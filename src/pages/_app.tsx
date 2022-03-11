@@ -10,6 +10,7 @@ import PageChange from '../components/PageChange/PageChange';
 import '../../public/plugins/nucleo/css/nucleo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../public/css/nextjs-argon-dashboard.css';
+// import '../../public/css/argon.css';
 import Script from 'next/script';
 import { NextPage } from 'next';
 // import '../../public/scss/nextjs-argon-dashboard.scss';
@@ -53,10 +54,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 					name="viewport"
 					content="width=device-width, initial-scale=1, shrink-to-fit=no"
 				/>
-				<title>NextJS Argon Dashboard by Creative Tim</title>
-				<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+				{/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> */}
 			</Head>
-			{/* <Script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></Script> */}
+			<Script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></Script>
 			{/* <Layout> */}
 			<Component {...pageProps} />
 			{/* </Layout> */}

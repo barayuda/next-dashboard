@@ -28,7 +28,7 @@ function UserHeader() {
 							</p>
 							<Button
 								color="info"
-								href="#pablo"
+								href="#home"
 								onClick={(e) => e.preventDefault()}
 							>
 								Edit profile

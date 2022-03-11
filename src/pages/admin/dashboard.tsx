@@ -1,10 +1,23 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 // node.js library that concatenates classes (strings)
 import classnames from 'classnames';
 // javascipt plugin for creating charts
-import Chart from 'chart.js';
+// import Chart from 'chart.js';
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	LineController,
+	Title,
+	Tooltip,
+	// Legend,
+} from 'chart.js';
 // react plugin used to create charts
-import { Line, Bar } from 'react-chartjs-2';
+// import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+
 // reactstrap components
 import {
 	Button,
@@ -23,33 +36,131 @@ import {
 // layout for this page
 import Admin from '../../layouts/Admin';
 // core components
-// import {
-// 	chartOptions,
-// 	parseOptions,
-// 	chartExample1,
-// 	chartExample2,
-// } from '../../../variables/charts';
+import {
+	chartOptions,
+	parseOptions,
+	chartExample1,
+	chartExample2,
+} from '../../../variables/charts';
 
 import Header from '../../components/Headers/Header';
+import axios from 'axios';
 
 // declare const window: Window &
 // 	typeof globalThis & {
 // 		Chart: object;
 // 	};
 
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	LineController,
+	Title,
+	Tooltip
+	// Legend
+);
+
+export const lineOptions = {
+	responsive: true,
+	plugins: {
+		// legend: {
+		// 	position: 'top' as const,
+		// },
+		title: {
+			display: true,
+			text: 'Line Chart: Error Counter',
+		},
+	},
+};
+
+const lineLabels = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+];
+
+export const lineDataDefault = {
+	labels: lineLabels,
+	datasets: [
+		{
+			label: 'Dataset Performance',
+			data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
+			borderColor: 'rgb(255, 99, 132)',
+			backgroundColor: 'rgba(255, 99, 132, 0.5)',
+		},
+		// {
+		// 	label: 'Dataset Error',
+		// 	data: [0, 20, 5, 25, 10, 30, 15, 40, 40],
+		// 	borderColor: 'rgb(53, 162, 235)',
+		// 	backgroundColor: 'rgba(53, 162, 235, 0.5)',
+		// },
+	],
+};
+
 const Dashboard = () => {
 	const [activeNav, setActiveNav] = React.useState(1);
-	// const [chartExample1Data, setChartExample1Data] = React.useState('data1');
+	const [lineData, setLineData] = useState(lineDataDefault);
+	const [totalNotify, setTotalNotify] = useState(0);
 
 	// if (window.Chart) {
 	// 	parseOptions(Chart, chartOptions());
 	// }
 
-	// const toggleNavs = (e, index) => {
-	// 	e.preventDefault();
-	// 	setActiveNav(index);
-	// 	setChartExample1Data('data' + index);
-	// };
+	const toggleNavs = (e: any, index: any) => {
+		e.preventDefault();
+		setActiveNav(index);
+	};
+
+	// Using useEffect to call the API once mounted and set the data
+	useEffect(() => {
+		(async () => {
+			const ROOT_API = process.env.NEXT_PUBLIC_API;
+			const API_VERSION = 'api/v1';
+			const url = `${ROOT_API}/${API_VERSION}/monitoring/lineday`;
+			const result = await axios(url);
+			console.log('result', result);
+			console.log('data', result.data.data);
+			var monitoring = result?.data?.data[0]?.monitoring ?? [];
+			console.log('monitoring', monitoring);
+			console.log('totalNotify', result.data.count);
+			setTotalNotify(parseInt(result?.data?.count));
+
+			var labels = [] as any;
+			var data = [] as any;
+
+			monitoring.map((items: []) => {
+				items.map((item: {}) => {
+					for (const [key, value] of Object.entries(item)) {
+						console.log('key', key, 'value', value);
+						if (key === 'date') {
+							labels.push(value);
+						} else {
+							data.push(value);
+						}
+					}
+				});
+			});
+			setLineData({
+				labels: labels,
+				datasets: [
+					{
+						label: 'Dataset Error',
+						data: data,
+						borderColor: 'rgb(255, 99, 132)',
+						backgroundColor: 'rgba(255, 99, 132, 0.5)',
+					},
+				],
+			});
+		})();
+	}, []);
+
 	return (
 		<>
 			<Header />
@@ -69,42 +180,44 @@ const Dashboard = () => {
 									<div className="col">
 										<Nav className="justify-content-end" pills>
 											<NavItem>
-												{/* <NavLink
+												<NavLink
 													className={classnames('py-2 px-3', {
 														active: activeNav === 1,
 													})}
-													href="#pablo"
+													href="#home"
 													onClick={(e) => toggleNavs(e, 1)}
 												>
 													<span className="d-none d-md-block">Month</span>
 													<span className="d-md-none">M</span>
-												</NavLink> */}
+												</NavLink>
 											</NavItem>
 											<NavItem>
-												{/* <NavLink
+												<NavLink
 													className={classnames('py-2 px-3', {
 														active: activeNav === 2,
 													})}
 													data-toggle="tab"
-													href="#pablo"
+													href="#home"
 													onClick={(e) => toggleNavs(e, 2)}
 												>
 													<span className="d-none d-md-block">Week</span>
 													<span className="d-md-none">W</span>
-												</NavLink> */}
+												</NavLink>
 											</NavItem>
 										</Nav>
 									</div>
 								</Row>
 							</CardHeader>
-							<CardBody>
+							<CardBody className="pb-8">
 								{/* Chart */}
 								<div className="chart">
 									{/* <Line
 										data={chartExample1[chartExample1Data]}
 										options={chartExample1.options}
-										getDatasetAtEvent={(e) => console.log(e)}
+										getDatasetAtEvent={(e: any) => console.log(e)}
 									/> */}
+									<Line options={lineOptions} data={lineData} />
+									{/* <Line options={lineOptions} data={chartData} /> */}
 								</div>
 							</CardBody>
 						</Card>
@@ -144,7 +257,7 @@ const Dashboard = () => {
 									<div className="col text-right">
 										<Button
 											color="primary"
-											href="#pablo"
+											href="#home"
 											onClick={(e) => e.preventDefault()}
 											size="sm"
 										>
@@ -220,7 +333,7 @@ const Dashboard = () => {
 									<div className="col text-right">
 										<Button
 											color="primary"
-											href="#pablo"
+											href="#home"
 											onClick={(e) => e.preventDefault()}
 											size="sm"
 										>

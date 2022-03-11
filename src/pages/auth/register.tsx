@@ -31,7 +31,7 @@ function Register() {
 							<Button
 								className="btn-neutral btn-icon mr-4"
 								color="default"
-								href="#pablo"
+								href="#home"
 								onClick={(e) => e.preventDefault()}
 							>
 								<span className="btn-inner--icon">
@@ -42,7 +42,7 @@ function Register() {
 							<Button
 								className="btn-neutral btn-icon"
 								color="default"
-								href="#pablo"
+								href="#home"
 								onClick={(e) => e.preventDefault()}
 							>
 								<span className="btn-inner--icon">
@@ -115,7 +115,7 @@ function Register() {
 										>
 											<span className="text-muted">
 												I agree with the{' '}
-												<a href="#pablo" onClick={(e) => e.preventDefault()}>
+												<a href="#home" onClick={(e) => e.preventDefault()}>
 													Privacy Policy
 												</a>
 											</span>

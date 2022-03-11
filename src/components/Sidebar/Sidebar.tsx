@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 // nodejs library to set properties for components
 import * as PropTypes from 'prop-types';
+import MenuItem from './MenuItem';
 
 // reactstrap components
 import {
@@ -74,7 +75,7 @@ function Sidebar(props: SidebarProps) {
 				<NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
 					<Link href={prop.layout + prop.path}>
 						<NavLink
-							href="#pablo"
+							href="#home"
 							active={activeRoute(prop.layout + prop.path)}
 							onClick={closeCollapse}
 						>
@@ -88,13 +89,13 @@ function Sidebar(props: SidebarProps) {
 	};
 	const { routes, logo } = props;
 	let navbarBrand = (
-		<NavbarBrand href="#pablo" className="pt-0">
+		<NavbarBrand href="#home" className="pt-0">
 			<img alt={logo.imgAlt} className="navbar-brand-img" src={logo.imgSrc} />
 		</NavbarBrand>
 	);
 	return (
 		<Navbar
-			className="navbar-vertical fixed-left navbar-light bg-white"
+			className="sidenav navbar navbar-vertical fixed-left navbar-light bg-white"
 			expand="md"
 			id="sidenav-main"
 		>
@@ -118,6 +119,7 @@ function Sidebar(props: SidebarProps) {
 						{navbarBrand}
 					</a>
 				) : null} */}
+
 				{/* User */}
 				<Nav className="align-items-center d-md-none">
 					<UncontrolledDropdown nav>
@@ -127,7 +129,6 @@ function Sidebar(props: SidebarProps) {
 						<DropdownMenu
 							aria-labelledby="navbar-default_dropdown_1"
 							className="dropdown-menu-arrow"
-							right
 						>
 							<DropdownItem>Action</DropdownItem>
 							<DropdownItem>Another action</DropdownItem>
@@ -143,7 +144,7 @@ function Sidebar(props: SidebarProps) {
 								</span>
 							</Media>
 						</DropdownToggle>
-						<DropdownMenu className="dropdown-menu-arrow" right>
+						<DropdownMenu className="dropdown-menu-arrow">
 							<DropdownItem className="noti-title" header tag="div">
 								<h6 className="text-overflow m-0">Welcome!</h6>
 							</DropdownItem>
@@ -172,7 +173,7 @@ function Sidebar(props: SidebarProps) {
 								</DropdownItem>
 							</Link>
 							<DropdownItem divider />
-							<DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+							<DropdownItem href="#home" onClick={(e) => e.preventDefault()}>
 								<i className="ni ni-user-run" />
 								<span>Logout</span>
 							</DropdownItem>
@@ -225,6 +226,41 @@ function Sidebar(props: SidebarProps) {
 					</Form>
 					{/* Navigation */}
 					<Nav navbar>{createLinks(routes)}</Nav>
+					<ul className="navbar-nav">
+						<li className="nav-item">
+							<a
+								href="#home"
+								data-toggle="collapse"
+								className="nav-link"
+								aria-expanded="true"
+							>
+								<i className="ni ni-align-left-2 text-default"></i>
+								<span className="nav-link-text">Tables</span>
+							</a>
+							<div className="collapse show">
+								<ul className="nav-sm flex-column nav">
+									<li className="nav-item">
+										<a href="#home" className="nav-link">
+											<span className="sidenav-mini-icon"> T </span>
+											<span className="sidenav-normal"> Tables </span>
+										</a>
+									</li>
+									<li className="nav-item">
+										<a href="#home" className="nav-link">
+											<span className="sidenav-mini-icon"> S </span>
+											<span className="sidenav-normal"> Sortable </span>
+										</a>
+									</li>
+									<li className="nav-item">
+										<a href="#home" className="nav-link">
+											<span className="sidenav-mini-icon"> RBT </span>
+											<span className="sidenav-normal"> React BS Tables </span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
 					{/* Divider */}
 					<hr className="my-3" />
 					{/* Heading */}
@@ -247,14 +283,6 @@ function Sidebar(props: SidebarProps) {
 							<NavLink href="https://www.creative-tim.com/learning-lab/nextjs/avatar/argon-dashboard?ref=njsad-admin-sidebar">
 								<i className="ni ni-ui-04" />
 								Components
-							</NavLink>
-						</NavItem>
-					</Nav>
-					<Nav className="mb-md-3" navbar>
-						<NavItem className="active-pro active">
-							<NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=njsad-admin-sidebar">
-								<i className="ni ni-spaceship" />
-								Upgrade to PRO
 							</NavLink>
 						</NavItem>
 					</Nav>

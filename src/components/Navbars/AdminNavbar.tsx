@@ -65,7 +65,7 @@ function AdminNavbar(props: AdminNavbarProps) {
 									</Media>
 								</Media>
 							</DropdownToggle>
-							<DropdownMenu className="dropdown-menu-arrow" right>
+							<DropdownMenu className="dropdown-menu-arrow">
 								<DropdownItem className="noti-title" header tag="div">
 									<h6 className="text-overflow m-0">Welcome!</h6>
 								</DropdownItem>
@@ -94,7 +94,7 @@ function AdminNavbar(props: AdminNavbarProps) {
 									</DropdownItem>
 								</Link>
 								<DropdownItem divider />
-								<DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+								<DropdownItem href="#home" onClick={(e) => e.preventDefault()}>
 									<i className="ni ni-user-run" />
 									<span>Logout</span>
 								</DropdownItem>

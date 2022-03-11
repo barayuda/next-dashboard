@@ -31,7 +31,7 @@ function Login() {
 							<Button
 								className="btn-neutral btn-icon"
 								color="default"
-								href="#pablo"
+								href="#home"
 								onClick={(e) => e.preventDefault()}
 							>
 								<span className="btn-inner--icon">
@@ -42,7 +42,7 @@ function Login() {
 							<Button
 								className="btn-neutral btn-icon"
 								color="default"
-								href="#pablo"
+								href="#home"
 								onClick={(e) => e.preventDefault()}
 							>
 								<span className="btn-inner--icon">
@@ -110,7 +110,7 @@ function Login() {
 					<Col xs="6">
 						<a
 							className="text-light"
-							href="#pablo"
+							href="#home"
 							onClick={(e) => e.preventDefault()}
 						>
 							<small>Forgot password?</small>
@@ -119,7 +119,7 @@ function Login() {
 					<Col className="text-right" xs="6">
 						<a
 							className="text-light"
-							href="#pablo"
+							href="#home"
 							onClick={(e) => e.preventDefault()}
 						>
 							<small>Create new account</small>

@@ -16,7 +16,10 @@ import {
 function AdminNavbar() {
 	return (
 		<>
-			<Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
+			<Navbar
+				className="navbar-top navbar-horizontal navbar-dark bg-gradient-info "
+				expand="md"
+			>
 				<Container className="px-4">
 					<Link href="/admin/dashboard">
 						<span>
