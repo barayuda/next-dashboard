@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
 
 function Header() {
   return (
@@ -35,7 +35,7 @@ function Header() {
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
                         <i className="fa fa-arrow-up" /> 3.48%
-                      </span>{" "}
+                      </span>{' '}
                       <span className="text-nowrap">Since last month</span>
                     </p>
                   </CardBody>
@@ -63,7 +63,7 @@ function Header() {
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-danger mr-2">
                         <i className="fas fa-arrow-down" /> 3.48%
-                      </span>{" "}
+                      </span>{' '}
                       <span className="text-nowrap">Since last week</span>
                     </p>
                   </CardBody>
@@ -91,7 +91,7 @@ function Header() {
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-warning mr-2">
                         <i className="fas fa-arrow-down" /> 1.10%
-                      </span>{" "}
+                      </span>{' '}
                       <span className="text-nowrap">Since yesterday</span>
                     </p>
                   </CardBody>
@@ -119,7 +119,7 @@ function Header() {
                     <p className="mt-3 mb-0 text-muted text-sm">
                       <span className="text-success mr-2">
                         <i className="fas fa-arrow-up" /> 12%
-                      </span>{" "}
+                      </span>{' '}
                       <span className="text-nowrap">Since last month</span>
                     </p>
                   </CardBody>

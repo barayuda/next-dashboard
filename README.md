@@ -35,9 +35,11 @@ npm run dev
 Using PM2
 
 ```
+npm run build
 pm2 --name NextjsPG-DASHBOARD start npm -- start --watch --version 1.0.0
-pm2 logs NextjsPG-DASHBOARD
+pm2 logs NextjsPG-DASHBOARD --lines 100
 
+npm run build
 pm2 start pm2-nextdashboard.config.js --env development
 pm2 start pm2-nextdashboard.config.js --env production
 

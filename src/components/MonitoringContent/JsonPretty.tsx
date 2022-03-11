@@ -1,23 +1,22 @@
 import React from 'react';
 
 interface JsonPrettyProps {
-	jsonStr: string;
+  jsonStr: string;
 }
 function JsonPretty(props: JsonPrettyProps) {
-	const { jsonStr } = props;
-	if (jsonStr === undefined) {
-		var jsonString = '{}';
-	} else {
-		var jsonString = jsonStr;
-	}
-	var jsonObj = JSON.parse(jsonString);
-	var json = JSON.stringify(jsonObj, null, 4);
+  const { jsonStr } = props;
+  let jsonString = '{}';
+  if (jsonStr !== undefined) {
+    jsonString = jsonStr;
+  }
+  const jsonObj = JSON.parse(jsonString);
+  const json = JSON.stringify(jsonObj, null, 4);
 
-	return (
-		<pre>
-			<code className="text-light">{json}</code>
-		</pre>
-	);
+  return (
+    <pre>
+      <code className="text-light">{json}</code>
+    </pre>
+  );
 }
 
 export default JsonPretty;
