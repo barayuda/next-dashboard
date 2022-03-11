@@ -32,6 +32,17 @@ cd nextjs-ts-argon-dashboard
 npm run dev
 ```
 
+Using PM2
+
+```
+pm2 --name NextjsPG-DASHBOARD start npm -- start --watch --version 1.0.0
+pm2 logs NextjsPG-DASHBOARD
+
+pm2 start pm2-nextdashboard.config.js --env development
+pm2 start pm2-nextdashboard.config.js --env production
+
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
