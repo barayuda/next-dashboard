@@ -33,7 +33,7 @@ function AdminNavbar() {
 							<Row>
 								<Col className="collapse-brand" xs="6">
 									<Link href="/admin/dashboard">
-										<img alt="..." src="/img/brand/nextjs_argon_black.png" />
+										<img alt="..." src="/img/brand/logo-bankmega-h144.png" />
 									</Link>
 								</Col>
 								<Col className="collapse-close" xs="6">

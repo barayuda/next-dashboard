@@ -23,11 +23,5 @@ var routes = [
 		icon: 'ni ni-key-25 text-info',
 		layout: '/',
 	},
-	{
-		path: '/',
-		name: 'Frontpage',
-		icon: 'ni ni-key-25 text-info',
-		layout: '/',
-	},
 ];
 export default routes;

@@ -38,7 +38,7 @@ function Admin(props: AdminProps) {
 				routes={routes}
 				logo={{
 					innerLink: '/admin/index',
-					imgSrc: '/img/brand/nextjs_argon_black.png',
+					imgSrc: '/img/brand/logo-bankmega-h144.png',
 					imgAlt: '...',
 					outterLink: '/admin/index',
 				}}

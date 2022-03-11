@@ -226,7 +226,7 @@ function Sidebar(props: SidebarProps) {
 					</Form>
 					{/* Navigation */}
 					<Nav navbar>{createLinks(routes)}</Nav>
-					<ul className="navbar-nav">
+					{/* <ul className="navbar-nav">
 						<li className="nav-item">
 							<a
 								href="#home"
@@ -260,7 +260,7 @@ function Sidebar(props: SidebarProps) {
 								</ul>
 							</div>
 						</li>
-					</ul>
+					</ul> */}
 					{/* Divider */}
 					<hr className="my-3" />
 					{/* Heading */}
