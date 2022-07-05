@@ -44,7 +44,7 @@ import Admin from '../../layouts/Admin';
 	chartExample2,
 } from '../../../variables/charts'; */
 
-import Header from '../../components/Headers/Header';
+import HeaderWithStat from '../../components/Headers/HeaderWithStat';
 
 // declare const window: Window &
 // 	typeof globalThis & {
@@ -163,7 +163,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Header />
+      <HeaderWithStat />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>

@@ -75,7 +75,10 @@
     "func-names": "off",
     "no-nested-ternary": "off",
     "jsx-a11y/no-redundant-roles": "off",
-    "react/jsx-boolean-value": "off"
+    "react/jsx-boolean-value": "off",
+    "react/jsx-curly-newline": "off",
+    "prefer-template": "off",
+    "no-plusplus": "off"
   },
   "settings": {
     "import/extensions": [".js", ".jsx", ".ts", ".tsx"],

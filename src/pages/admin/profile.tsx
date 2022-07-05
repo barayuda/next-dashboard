@@ -1,5 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 // import Image from 'next/image';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 // reactstrap components
 import {
@@ -18,8 +20,28 @@ import {
 import Admin from '../../layouts/Admin';
 // core components
 import UserHeader from '../../components/Headers/UserHeader';
+import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
 
 function Profile() {
+  const [user, setUser] = useState({
+    avatar: '/img/theme/team-1-800x800.jpg',
+    name: '',
+    username: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      const jwtToken = atob(token);
+      if (jwtToken !== 'undefined') {
+        const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+        const userFromPayload: UserTypes = payload.user;
+        setUser(userFromPayload);
+      }
+    }
+  }, []);
+
   return (
     <>
       <UserHeader />
@@ -35,7 +57,7 @@ function Profile() {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src="/img/theme/team-4-800x800.jpg"
+                        src={user.avatar}
                       />
                     </a>
                   </div>
@@ -84,7 +106,7 @@ function Profile() {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    Jessica Jones
+                    {user.name}
                     <span className="font-weight-light">, 27</span>
                   </h3>
                   <div className="h5 font-weight-300">
@@ -148,7 +170,7 @@ function Profile() {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="lucky.jesse"
+                            defaultValue={user.username}
                             id="input-username"
                             placeholder="Username"
                             type="text"
@@ -166,7 +188,8 @@ function Profile() {
                           <Input
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="jesse@example.com"
+                            placeholder="your.email@example.com"
+                            defaultValue={user.email}
                             type="email"
                           />
                         </FormGroup>

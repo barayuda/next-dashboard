@@ -6,8 +6,12 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Router from 'next/router';
 import Script from 'next/script';
+import { ToastContainer } from 'react-toastify';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import PageChange from '../components/PageChange/PageChange';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../public/plugins/nucleo/css/nucleo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -60,6 +64,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       {/* <Layout> */}
       <Component {...pageProps} />
       {/* </Layout> */}
+      <ToastContainer />
     </React.Fragment>
   );
 }

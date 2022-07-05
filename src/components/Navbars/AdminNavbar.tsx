@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 // reactstrap components
 import {
   DropdownMenu,
@@ -18,6 +20,8 @@ import {
   Media,
 } from 'reactstrap';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
 
 interface AdminNavbarProps {
   brandText: string;
@@ -25,6 +29,36 @@ interface AdminNavbarProps {
 
 function AdminNavbar(props: AdminNavbarProps) {
   const { brandText } = props;
+  const [isLogin, setIsLogin] = useState(false);
+  const [user, setUser] = useState({
+    avatar: '/img/theme/team-1-800x800.jpg',
+    name: '',
+    email: '',
+  });
+  const router = useRouter();
+
+  const onLogout = () => {
+    localStorage.removeItem('user-form');
+    Cookies.remove('token');
+    // router.push('/');
+    router.push('/auth/login');
+    setIsLogin(false);
+  };
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      // const jwtToken = atob(token);
+      // console.log('token', token);
+      // if (jwtToken !== 'undefined') {
+      //   console.log('jwtToken 1: ', typeof jwtToken + ' => ' + jwtToken);
+      //   const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+      //   const userFromPayload: UserTypes = payload.user;
+      //   console.log('userFromPayload', userFromPayload);
+      //   setUser(userFromPayload);
+      // }
+    }
+  }, []);
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -34,7 +68,7 @@ function AdminNavbar(props: AdminNavbarProps) {
               {brandText}
             </a>
           </Link>
-          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto pt-3">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
                 {/* <InputGroupAddon addonType="prepend"> */}
@@ -51,16 +85,11 @@ function AdminNavbar(props: AdminNavbarProps) {
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
-                    <Image
-                      alt="..."
-                      src="/img/theme/team-4-800x800.jpg"
-                      width={36}
-                      height={36}
-                    />
+                    <Image alt="..." src={user.avatar} width={36} height={36} />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      Hi, {user.name}
                     </span>
                   </Media>
                 </Media>
@@ -94,7 +123,7 @@ function AdminNavbar(props: AdminNavbarProps) {
                   </DropdownItem>
                 </Link>
                 <DropdownItem divider />
-                <DropdownItem href="#home" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#home" onClick={onLogout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
