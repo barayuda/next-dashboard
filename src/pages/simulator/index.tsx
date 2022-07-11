@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import Footer from '../../components/public/MainContent/Footer';
-import Header from '../../components/public/MainContent/Header';
-import Navbar from '../../components/public/Navbar';
-import { setSimulator } from '../../services/simulator';
-import { SimulatorTypes } from '../../services/data-types';
+// import Footer from '../../components/public/MainContent/Footer';
+// import Header from '../../components/public/MainContent/Header';
+// import Navbar from '../../components/public/Navbar';
+// import { setSimulator } from '../../services/simulator';
+// import { SimulatorTypes } from '../../services/data-types';
 // import styles from '../styles/Home.module.css';
 
 const Simulator: NextPage = () => {
@@ -27,7 +27,7 @@ const Simulator: NextPage = () => {
 	const [material, setMaterial] = useState('steel');
 	const [paymentSource, setPaymentSource] = useState('megadebit');
 
-	const onSubmit = async () => {
+	/* const onSubmit = async () => {
 		const data: SimulatorTypes = {
 			quantity,
 			total,
@@ -50,7 +50,7 @@ const Simulator: NextPage = () => {
 				router.push('/dashboard/simulator');
 			}
 		}
-	};
+	}; */
 
 	useEffect(() => {
 		document
@@ -80,8 +80,8 @@ const Simulator: NextPage = () => {
 				<meta property="og:url" content="https://www.bankmega.com" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Navbar />
-			<Header />
+			{/* <Navbar />
+			<Header /> */}
 			<div className="main-content">
 				<div className="container-fluid py-4">
 					<div className="row">
@@ -258,14 +258,14 @@ const Simulator: NextPage = () => {
 												</div>
 												<div className="row mt-4">
 													<div className="col-lg-5">
-														<button
+														{/* <button
 															className="btn btn-primary mb-0 mt-lg-auto w-100"
 															type="button"
 															name="button"
 															onClick={onSubmit}
 														>
 															Checkout
-														</button>
+														</button> */}
 													</div>
 												</div>
 											</form>
@@ -277,7 +277,7 @@ const Simulator: NextPage = () => {
 					</div>
 				</div>
 			</div>
-			<Footer />
+			{/* <Footer /> */}
 		</>
 	);
 };

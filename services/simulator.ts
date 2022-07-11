@@ -10,16 +10,15 @@ const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
 
 export async function setSimulator(data: SimulatorTypes) {
 	// START Process Inquiry
-	console.log('dataSimulator', data);
-	var date = new Date();
-	var orderRefId =
+	let date = new Date();
+	let orderRefId =
 		date.getFullYear().toString() +
 		date.getMonth().toString() +
 		date.getDate().toString() +
 		date.getHours().toString() +
 		date.getMinutes().toString() +
 		date.getSeconds().toString();
-	var requestData = {
+	let requestData = {
 		amount: data.total,
 		currency: 'IDR',
 		referenceUrl: process.env.NEXT_PUBLIC_FRONTEND + '/simulator/' + orderRefId,
@@ -47,20 +46,21 @@ export async function setSimulator(data: SimulatorTypes) {
 		token: '',
 	};
 
-	console.log('urlInquiry', urlInquiry);
-	console.log('requestData', requestData);
-	var responseData = await callAPI({
+	// console.log('dataSimulator', data);
+	// console.log('urlInquiry', urlInquiry);
+	// console.log('requestData', requestData);
+	let responseData = await callAPI({
 		url: urlInquiry,
 		method: 'POST',
 		data: requestData,
 	});
-	console.log('responseData', responseData);
+	// console.log('responseData', responseData);
 
 	// START Save to DB
 	const url = `${ROOT_API}/${API_VERSION}/simulator`;
-	console.log('url', url);
+	// console.log('url', url);
 
-	var payload = {
+	let payload = {
 		reqId: uuidv4(),
 		apiKey: process.env.NEXT_PUBLIC_IPG_API_KEY,
 		orderRefId,
@@ -77,9 +77,25 @@ export async function setSimulator(data: SimulatorTypes) {
 	};
 	console.log('payload', payload);
 
-	return await callAPI({
+	return callAPI({
 		url,
 		method: 'POST',
 		data: payload,
 	});
+}
+
+export async function getSimulator(valueParams: string) {
+  let params = '';
+  if (valueParams === 'all') {
+    params = '';
+  } else {
+    params = `?status=${valueParams}`;
+  }
+  const url = `${ROOT_API}/${API_VERSION}/players/history${params}`;
+
+  return callAPI({
+    url,
+    method: 'GET',
+    token: true,
+  });
 }

@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import Footer from '../../components/public/MainContent/Footer';
-import Header from '../../components/public/MainContent/Header';
-import Navbar from '../../components/public/Navbar';
-import { setSimulator } from '../../services/simulator';
-import { SimulatorTypes } from '../../services/data-types';
+// import Footer from '../../components/public/MainContent/Footer';
+// import Header from '../../components/public/MainContent/Header';
+// import Navbar from '../../components/public/Navbar';
+// import { setSimulator } from '../../services/simulator';
+// import { SimulatorTypes } from '../../services/data-types';
 // import styles from '../styles/Home.module.css';
 
 const Simulator: NextPage = () => {
@@ -27,30 +27,30 @@ const Simulator: NextPage = () => {
 	const [material, setMaterial] = useState('steel');
 	const [paymentSource, setPaymentSource] = useState('megadebit');
 
-	const onSubmit = async () => {
-		const data: SimulatorTypes = {
-			quantity,
-			total,
-			material,
-			paymentSource,
-		};
+	// const onSubmit = async () => {
+	// 	const data: SimulatorTypes = {
+	// 		quantity,
+	// 		total,
+	// 		material,
+	// 		paymentSource,
+	// 	};
 
-		if (!quantity || !total) {
-			console.log('Error');
-			toast.error('quantity and total are required !!!');
-		} else {
-			const response = await setSimulator(data);
-			if (response.error) {
-				toast.error(response.message);
-			} else {
-				toast.success('Transaction Created !!!');
-				// const { token } = response.data;
-				// const tokenBase64 = btoa(token);
-				// Cookies.set('token', tokenBase64, { expires: 1 });
-				router.push('/dashboard/simulator');
-			}
-		}
-	};
+	// 	if (!quantity || !total) {
+	// 		console.log('Error');
+	// 		toast.error('quantity and total are required !!!');
+	// 	} else {
+	// 		const response = await setSimulator(data);
+	// 		if (response.error) {
+	// 			toast.error(response.message);
+	// 		} else {
+	// 			toast.success('Transaction Created !!!');
+	// 			// const { token } = response.data;
+	// 			// const tokenBase64 = btoa(token);
+	// 			// Cookies.set('token', tokenBase64, { expires: 1 });
+	// 			router.push('/dashboard/simulator');
+	// 		}
+	// 	}
+	// };
 
 	useEffect(() => {
 		document
@@ -59,7 +59,7 @@ const Simulator: NextPage = () => {
 	});
 	return (
 		<>
-			<Head>
+			{/* <Head>
 				<title>Bank Mega Dashboard</title>
 				<meta
 					name="description"
@@ -190,7 +190,7 @@ const Simulator: NextPage = () => {
 					</div>
 				</div>
 			</div>
-			<Footer />
+			<Footer /> */}
 		</>
 	);
 };

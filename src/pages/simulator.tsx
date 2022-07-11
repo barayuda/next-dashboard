@@ -39,8 +39,8 @@ const Simulator: NextPage = () => {
       toast.error('quantity and total are required !!!');
     } else {
       const response = await setSimulator(data);
-      if (response.error) {
-        toast.error(response.message);
+      if (response?.error) {
+        toast.error(response?.message);
       } else {
         toast.success('Transaction Created !!!');
         // const { token } = response.data;

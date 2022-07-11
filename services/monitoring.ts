@@ -12,7 +12,7 @@ export async function getMonitoringTransaction(valueParams?: string) {
 	}
 	const url = `${ROOT_API}/${API_VERSION}/monitoring/${params}`;
 
-	return await callAPI({
+	return callAPI({
 		url,
 		token: true,
 		method: 'GET',

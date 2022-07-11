@@ -35,7 +35,7 @@ export default async function callAPI({
     headers,
   }).catch((err) => err.response);
 
-  console.log('API Response', JSON.stringify(response));
+  // console.log('API Response', JSON.stringify(response));
 
   if (response?.status > 300) {
     let res = {
@@ -62,9 +62,7 @@ export default async function callAPI({
   let res = {
     error: true,
     message: 'error',
-    data: {
-      data: response?.data,
-    },
+    data: response?.data,
     statusHttp: response?.status || 500,
   };
 

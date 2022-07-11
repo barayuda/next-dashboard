@@ -198,7 +198,7 @@ const Login: NextPageWithLayout = () => {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <Link className={'text-light'} href={'/auth/forgotpass'}>
+            <Link href={'/auth/forgotpass'}>
               <small>Forgot password?</small>
             </Link>
           </Col>
