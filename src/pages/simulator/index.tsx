@@ -6,19 +6,19 @@ import { toast } from 'react-toastify';
 // import Footer from '../../components/public/MainContent/Footer';
 // import Header from '../../components/public/MainContent/Header';
 // import Navbar from '../../components/public/Navbar';
-// import { setSimulator } from '../../services/simulator';
-// import { SimulatorTypes } from '../../services/data-types';
+import { setSimulator } from '../../../services/simulator';
+import { SimulatorTypes } from '../../../services/data-types';
 // import styles from '../styles/Home.module.css';
 
 const Simulator: NextPage = () => {
-	console.log(
-		'My Application IPG_API_KEY',
-		process.env.NEXT_PUBLIC_IPG_API_KEY
-	);
-	console.log(
-		'My Application IPG_INQUIRY_URL',
-		process.env.NEXT_PUBLIC_IPG_INQUIRY_URL
-	);
+	// console.log(
+	// 	'My Application IPG_API_KEY',
+	// 	process.env.NEXT_PUBLIC_IPG_API_KEY
+	// );
+	// console.log(
+	// 	'My Application IPG_INQUIRY_URL',
+	// 	process.env.NEXT_PUBLIC_IPG_INQUIRY_URL
+	// );
 
 	const router = useRouter();
 	const price = 200;
@@ -27,7 +27,7 @@ const Simulator: NextPage = () => {
 	const [material, setMaterial] = useState('steel');
 	const [paymentSource, setPaymentSource] = useState('megadebit');
 
-	/* const onSubmit = async () => {
+	const onSubmit = async () => {
 		const data: SimulatorTypes = {
 			quantity,
 			total,
@@ -36,10 +36,11 @@ const Simulator: NextPage = () => {
 		};
 
 		if (!quantity || !total) {
-			console.log('Error');
+			// console.log('Error');
 			toast.error('quantity and total are required !!!');
 		} else {
 			const response = await setSimulator(data);
+			console.log('response', JSON.stringify(response));
 			if (response.error) {
 				toast.error(response.message);
 			} else {
@@ -47,10 +48,11 @@ const Simulator: NextPage = () => {
 				// const { token } = response.data;
 				// const tokenBase64 = btoa(token);
 				// Cookies.set('token', tokenBase64, { expires: 1 });
-				router.push('/dashboard/simulator');
+				// router.push('/dashboard/simulator');
+				window.location.href = response?.data?.selectionsUrl;
 			}
 		}
-	}; */
+	};
 
 	useEffect(() => {
 		document
@@ -258,14 +260,14 @@ const Simulator: NextPage = () => {
 												</div>
 												<div className="row mt-4">
 													<div className="col-lg-5">
-														{/* <button
+														<button
 															className="btn btn-primary mb-0 mt-lg-auto w-100"
 															type="button"
 															name="button"
 															onClick={onSubmit}
 														>
 															Checkout
-														</button> */}
+														</button>
 													</div>
 												</div>
 											</form>

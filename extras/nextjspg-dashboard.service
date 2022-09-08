@@ -1,18 +1,18 @@
 [Unit]
-Description=Manage API IPG Dashboard Node service
+Description=Manage NextJS IPG Dashboard Node service
 After=network.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/www/monitoring/expresspg-dashboard/
-ExecStart=/var/www/monitoring/expresspg-dashboard/extras/start-service.sh
-ExecStop=/var/www/monitoring/expresspg-dashboard/extras/stop-service.sh
+WorkingDirectory=/var/www/monitoring/nextjspg-dashboard/
+ExecStart=/var/www/monitoring/nextjspg-dashboard/extras/start-service.sh
+ExecStop=/var/www/monitoring/nextjspg-dashboard/extras/stop-service.sh
 User=root
 Restart=on-failure
 RestartSec=60
 StandardOutput=syslog
-SyslogIdentifier=expresspg-dashboard
+SyslogIdentifier=nextjspg-dashboard
 
 [Install]
 WantedBy=multi-user.target network-online.target

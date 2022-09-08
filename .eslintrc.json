@@ -78,7 +78,8 @@
     "react/jsx-boolean-value": "off",
     "react/jsx-curly-newline": "off",
     "prefer-template": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-param-reassign": "off"
   },
   "settings": {
     "import/extensions": [".js", ".jsx", ".ts", ".tsx"],

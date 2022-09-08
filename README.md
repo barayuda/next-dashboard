@@ -36,14 +36,43 @@ Using PM2
 
 ```
 npm run build
-pm2 --name NextjsPG-DASHBOARD start npm -- start --watch --version 1.0.0
-pm2 logs NextjsPG-DASHBOARD --lines 100
+pm2 --name NextJSPG-DASHBOARD start npm -- start --watch --version 1.0.0
+pm2 logs NextJSPG-DASHBOARD --lines 100
+pm2 stop NextJSPG-DASHBOARD --watch
 
 npm run build
 pm2 start pm2-nextdashboard.config.js --env development
 pm2 start pm2-nextdashboard.config.js --env production
 
 ```
+
+## Run as a service
+
+https://computingforgeeks.com/how-to-run-java-jar-application-with-systemd-on-linux/
+
+/lib/systemd/system/multi-user.target/
+/usr/lib/systemd/system/
+
+example:
+/lib/systemd/system/multi-user.target/nodes.service
+/usr/lib/systemd/system/nodes.service
+
+/etc/systemd/system/multi-user.target.wants/nextjspg-dashboard.service
+
+chmod +x /var/www/nextjspg-dashboard/extras/start-service.sh
+chmod +x /var/www/nextjspg-dashboard/extras/stop-service.sh
+
+sudo systemctl daemon-reload
+systemctl start nextjspg-dashboard.service
+systemctl status nextjspg-dashboard.service
+systemctl stop nextjspg-dashboard.service
+systemctl restart nextjspg-dashboard.service -l
+systemctl enable nextjspg-dashboard.service
+systemctl is-enabled nextjspg-dashboard.service
+journalctl -u nextjspg-dashboard.service -n 100
+sudo systemd-analyze verify nextjspg-dashboard.service
+sudo systemd-analyze --user verify nextjspg-dashboard.service
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

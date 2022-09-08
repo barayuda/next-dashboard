@@ -25,7 +25,7 @@ export async function setSimulator(data: SimulatorTypes) {
 		order: {
 			id: orderRefId,
 			disablePromo: true,
-			afterDiscount: data.total,
+			afterDiscount: '',
 			items: [
 				{
 					name: data.material,
@@ -53,12 +53,17 @@ export async function setSimulator(data: SimulatorTypes) {
 		url: urlInquiry,
 		method: 'POST',
 		data: requestData,
+		headers: {
+			Authorization: '6BPxIS7nJt1kwgN1PHA2YO',
+			'x-real-ip': '35.191.16.235',
+			'x-forwarded-for': '128.199.167.85,34.95.125.106, 35.191.16.235'
+		}
 	});
 	// console.log('responseData', responseData);
 
 	// START Save to DB
 	const url = `${ROOT_API}/${API_VERSION}/simulator`;
-	// console.log('url', url);
+	console.log('url', url);
 
 	let payload = {
 		reqId: uuidv4(),
@@ -80,7 +85,7 @@ export async function setSimulator(data: SimulatorTypes) {
 	return callAPI({
 		url,
 		method: 'POST',
-		data: payload,
+		data: payload
 	});
 }
 

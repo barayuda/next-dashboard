@@ -12,20 +12,27 @@ export default async function callAPI({
   data,
   token,
   serverToken,
+  headers
 }: CallAPIProps) {
-  let headers = {};
   if (serverToken) {
-    headers = {
-      Authorization: `Bearer ${serverToken}`,
-    };
+    if (headers !== undefined) headers.Authorization = `Bearer ${serverToken}`;
+    else {
+      headers = {
+        // Authorization: `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${serverToken}`,
+      };
+    }
   } else if (token) {
     const tokenCookies = Cookies.get('token');
     if (tokenCookies) {
       // const jwtToken = atob(tokenCookies);
-      headers = {
-        // Authorization: `Bearer ${jwtToken}`,
-        Authorization: `Bearer ${tokenCookies}`,
-      };
+      if (headers !== undefined) headers.Authorization = `Bearer ${tokenCookies}`;
+      else {
+        headers = {
+          // Authorization: `Bearer ${jwtToken}`,
+          Authorization: `Bearer ${tokenCookies}`,
+        };
+      }
     }
   }
   const response = await axios({
@@ -35,10 +42,17 @@ export default async function callAPI({
     headers,
   }).catch((err) => err.response);
 
-  // console.log('API Response', JSON.stringify(response));
+  console.log('API Response', JSON.stringify(response));
+
+  let res = {
+    error: true,
+    message: 'error',
+    data: response?.data,
+    statusHttp: response?.status || 500,
+  };
 
   if (response?.status > 300) {
-    let res = {
+    res = {
       error: true,
       message: response?.data?.message,
       data: {
@@ -51,7 +65,7 @@ export default async function callAPI({
 
   if (response?.data) {
     const { length } = Object.keys(response?.data);
-    let res = {
+    res = {
       error: false,
       message: 'success',
       data: length > 1 ? response?.data : response?.data?.data,
@@ -59,12 +73,7 @@ export default async function callAPI({
     };
   }
 
-  let res = {
-    error: true,
-    message: 'error',
-    data: response?.data,
-    statusHttp: response?.status || 500,
-  };
+  console.log('NextJS Response', JSON.stringify(res));
 
   return res;
 }
