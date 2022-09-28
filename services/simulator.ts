@@ -18,6 +18,56 @@ export async function setSimulator(data: SimulatorTypes) {
 		date.getHours().toString() +
 		date.getMinutes().toString() +
 		date.getSeconds().toString();
+	let orderAuth = {};
+
+	if (['allopay', 'allopaylater', 'allopoint'].indexOf(data.paymentSource) >= 0) {
+		// ALLO_MegaAuthentication
+		let reqAlloMA = { phoneNumber: '082114017471' };
+		let resAlloMA = await callAPI({
+			url: 'http://10.14.20.49/alloServices/',
+			method: 'POST',
+			data: reqAlloMA,
+			headers: {
+				bu: 'mega',
+				action: 'authorize',
+				secret: '082208222250',
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+				Referer: 'http://10.14.20.49/'
+			}
+		});
+
+		console.log('resAlloMA', JSON.stringify(resAlloMA));
+
+		if (resAlloMA.data?.responseData?.accessToken !== undefined) {
+			let reqGenCode = { accessToken: resAlloMA.data?.responseData?.accessToken };
+			let resGenCode = await callAPI({
+				url: 'http://10.14.20.49/alloServices/',
+				method: 'POST',
+				data: reqGenCode,
+				headers: {
+					bu: 'mega',
+					action: 'genNewCodeForCrossBu',
+					secret: '082208222250',
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*'
+				}
+			});
+
+			console.log('resGenCode', JSON.stringify(resGenCode));
+
+			orderAuth = {
+				alloCode: resGenCode.data?.responseData?.code,
+				alloCodeVerifier: resGenCode.data?.codeVerifier,
+				alloOsType: 'ANDROID',
+				alloDeviceId: '899292',
+				alloAppType: 'apps',
+			};
+
+			console.log('orderAuth', JSON.stringify(orderAuth));
+		}
+	}
+
 	let requestData = {
 		amount: data.total,
 		currency: 'IDR',
@@ -33,6 +83,7 @@ export async function setSimulator(data: SimulatorTypes) {
 					amount: data.total,
 				},
 			],
+			auth: orderAuth
 		},
 		customer: {
 			name: 'Fyan E. Widyantoro',

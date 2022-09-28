@@ -249,11 +249,14 @@ const Simulator: NextPage = () => {
 															}}
 														>
 															<option value="">- Select One -</option>
+															<option value="allopay">AlloPay</option>
+															<option value="allopaylater">AlloPaylater</option>
+															<option value="allopoint">AlloPoint</option>
+															<option value="bcava">BCA VA</option>
+															<option value="briva">BRI VA</option>
 															<option value="megadebit">Mega Debit Card</option>
 															<option value="megacc">Mega Credit Card</option>
-															<option value="megava">
-																Mega Virtual Account
-															</option>
+															<option value="megava">Mega Virtual Account</option>
 															<option value="megaqris">Mega QRIS</option>
 														</select>
 													</div>
