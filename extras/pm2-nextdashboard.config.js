@@ -18,6 +18,11 @@ module.exports = {
 				API_URL: 'http://10.14.20.49',
 				PORT: 4000,
 			},
+			env_sandbox: {
+				NODE_ENV: 'sandbox',
+				API_URL: 'http://10.14.21.37',
+				PORT: 4000,
+			},
 			env_production: {
 				NODE_ENV: 'production',
 				API_URL: 'http://10.14.19.206',
