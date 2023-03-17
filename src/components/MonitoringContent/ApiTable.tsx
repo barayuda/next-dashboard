@@ -1,15 +1,10 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import axios from 'axios';
-import {
-  useTable,
-  usePagination,
-  useSortBy,
-  useGlobalFilter,
-} from 'react-table';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
+import { useTable, usePagination, useSortBy, useGlobalFilter } from "react-table";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-import GlobalFilter from './GlobalFilter';
-import JsonPretty from './JsonPretty';
+import GlobalFilter from "./GlobalFilter";
+import JsonPretty from "./JsonPretty";
 
 type Data = {
   _id: string;
@@ -36,67 +31,63 @@ export default function ApiTable() {
     () => [
       {
         // first group - TV Show
-        Header: 'Application',
+        Header: "Application",
         // First group columns
         columns: [
           {
-            Header: 'Log_ID',
-            accessor: 'logId', // accessor is the "key" in the data
-            sortType: 'basic',
+            Header: "Log_ID",
+            accessor: "logId", // accessor is the "key" in the data
+            sortType: "basic",
             disableSortBy: true,
             Cell: (props: any, cell: any) =>
               cell && (
-                <Button
-                  variant="primary"
-                  onClick={() => handleClick(props.row.original)}
-                  size="sm"
-                >
+                <Button variant="primary" onClick={() => handleClick(props.row.original)} size="sm">
                   {props.value}
                 </Button>
               ),
           },
           {
-            Header: 'App_IP',
-            accessor: 'appIP',
+            Header: "App_IP",
+            accessor: "appIP",
           },
           {
-            Header: 'App_Name',
-            accessor: 'appName',
+            Header: "App_Name",
+            accessor: "appName",
           },
         ],
       },
       {
         // Second group - Details
-        Header: 'Details',
+        Header: "Details",
         // Second group columns
         columns: [
           {
-            Header: 'Status_Http',
-            accessor: 'statusHttp',
+            Header: "Status_Http",
+            accessor: "statusHttp",
           },
           {
-            Header: 'Status',
-            accessor: 'status',
+            Header: "Status",
+            accessor: "status",
           },
           {
-            Header: 'Trx_Amount',
-            accessor: 'trxAmount',
+            Header: "Trx_Amount",
+            accessor: "trxAmount",
           },
           {
-            Header: 'Trx_Timestamp',
-            accessor: 'trxTimestamp',
+            Header: "Trx_Timestamp",
+            accessor: "trxTimestamp",
           },
           {
-            Header: 'Merchant',
-            accessor: 'merchantId',
+            Header: "Merchant",
+            accessor: "merchantId",
           },
           {
-            Header: 'Created_At',
-            accessor: 'createdAt',
+            Header: "Created_At",
+            accessor: "createdAt",
           },
           {
-            Header: 'Updated_At',
-            accessor: 'updatedAt',
+            Header: "Updated_At",
+            accessor: "updatedAt",
           },
         ],
       },
@@ -175,11 +166,11 @@ export default function ApiTable() {
 
   const loadMonitoringData = async () => {
     const ROOT_API = process.env.NEXT_PUBLIC_API;
-    const API_VERSION = 'api/v1';
+    const API_VERSION = "api/v1";
     const url = `${ROOT_API}/${API_VERSION}/monitoring`;
     const result = await axios(url);
-    // console.log('result', result);
-    // console.log('data', result.data.data);
+    console.log("result", result);
+    console.log("data", result.data.data);
     setData(result.data.data);
   };
 
@@ -246,18 +237,9 @@ export default function ApiTable() {
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th
-                      scope="col"
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      {column.render('Header')}
-                      <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
-                          : ''}
-                      </span>
+                    <th scope="col" {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      {column.render("Header")}
+                      <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
                     </th>
                   ))}
                 </tr>
@@ -269,9 +251,7 @@ export default function ApiTable() {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell) => {
-                      return (
-                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                      );
+                      return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
                     })}
                   </tr>
                 );
@@ -284,25 +264,23 @@ export default function ApiTable() {
             <ul className="pagination justify-content-end mb-0">
               <li className="mr-5 mt-1">
                 <span>
-                  Page{' '}
+                  Page{" "}
                   <strong>
                     {pageIndex + 1} of {pageOptions.length}
-                  </strong>{' '}
+                  </strong>{" "}
                 </span>
                 <span>
-                  | Go to page:{' '}
+                  | Go to page:{" "}
                   <input
                     type="number"
                     defaultValue={pageIndex + 1}
                     onChange={(e) => {
-                      const pageVal = e.target.value
-                        ? Number(e.target.value) - 1
-                        : 0;
+                      const pageVal = e.target.value ? Number(e.target.value) - 1 : 0;
                       gotoPage(pageVal);
                     }}
-                    style={{ width: '100px' }}
+                    style={{ width: "100px" }}
                   />
-                </span>{' '}
+                </span>{" "}
                 <select
                   value={pageSize}
                   onChange={(e) => {
@@ -317,41 +295,25 @@ export default function ApiTable() {
                 </select>
               </li>
               <li className="page-item">
-                <button
-                  className="page-link"
-                  onClick={() => gotoPage(0)}
-                  disabled={!canPreviousPage}
-                >
-                  {'<<'}
-                </button>{' '}
+                <button className="page-link" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                  {"<<"}
+                </button>{" "}
               </li>
               <li className="page-item">
-                <button
-                  className="page-link"
-                  onClick={() => previousPage()}
-                  disabled={!canPreviousPage}
-                >
-                  {'<'}
-                </button>{' '}
+                <button className="page-link" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                  {"<"}
+                </button>{" "}
               </li>
 
               <li className="page-item">
-                <button
-                  className="page-link"
-                  onClick={() => nextPage()}
-                  disabled={!canNextPage}
-                >
-                  {'>'}
-                </button>{' '}
+                <button className="page-link" onClick={() => nextPage()} disabled={!canNextPage}>
+                  {">"}
+                </button>{" "}
               </li>
               <li className="page-item">
-                <button
-                  className="page-link"
-                  onClick={() => gotoPage(pageCount - 1)}
-                  disabled={!canNextPage}
-                >
-                  {'>>'}
-                </button>{' '}
+                <button className="page-link" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                  {">>"}
+                </button>{" "}
               </li>
             </ul>
           </nav>

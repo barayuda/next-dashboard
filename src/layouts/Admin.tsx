@@ -7,6 +7,7 @@ import { Container } from 'reactstrap';
 import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AdminFooter from '../components/Footers/AdminFooter';
 import Sidebar from '../components/Sidebar/Sidebar';
+// import SidebarNew from '../components/Sidebar/SidebarNew';
 
 import routes from '../../variables/routes';
 
