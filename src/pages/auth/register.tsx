@@ -1,265 +1,222 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
-import { NextPage } from 'next';
-import Link, { LinkProps } from 'next/link';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import GoogleLogin from '@leecheuk/react-google-login';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { GoogleLogin } from 'react-google-login';
-import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-// reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  // InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Row,
-  Col,
-  Label,
-} from 'reactstrap';
-// layout for this page
-import Auth from '../../layouts/Auth';
-import {
-  authenticate,
-  isAuth,
-  sendGoogleToken,
-  setSignUp,
-} from '../../../services/auth';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { env } from '../../env/client.mjs';
 
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+// layout for page
 
-const Register: NextPageWithLayout = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [localForm, setLocalForm] = useState({
-    name: '',
-    email: '',
-  });
-  const [agreement, setAgreement] = useState(false);
+import AuthLayout from '../../layouts/AuthLayout';
+import { authenticate, isAuth, sendGoogleToken } from '../../services/auth';
 
-  useEffect(() => {
-    const getLocalForm = localStorage.getItem('user-form');
-    setLocalForm(JSON.parse(getLocalForm!));
-  }, []);
-
+export default function Register() {
   const router = useRouter();
-  const onSubmit = async () => {
-    const userForm = {
-      email,
-      name,
-      password,
-    };
-    // console.log('agreement', agreement);
-    // console.log('typeof agreement', typeof agreement);
-    if (agreement) {
-      localStorage.setItem('user-form', JSON.stringify(userForm));
 
-      const getLocalForm = await localStorage.getItem('user-form');
-      const form = JSON.parse(getLocalForm!);
-      const data = new FormData();
-      let username = form.name;
-      username = username.replace(/\s+/g, '');
-      username = username.replace(/'+/g, '');
-      username = username.replace(/-+/g, '');
-      username = username.toLowerCase();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRetypePassword, setShowRetypePassword] = useState(false);
 
-      data.append('image', '');
-      data.append('email', form.email);
-      data.append('name', form.name);
-      data.append('password', form.password);
-      data.append('username', username);
-      data.append('phoneNumber', '08123456789');
-      data.append('role', 'public-free');
-      data.append('status', 'NEW');
-
-      const result = await setSignUp(data);
-      if (result.error) {
-        toast.error(result.message);
-      } else {
-        toast.success('Register Berhasil');
-        // router.push('/sign-up-success');
-        router.push('/auth/login');
-        // [CODE UPDATE] di tutorial saya simpan remove user-form disini,
-        // saya rubah remove nya menjadi di halaman setelahnya.
-        // localStorage.removeItem('user-form');
-      }
-    } else {
-      toast.error('Mohon ceklist pada agreement');
-    }
-  };
-
-  const informParent = (response: any) => {
-    authenticate(response, () => {
-      if (isAuth() && isAuth().role === 'admin') {
-        router.push('/dashboard');
-      } else {
-        router.push('/simulator');
-      }
-    });
-  };
+  const inputReference = useRef<HTMLInputElement>(null);
 
   const responseGoogle = async (response: any) => {
-    console.log('GOOGLE CLIENT ID', process.env.NEXT_PUBLIC_GOOGLE_CLIENT);
+    console.log('GOOGLE CLIENT ID', env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
     console.log('responseGoogle', response);
     const res = await sendGoogleToken(response.tokenId);
     informParent(res);
   };
 
+  const informParent = (response: any) => {
+    authenticate(response, () => {
+      if (isAuth() && isAuth().role === 'admin') {
+        void router.push('/dashboard');
+      } else {
+        void router.push('/');
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (inputReference.current) {
+      inputReference.current.focus();
+    }
+  }, []);
+
   return (
-    <>
-      <Col lg="6" md="8">
-        <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <div className="text-muted text-center mt-2 mb-4">
-              <small>Sign up with</small>
-            </div>
-            <div className="text-center">
-              <Button
-                className="btn-neutral btn-icon mr-4"
-                color="default"
-                href="#home"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img alt="..." src="/img/icons/common/github.svg" />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <GoogleLogin
-                clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT}`}
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-                render={(renderProps) => (
-                  <Button
-                    className="btn-neutral btn-icon"
-                    color="default"
-                    href="#home"
-                    // onClick={(e) => e.preventDefault()}
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
+    <AuthLayout>
+      <div className="container mx-auto h-full px-4">
+        <div className="flex h-full content-center items-center justify-center">
+          <div className="w-full px-4 lg:w-6/12">
+            <div className="bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
+              <div className="mb-0 rounded-t px-6 py-6">
+                <div className="mb-3 text-center">
+                  <h6 className="text-blueGray-500 text-sm font-bold">
+                    Sign up with
+                  </h6>
+                </div>
+                <div className="btn-wrapper text-center">
+                  <button
+                    className="active:bg-blueGray-50 text-blueGray-700 mr-2 mb-1 inline-flex items-center rounded bg-white px-4 py-2 text-xs font-bold uppercase shadow outline-none transition-all duration-150 ease-linear hover:shadow-md focus:outline-none"
+                    type="button"
                   >
-                    <span className="btn-inner--icon">
-                      <img alt="..." src="/img/icons/common/google.svg" />
-                    </span>
-                    <span className="btn-inner--text">Google</span>
-                  </Button>
-                )}
-              />
-            </div>
-          </CardHeader>
-          <CardBody className="px-lg-5 py-lg-5">
-            <div className="text-center text-muted mb-4">
-              <small>Or sign up with credentials</small>
-            </div>
-            <Form role="form">
-              <FormGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  {/* <InputGroupAddon addonType="prepend"> */}
-                  <InputGroupText>
-                    <i className="ni ni-hat-3" />
-                  </InputGroupText>
-                  {/* </InputGroupAddon> */}
-                  <Input
-                    placeholder="Name"
-                    type="text"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  {/* <InputGroupAddon addonType="prepend"> */}
-                  <InputGroupText>
-                    <i className="ni ni-email-83" />
-                  </InputGroupText>
-                  {/* </InputGroupAddon> */}
-                  <Input
-                    placeholder="Email"
-                    type="email"
-                    autoComplete="new-email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  {/* <InputGroupAddon addonType="prepend"> */}
-                  <InputGroupText>
-                    <i className="ni ni-lock-circle-open" />
-                  </InputGroupText>
-                  {/* </InputGroupAddon> */}
-                  <Input
-                    placeholder="Password"
-                    type="password"
-                    autoComplete="new-password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <div className="text-muted font-italic">
-                <small>
-                  password strength:{' '}
-                  <span className="text-success font-weight-700">strong</span>
-                </small>
-              </div>
-              <Row className="my-4">
-                <Col xs="12">
-                  <div className="custom-control custom-control-alternative custom-checkbox">
-                    <Input
-                      className="custom-control-input"
-                      id="customCheckRegister"
-                      type="checkbox"
-                      checked={agreement}
-                      onChange={(event) => {
-                        setAgreement(event.target.checked);
-                      }}
+                    <Image
+                      alt="..."
+                      className="mr-1 w-5"
+                      src="/img/github.svg"
+                      width={20}
+                      height={20}
                     />
-                    <Label
-                      className="custom-control-label"
-                      for="customCheckRegister"
-                      check
-                    >
-                      I agree with the{' '}
-                      <a href="#home" onClick={(e) => e.preventDefault()}>
-                        Privacy Policy
-                      </a>
-                    </Label>
-                  </div>
-                </Col>
-              </Row>
-              <div className="text-center">
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  type="button"
-                  onClick={onSubmit}
-                >
-                  Create account
-                </Button>
+                    Github
+                  </button>
+                  <GoogleLogin
+                    clientId={env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                    render={(renderProps) => (
+                      <button
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                        className="active:bg-blueGray-50 text-blueGray-700 mr-1 mb-1 inline-flex items-center rounded bg-white px-4 py-2 text-xs font-bold uppercase shadow outline-none transition-all duration-150 ease-linear hover:shadow-md focus:outline-none"
+                      >
+                        <Image
+                          alt="..."
+                          className="mr-1 w-5"
+                          src="/img/google.svg"
+                          width={20}
+                          height={20}
+                        />
+                        Google
+                      </button>
+                    )}
+                  ></GoogleLogin>
+                </div>
+                <hr className="border-b-1 border-blueGray-300 mt-6" />
               </div>
-            </Form>
-          </CardBody>
-        </Card>
-      </Col>
-    </>
+              <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
+                <div className="text-blueGray-400 mb-3 text-center font-bold">
+                  <small>Or sign up with credentials</small>
+                </div>
+                <form>
+                  <div className="relative mb-3 w-full">
+                    <label
+                      className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                      htmlFor="grid-password"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="email"
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      placeholder="Name"
+                    />
+                  </div>
+
+                  <div className="relative mb-3 w-full">
+                    <label
+                      className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                      htmlFor="grid-password"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      placeholder="Email"
+                    />
+                  </div>
+
+                  <div className="relative mb-3 w-full">
+                    <label
+                      className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                      htmlFor="grid-password"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      placeholder="Password"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowPassword(!showPassword);
+                      }}
+                      className="absolute right-5 mt-1 inline-block py-3"
+                    >
+                      <FaEye className={showPassword ? 'hidden' : 'block'} />
+                      <FaEyeSlash
+                        className={showPassword ? 'block' : 'hidden'}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="relative mb-3 w-full">
+                    <label
+                      className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                      htmlFor="grid-password"
+                    >
+                      Retype Password
+                    </label>
+                    <input
+                      type={showRetypePassword ? 'text' : 'password'}
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      placeholder="Retype Password"
+                    ></input>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowRetypePassword(!showRetypePassword);
+                      }}
+                      className="absolute right-5 mt-1 inline-block py-3"
+                    >
+                      <FaEye
+                        className={showRetypePassword ? 'hidden' : 'block'}
+                      />
+                      <FaEyeSlash
+                        className={showRetypePassword ? 'block' : 'hidden'}
+                      />
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="inline-flex cursor-pointer items-center">
+                      <input
+                        id="customCheckLogin"
+                        type="checkbox"
+                        className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
+                      />
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        I agree with the{' '}
+                        <a
+                          href="#pablo"
+                          className="text-lightBlue-500"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          Privacy Policy
+                        </a>
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="mt-6 text-center">
+                    <button
+                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                      type="button"
+                    >
+                      Create Account
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AuthLayout>
   );
-};
-
-// Register.layout = Auth;
-Register.getLayout = function getLayout(page: ReactElement) {
-  return <Auth>{page}</Auth>;
-};
-
-export default Register;
+}

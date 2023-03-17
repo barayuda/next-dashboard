@@ -1,10 +1,13 @@
-import React from 'react';
-import Router from 'next/router';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import React, { Component } from "react";
+import Router from "next/router";
 
-export default function _error() {
-  React.useEffect(() => {
-    Router.push('/admin/dashboard');
-  });
+export default class _error extends Component {
+  componentDidMount = () => {
+    Router.push("/");
+  };
 
-  return <div />;
+  render() {
+    return <div />;
+  }
 }

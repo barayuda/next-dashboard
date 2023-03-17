@@ -1,50 +1,19 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
-// reactstrap components
-import {
-	Badge,
-	Card,
-	CardHeader,
-	CardFooter,
-	DropdownMenu,
-	DropdownItem,
-	UncontrolledDropdown,
-	DropdownToggle,
-	Media,
-	Pagination,
-	PaginationItem,
-	PaginationLink,
-	Progress,
-	Table,
-	Container,
-	Row,
-	UncontrolledTooltip,
-} from 'reactstrap';
-// layout for this page
-import Admin from '../../layouts/Admin';
-// core components
-import Header from '../../components/Headers/Header';
+// components
 import ApiTable from '../../components/MonitoringContent/ApiTable';
 
-function Monitoring() {
-	return (
-		<>
-			<Header />
-			{/* Page content */}
-			<Container className="mt--7" fluid>
-				<Row>
-					<div className="col mb-5">
-						<ApiTable />
-					</div>
-				</Row>
-			</Container>
-		</>
-	);
+// layout for page
+import AdminLayout from '../../layouts/AdminLayout';
+
+export default function Monitoring() {
+  return (
+    <AdminLayout>
+      <div className="mt-4 flex flex-wrap">
+        <div className="mb-12 w-full px-4">
+          <ApiTable color="dark" />
+        </div>
+      </div>
+    </AdminLayout>
+  );
 }
-
-// Monitoring.layout = Admin;
-Monitoring.getLayout = function getLayout(page: ReactElement) {
-	return <Admin>{page}</Admin>;
-};
-
-export default Monitoring;

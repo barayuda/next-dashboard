@@ -1,33 +1,19 @@
-import { ReactElement, useEffect } from 'react';
-import { Container, Row } from 'reactstrap';
-import Header from '../../components/Headers/Header';
+import React from 'react';
+
+// components
 import ApiTable from '../../components/SimulatorContent/ApiTable';
-import Admin from '../../layouts/Admin';
 
-function Simulator() {
-  useEffect(() => {
-    document
-      .querySelector('body')
-      ?.classList.add('g-sidenav-show', 'g-sidenav-pinned');
-  });
+// layout for page
+import AdminLayout from '../../layouts/AdminLayout';
 
+export default function Monitoring() {
   return (
-    <>
-      <Header />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <div className="col mb-5">
-            <ApiTable />
-          </div>
-        </Row>
-      </Container>
-    </>
+    <AdminLayout>
+      <div className="mt-4 flex flex-wrap">
+        <div className="mb-12 w-full px-4">
+          <ApiTable color="dark" />
+        </div>
+      </div>
+    </AdminLayout>
   );
 }
-
-Simulator.getLayout = function getLayout(page: ReactElement) {
-  return <Admin>{page}</Admin>;
-};
-
-export default Simulator;

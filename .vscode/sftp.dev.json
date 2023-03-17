@@ -1,0 +1,12 @@
+{
+    "name": "Dev Server",
+    "host": "10.14.20.49",
+    "protocol": "sftp",
+    "port": 22,
+    "username": "root",
+    "password": "P@ssw0rd",
+    "remotePath": "/var/www/monitoring/nextjspg-dashboard/",
+    "uploadOnSave": false,
+    "useTempFile": false,
+    "openSsh": false
+}

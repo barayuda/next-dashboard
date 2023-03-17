@@ -1,123 +1,25 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
-// reactstrap components
-import { Card, Container, Row } from 'reactstrap';
-// layout for this page
-import Admin from '../../layouts/Admin';
-// core components
-import Header from '../../components/Headers/Header';
+// components
 
-declare const window: any;
+import MapExample from '../../components/Maps/MapExample';
 
-const MapWrapper = () => {
-  const mapRef = React.useRef(null);
-  React.useEffect(() => {
-    let google = window.google;
-    let map = mapRef.current;
-    let lat = '40.748817';
-    let lng = '-73.985428';
-    const myLatlng = new window.google.maps.LatLng(lat, lng);
-    const mapOptions = {
-      zoom: 13,
-      center: myLatlng,
-      scrollwheel: false,
-      zoomControl: true,
-      styles: [
-        {
-          featureType: 'administrative',
-          elementType: 'labels.text.fill',
-          stylers: [{ color: '#444444' }],
-        },
-        {
-          featureType: 'landscape',
-          elementType: 'all',
-          stylers: [{ color: '#f2f2f2' }],
-        },
-        {
-          featureType: 'poi',
-          elementType: 'all',
-          stylers: [{ visibility: 'off' }],
-        },
-        {
-          featureType: 'road',
-          elementType: 'all',
-          stylers: [{ saturation: -100 }, { lightness: 45 }],
-        },
-        {
-          featureType: 'road.highway',
-          elementType: 'all',
-          stylers: [{ visibility: 'simplified' }],
-        },
-        {
-          featureType: 'road.arterial',
-          elementType: 'labels.icon',
-          stylers: [{ visibility: 'off' }],
-        },
-        {
-          featureType: 'transit',
-          elementType: 'all',
-          stylers: [{ visibility: 'off' }],
-        },
-        {
-          featureType: 'water',
-          elementType: 'all',
-          stylers: [{ color: '#5e72e4' }, { visibility: 'on' }],
-        },
-      ],
-    };
+// layout for page
 
-    map = new google.maps.Map(map, mapOptions);
+import AdminLayout from '../../layouts/AdminLayout';
 
-    const marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      title: 'Light Bootstrap Dashboard PRO React!',
-    });
-
-    const contentString =
-      '<div class="info-window-content"><h2>Argon Dashboard PRO React</h2>' +
-      '<p>A free Admin for Reactstrap, Bootstrap, React, and React Hooks.</p></div>';
-
-    const infowindow = new google.maps.InfoWindow({
-      content: contentString,
-    });
-
-    google.maps.event.addListener(marker, 'click', function () {
-      infowindow.open(map, marker);
-    });
-  }, []);
-  return (
-    <div
-      style={{ height: '600px' }}
-      className="map-canvas"
-      id="map-canvas"
-      ref={mapRef}
-    />
-  );
-};
-
-function Maps() {
+export default function Maps() {
   return (
     <>
-      <Header />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <div className="col">
-            <Card className="shadow border-0">
-              <MapWrapper />
-            </Card>
+      <div className="flex flex-wrap">
+        <div className="w-full px-4">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+            <MapExample />
           </div>
-        </Row>
-      </Container>
+        </div>
+      </div>
     </>
   );
 }
 
-// Maps.layout = Admin;
-Maps.getLayout = function getLayout(page: ReactElement) {
-  return <Admin>{page}</Admin>;
-};
-
-export default Maps;
+Maps.layout = AdminLayout;

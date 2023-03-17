@@ -1,74 +1,92 @@
-import '../../styles/globals.css';
-import type { AppProps } from 'next/app';
-import React, { ReactElement, ReactNode } from 'react';
-import ReactDOM from 'react-dom';
-import { NextPage } from 'next';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import React from 'react';
+import { Toaster } from 'react-hot-toast';
 import Head from 'next/head';
+import { SessionProvider } from 'next-auth/react';
+import { appWithTranslation } from 'next-i18next';
+import { createRoot } from 'react-dom/client';
 import Router from 'next/router';
-import Script from 'next/script';
-import { ToastContainer } from 'react-toastify';
+import { type AppType } from 'next/app';
+import { type Session } from 'next-auth';
+import type { Root } from 'react-dom/client';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { trpc } from '../utils/trpc';
+
+import '../styles/globals.css';
+import '../styles/tailwind.css';
+import '../styles/custom.css';
 
 import PageChange from '../components/PageChange/PageChange';
-import 'react-toastify/dist/ReactToastify.css';
+import GlobalContextProvider from '../contexts/GlobalContextProvider';
+import { AppPropsWithLayout } from '../types';
 
-import '../../public/plugins/nucleo/css/nucleo.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../../public/css/nextjs-argon-dashboard.css';
-// import '../../public/css/argon.css';
-// import '../../public/scss/nextjs-argon-dashboard.scss';
+let root: Root;
+let container: HTMLElement;
 
-Router.events.on('routeChangeStart', (url) => {
-  // console.log(`Loading: ${url}`);
+Router.events.on('routeChangeStart', (url: string) => {
+  console.log(`Loading: ${url}`);
   document.body.classList.add('body-page-transition');
-  ReactDOM.render(
-    <PageChange path={url} />,
-    document.getElementById('page-transition')
-  );
+
+  if (!root && !container) {
+    container = document.getElementById('page-transition') as HTMLElement;
+    root = createRoot(container);
+    root.render(<PageChange path={url} />);
+    // console.log("routeChangeStart1");
+  } else {
+    root = createRoot(container);
+    root.render(<PageChange path={url} />);
+    // console.log("routeChangeStart2");
+  }
 });
+
 Router.events.on('routeChangeComplete', () => {
-  ReactDOM.unmountComponentAtNode(
-    document.getElementById('page-transition') as HTMLElement
-  );
+  if (!root) {
+    container = document.getElementById('page-transition') as HTMLElement;
+    root = createRoot(container);
+    root.unmount();
+    // console.log("routeChangeComplete1");
+  } else {
+    root.unmount();
+    // console.log("routeChangeComplete2");
+  }
   document.body.classList.remove('body-page-transition');
 });
+
 Router.events.on('routeChangeError', () => {
-  ReactDOM.unmountComponentAtNode(
-    document.getElementById('page-transition') as HTMLElement
-  );
-  document.body.classList.remove('body-page-transition');
+  if (!root) {
+    container = document.getElementById('page-transition') as HTMLElement;
+    root = createRoot(container);
+    root.unmount();
+    // console.log("routeChangeError1");
+  } else {
+    root.unmount();
+    // console.log("routeChangeError2");
+  }
 });
 
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};
-
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((children) => children);
-
-  return getLayout(
-    <React.Fragment>
+const MyApp: AppType<{ session: Session | null }> = ({
+  Component,
+  pageProps,
+}: AppPropsWithLayout) => {
+  const { session } = pageProps;
+  return (
+    <>
       <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        <title>EMPIS BANK MEGA</title>
         {/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> */}
       </Head>
-      <Script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></Script>
-      {/* <Layout> */}
-      <Component {...pageProps} />
-      {/* </Layout> */}
-      <ToastContainer />
-    </React.Fragment>
+      <SessionProvider session={session}>
+        <GlobalContextProvider>
+          <Toaster />
+          <Component {...pageProps} />
+        </GlobalContextProvider>
+      </SessionProvider>
+    </>
   );
-}
+};
 
-export const getStaticProps = async () => {};
-
-export default MyApp;
+export default trpc.withTRPC(MyApp);

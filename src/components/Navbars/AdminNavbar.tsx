@@ -1,139 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
-// reactstrap components
-import {
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Form,
-  FormGroup,
-  // InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
-  Navbar,
-  Nav,
-  Container,
-  Media,
-} from 'reactstrap';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
+import Link from "next/link";
+import React from "react";
+import { FaSearch } from "react-icons/fa";
 
-interface AdminNavbarProps {
-  brandText: string;
-}
+import UserDropdown from "../../components/Dropdowns/UserDropdown";
 
-function AdminNavbar(props: AdminNavbarProps) {
-  const { brandText } = props;
-  const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState({
-    avatar: '/img/theme/team-1-800x800.jpg',
-    name: '',
-    email: '',
-  });
-  const router = useRouter();
-
-  const onLogout = () => {
-    localStorage.removeItem('user-form');
-    Cookies.remove('token');
-    // router.push('/');
-    router.push('/auth/login');
-    setIsLogin(false);
-  };
-
-  useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      // const jwtToken = atob(token);
-      // console.log('token', token);
-      // if (jwtToken !== 'undefined') {
-      //   console.log('jwtToken 1: ', typeof jwtToken + ' => ' + jwtToken);
-      //   const payload: JWTPayloadTypes = jwtDecode(jwtToken);
-      //   const userFromPayload: UserTypes = payload.user;
-      //   console.log('userFromPayload', userFromPayload);
-      //   setUser(userFromPayload);
-      // }
-    }
-  }, []);
+export default function Navbar() {
   return (
     <>
-      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
-        <Container fluid>
-          <Link href="/admin/dashboard" passHref>
-            <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">
-              {brandText}
-            </a>
+      {/* Navbar */}
+      <nav className="absolute top-0 left-0 z-10 flex w-full items-center bg-transparent p-4 md:flex-row md:flex-nowrap md:justify-start">
+        <div className="mx-autp flex w-full flex-wrap items-center justify-between px-4 md:flex-nowrap md:px-10">
+          {/* Brand */}
+          <Link
+            className="hidden text-sm font-semibold uppercase text-white lg:inline-block"
+            href="#pablo"
+            onClick={(e) => e.preventDefault()}
+          >
+            Dashboard
           </Link>
-          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto pt-3">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                {/* <InputGroupAddon addonType="prepend"> */}
-                <InputGroupText>
-                  <i className="fas fa-search" />
-                </InputGroupText>
-                {/* </InputGroupAddon> */}
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form>
-          <Nav className="align-items-center d-none d-md-flex" navbar>
-            <UncontrolledDropdown nav>
-              <DropdownToggle className="pr-0" nav>
-                <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
-                    <Image alt="..." src={user.avatar} width={36} height={36} />
-                  </span>
-                  <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                      Hi, {user.name}
-                    </span>
-                  </Media>
-                </Media>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-arrow">
-                <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
-                </DropdownItem>
-                <Link href="/admin/profile" passHref>
-                  <DropdownItem>
-                    <i className="ni ni-single-02" />
-                    <span>My profile</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile" passHref>
-                  <DropdownItem>
-                    <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile" passHref>
-                  <DropdownItem>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Activity</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile" passHref>
-                  <DropdownItem>
-                    <i className="ni ni-support-16" />
-                    <span>Support</span>
-                  </DropdownItem>
-                </Link>
-                <DropdownItem divider />
-                <DropdownItem href="#home" onClick={onLogout}>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-        </Container>
-      </Navbar>
+          {/* Form */}
+          <form className="mr-3 hidden flex-row flex-wrap items-center md:flex lg:ml-auto">
+            <div className="relative flex w-full flex-wrap items-stretch">
+              <span className="text-blueGray-300 absolute z-10 h-full w-8 items-center justify-center rounded bg-transparent py-3 pl-3 text-center text-base font-normal leading-snug">
+                {/* <i className="fas fa-search"></i> */}
+                <FaSearch />
+              </span>
+              <input
+                type="text"
+                placeholder="Search here..."
+                className="placeholder-blueGray-300 text-blueGray-600 relative w-full rounded border-0 bg-white px-3 py-3 pl-10 text-sm shadow outline-none focus:outline-none focus:ring"
+              />
+            </div>
+          </form>
+          {/* User */}
+          <ul className="hidden list-none flex-col items-center md:flex md:flex-row">
+            <UserDropdown />
+          </ul>
+        </div>
+      </nav>
+      {/* End Navbar */}
     </>
   );
 }
-
-export default AdminNavbar;

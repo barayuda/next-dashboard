@@ -1,98 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Create T3 App
 
-## Getting Started
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-First, run the development server:
+## What's next? How do I make an app with this?
 
-```bash
-npx create-next-app@latest --ts nextjs-ts-argon-dashboard
+We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-npm run dev
-# or
-yarn dev
-```
+If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-Inside that directory, you can run several commands:
-
-```
-npm run dev
-  Starts the development server.
-
-npm run build
-  Builds the app for production.
-
-npm start
-  Runs the built app in production mode.
-```
-
-We suggest that you begin by typing:
-
-```
-cd nextjs-ts-argon-dashboard
-npm run dev
-```
-
-Using PM2
-
-```
-npm run build
-pm2 --name NextJSPG-DASHBOARD start npm -- start --watch --version 1.0.0
-pm2 logs NextJSPG-DASHBOARD --lines 100
-pm2 stop NextJSPG-DASHBOARD --watch
-
-npm run build
-pm2 start pm2-nextdashboard.config.js --env development
-pm2 start pm2-nextdashboard.config.js --env production
-
-```
-
-## Run as a service
-
-https://computingforgeeks.com/how-to-run-java-jar-application-with-systemd-on-linux/
-
-/lib/systemd/system/multi-user.target/
-/usr/lib/systemd/system/
-
-example:
-/lib/systemd/system/multi-user.target/nodes.service
-/usr/lib/systemd/system/nodes.service
-
-/etc/systemd/system/multi-user.target.wants/nextjspg-dashboard.service
-
-chmod +x /var/www/nextjspg-dashboard/extras/start-service.sh
-chmod +x /var/www/nextjspg-dashboard/extras/stop-service.sh
-
-sudo systemctl daemon-reload
-systemctl start nextjspg-dashboard.service
-systemctl status nextjspg-dashboard.service
-systemctl stop nextjspg-dashboard.service
-systemctl restart nextjspg-dashboard.service -l
-systemctl enable nextjspg-dashboard.service
-systemctl is-enabled nextjspg-dashboard.service
-journalctl -u nextjspg-dashboard.service -n 100
-sudo systemd-analyze verify nextjspg-dashboard.service
-sudo systemd-analyze --user verify nextjspg-dashboard.service
-
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- [Next.js](https://nextjs.org)
+- [NextAuth.js](https://next-auth.js.org)
+- [Prisma](https://prisma.io)
+- [Tailwind CSS](https://tailwindcss.com)
+- [tRPC](https://trpc.io)
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Documentation](https://create.t3.gg/)
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## How do I deploy this?
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Next steps
+
+```bash
+cd t3-app-blog
+
+npm install react-google-login --force
+# or
+npm install react-google-login --legacy-peer-deps
+
+npx prisma db push
+npm run dev
+
+npx prisma format
+npx prisma db push
+npx prisma db seed
+
+npm run dev
+
+npm i supabase --save-dev
+npx supabase init
+npx supabase start
+npx supabase status
+npx supabase stop
+
+Digest: sha256:31c3b2d87690c37142f2c345553332a8417a11a7784fd96b84911fae5dd7e909
+Status: Downloaded newer image for public.ecr.aws/supabase/deno-relay:v1.5.0
+Seeding data supabase\seed.sql...
+Started supabase local development setup.
+
+         API URL: http://localhost:54321
+          DB URL: postgresql://postgres:postgres@localhost:54322/postgres
+      Studio URL: http://localhost:54323
+    Inbucket URL: http://localhost:54324
+      JWT secret: super-secret-jwt-token-with-at-least-32-characters-long
+        anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+D:\Applications\Data\ReactNextJS\ultimate-blog-app
+```
+
+## Reference
+
+[Github Repos](https://github.com/sonipranjal/ultimate-blog-app)
+[DB Diagrams](https://dbdiagram.io/d/63b5dd9e7d39e42284e8f6ae)
+[YT JSM Google Login](https://www.youtube.com/watch?v=LKlO8vLvUao)
+[Supabase CLI](https://supabase.com/docs/guides/cli)

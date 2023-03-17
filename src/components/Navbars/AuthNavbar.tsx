@@ -1,183 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
-import { useRouter } from 'next/router';
+import React from 'react';
 import Link from 'next/link';
-// reactstrap components
-import {
-  UncontrolledCollapse,
-  NavbarBrand,
-  Navbar,
-  NavItem,
-  NavLink,
-  Nav,
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
-import { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
+// components
 
-function AuthNavbar() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState({
-    avatar: '',
-  });
-  const router = useRouter();
+import PagesDropdown from '../../components/Dropdowns/PagesDropdown';
+import { FaBars, FaFacebook, FaTwitter } from 'react-icons/fa';
 
-  useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      // const jwtToken = atob(token);
-      // if (jwtToken !== 'undefined') {
-      //   const payload: JWTPayloadTypes = jwtDecode(jwtToken);
-      //   const userFromPayload: UserTypes = payload.user;
-      //   setIsLogin(true);
-      //   setUser(userFromPayload);
-      // }
-    }
-  }, []);
-
-  const onLogout = () => {
-    localStorage.removeItem('user-form');
-    Cookies.remove('token');
-    router.push('/');
-    setIsLogin(false);
-  };
-
-  if (isLogin) {
-    return (
-      <>
-        <Navbar
-          className="navbar-top navbar-horizontal navbar-dark"
-          expand="md"
-        >
-          <Container className="px-4">
-            <Link href="/admin/dashboard" passHref>
-              <span>
-                <NavbarBrand href="#home">
-                  <img alt="..." src="/img/brand/logo-bankmega-h144.png" />
-                </NavbarBrand>
-              </span>
-            </Link>
-            <button className="navbar-toggler" id="navbar-collapse-main">
-              <span className="navbar-toggler-icon" />
-            </button>
-            <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
-              <div className="navbar-collapse-header d-md-none">
-                <Row>
-                  <Col className="collapse-brand" xs="6">
-                    <Link href="/admin/dashboard" passHref>
-                      <img alt="..." src="/img/brand/logo-bankmega-h144.png" />
-                    </Link>
-                  </Col>
-                  <Col className="collapse-close" xs="6">
-                    <button
-                      className="navbar-toggler"
-                      id="navbar-collapse-main"
-                    >
-                      <span />
-                      <span />
-                    </button>
-                  </Col>
-                </Row>
-              </div>
-              <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <Link href="/admin/dashboard" passHref>
-                    <NavLink href="#home" className="nav-link-icon">
-                      <i className="ni ni-planet" />
-                      <span className="nav-link-inner--text">Dashboard</span>
-                    </NavLink>
-                  </Link>
-                </NavItem>
-                <NavItem>
-                  <Link href="/admin/profile" passHref>
-                    <NavLink href="#home" className="nav-link-icon">
-                      <i className="ni ni-single-02" />
-                      <span className="nav-link-inner--text">Profile</span>
-                    </NavLink>
-                  </Link>
-                </NavItem>
-                <NavItem>
-                  <Link href="/auth/login" passHref>
-                    <NavLink
-                      href="#home"
-                      className="nav-link-icon"
-                      onClick={onLogout}
-                    >
-                      <i className="ni ni-key-25" />
-                      <span className="nav-link-inner--text">Logout</span>
-                    </NavLink>
-                  </Link>
-                </NavItem>
-              </Nav>
-            </UncontrolledCollapse>
-          </Container>
-        </Navbar>
-      </>
-    );
-  }
+export default function Navbar() {
+  const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
     <>
-      <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
-        <Container className="px-4">
-          <Link href="/admin/dashboard" passHref>
-            <span>
-              <NavbarBrand href="#home">
-                <img alt="..." src="/img/brand/logo-bankmega-h144.png" />
-              </NavbarBrand>
-            </span>
-          </Link>
-          <button className="navbar-toggler" id="navbar-collapse-main">
-            <span className="navbar-toggler-icon" />
-          </button>
-          <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
-            <div className="navbar-collapse-header d-md-none">
-              <Row>
-                <Col className="collapse-brand" xs="6">
-                  <Link href="/admin/dashboard" passHref>
-                    <img alt="..." src="/img/brand/logo-bankmega-h144.png" />
-                  </Link>
-                </Col>
-                <Col className="collapse-close" xs="6">
-                  <button className="navbar-toggler" id="navbar-collapse-main">
-                    <span />
-                    <span />
-                  </button>
-                </Col>
-              </Row>
-            </div>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <Link href="/admin/dashboard" passHref>
-                  <NavLink href="#home" className="nav-link-icon">
-                    <i className="ni ni-planet" />
-                    <span className="nav-link-inner--text">Dashboard</span>
-                  </NavLink>
+      <nav className="navbar-expand-lg absolute top-0 z-50 flex w-full flex-wrap items-center justify-between px-2 py-3">
+        <div className="container mx-auto flex flex-wrap items-center justify-between px-4">
+          <div className="relative flex w-full justify-between lg:static lg:block lg:w-auto lg:justify-start">
+            <Link
+              href="/"
+              className="mr-4 inline-block whitespace-nowrap py-2 text-sm font-bold uppercase leading-relaxed text-white"
+            >
+              Bank Mega
+            </Link>
+            <button
+              className="block cursor-pointer rounded border border-solid border-transparent bg-transparent px-3 py-1 text-xl leading-none outline-none focus:outline-none lg:hidden"
+              type="button"
+              onClick={() => setNavbarOpen(!navbarOpen)}
+            >
+              <FaBars className="text-white" />
+            </button>
+          </div>
+          <div
+            className={
+              'flex-grow items-center bg-white lg:flex lg:bg-opacity-0 lg:shadow-none' +
+              (navbarOpen ? ' block rounded shadow-lg' : ' hidden')
+            }
+            id="example-navbar-warning"
+          >
+            <ul className="mr-auto flex list-none flex-col lg:flex-row"></ul>
+            <ul className="flex list-none flex-col lg:ml-auto lg:flex-row">
+              <li className="flex items-center">
+                <Link
+                  className="lg:hover:text-blueGray-200 text-blueGray-700 flex items-center px-3 py-4 text-xs font-bold uppercase lg:py-2 lg:text-white"
+                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdemos.creative-tim.com%2Fnotus-nextjs%2F"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaFacebook className="lg:text-blueGray-200 text-blueGray-400 leading-lg text-lg" />
+                  <span className="ml-2 inline-block lg:hidden">Share</span>
                 </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/auth/register" passHref>
-                  <NavLink href="#home" className="nav-link-icon">
-                    <i className="ni ni-circle-08" />
-                    <span className="nav-link-inner--text">Register</span>
-                  </NavLink>
+              </li>
+
+              <li className="flex items-center">
+                <Link
+                  className="lg:hover:text-blueGray-200 text-blueGray-700 flex items-center px-3 py-4 text-xs font-bold uppercase lg:py-2 lg:text-white"
+                  href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdemos.creative-tim.com%2Fnotus-nextjs%2F&text=Start%20your%20development%20with%20a%20Free%20Tailwind%20CSS%20and%20NextJS%20UI%20Kit%20and%20Admin.%20Let%20Notus%20NextJS%20amaze%20you%20with%20its%20cool%20features%20and%20build%20tools%20and%20get%20your%20project%20to%20a%20whole%20new%20level."
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaTwitter className="lg:text-blueGray-200 text-blueGray-400 leading-lg text-lg" />
+                  <span className="ml-2 inline-block lg:hidden">Tweet</span>
                 </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/auth/login" passHref>
-                  <NavLink href="#home" className="nav-link-icon">
-                    <i className="ni ni-key-25" />
-                    <span className="nav-link-inner--text">Login</span>
-                  </NavLink>
+              </li>
+
+              <li className="flex items-center">
+                <Link
+                  className="lg:hover:text-blueGray-200 text-blueGray-700 flex items-center px-3 py-4 text-xs font-bold uppercase lg:py-2 lg:text-white"
+                  href="https://github.com/creativetimofficial/notus-nextjs?ref=nnjs-auth-navbar"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i className="lg:text-blueGray-200 text-blueGray-400 fab fa-github leading-lg text-lg " />
+                  <span className="ml-2 inline-block lg:hidden">Star</span>
                 </Link>
-              </NavItem>
-            </Nav>
-          </UncontrolledCollapse>
-        </Container>
-      </Navbar>
+              </li>
+
+              <li className="flex items-center">
+                <button
+                  className="text-blueGray-700 active:bg-blueGray-50 ml-3 mb-3 rounded bg-white px-4 py-2 text-xs font-bold uppercase shadow outline-none transition-all duration-150 ease-linear hover:shadow-md focus:outline-none lg:mr-1 lg:mb-0"
+                  type="button"
+                >
+                  <i className="fas fa-arrow-alt-circle-down"></i> Download
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </>
   );
 }
-
-export default AuthNavbar;
