@@ -1,15 +1,19 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import dayjs from "dayjs";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { HiXMark } from "react-icons/hi2";
-import { z } from "zod";
-import { trpc } from "../../utils/trpc";
-import AnimatedSidebar from "../AnimatedSidebar";
-import Avatar from "../Avatar";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { HiXMark } from 'react-icons/hi2';
+import { z } from 'zod';
+import { trpc } from '../../utils/trpc';
+import AnimatedSidebar from '../AnimatedSidebar';
+import Avatar from '../Avatar';
 
-import relativeTime from "dayjs/plugin/relativeTime";
-import { useSession } from "next-auth/react";
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { useSession } from 'next-auth/react';
 dayjs.extend(relativeTime);
 
 type CommentsSidebarProps = {
@@ -89,7 +93,7 @@ const CommentsSidebar = ({
                 id="comment"
                 placeholder="What are your thoughts?"
                 className="w-full rounded-lg border p-4 shadow-md outline-none placeholder:text-sm focus:border-gray-600"
-                {...register("text")}
+                {...register('text')}
                 rows={2}
                 disabled={createComment.isLoading}
               />
@@ -100,22 +104,20 @@ const CommentsSidebar = ({
                   type="submit"
                   className="flex items-center space-x-2 rounded-lg px-4 py-2 ring-1 ring-gray-400"
                 >
-                  {createComment.isLoading ? "Loading..." : "Comment"}
+                  {createComment.isLoading ? 'Loading...' : 'Comment'}
                 </button>
               )}
             </div>
           </form>
           <div className="mt-10 flex flex-col space-y-8 overflow-y-auto">
             {comments.data &&
-              comments.data.map((comment) => (
+              comments.data.map((comment: any) => (
                 <div
                   key={comment.id}
                   className="flex flex-col justify-center space-y-3 border-b border-b-gray-200 pb-8 last:border-none"
                 >
                   <div className="flex items-center space-x-2">
-                    <div className="h-10 w-10">
-                      <Avatar size="full" url={comment.user.image} />
-                    </div>
+                    <div className="h-10 w-10"></div>
                     <div>
                       <p className="text-base text-gray-900">
                         {comment.user.name}
