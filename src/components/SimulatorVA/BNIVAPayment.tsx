@@ -1,30 +1,44 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { setLocalStorage } from '../../services/auth';
-import { findByAccRef } from '../../services/mega-ipg';
+import React, { useEffect, useState } from 'react';
+import { getLocalStorage, removeLocalStorage } from '../../services/auth';
 
-const MANDIRIVA = () => {
+const BNIVAPayment = () => {
   const router = useRouter();
+  const [isError, setIsError] = useState(true);
   const [va, setVa] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('0.00');
 
-  const pencetBenar = async () => {
-    console.log('Pencet bener ');
-    const dataFindByAccRef = {
-      trxType: 'getby.account_ref',
-      accountRef: va,
-    };
-    console.log('dataFindByAccRef', dataFindByAccRef);
-    const callApiSpring = await findByAccRef(dataFindByAccRef);
-    console.log('response', callApiSpring.data);
-    if (!callApiSpring.error) {
-      // if (callApiSpring?.data?.statusCode === '00') {
-      // }
-      setLocalStorage('mandiriva', callApiSpring.data);
-      void router.push('/simulator/mandiriva/confirm');
+  useEffect(() => {
+    const data = getLocalStorage('bniva');
+    if (
+      data?.response?.PaymentFlagStatus !== undefined &&
+      data?.response?.CompanyCode !== undefined &&
+      data?.response?.CustomerNumber !== undefined &&
+      data?.response?.PaymentFlagStatus === '00'
+    ) {
+      setIsError(false);
+      setVa(data.response.CompanyCode + '' + data.response.CustomerNumber);
+      setDescription(data.response.PaymentFlagReason.Indonesian);
+      setAmount(data?.response?.TotalAmount || '0.00');
+      setName(data?.response?.CustomerName || 'Unknown');
+    } else if (data?.response?.PaymentFlagStatus === '01') {
+      setDescription(data.response.PaymentFlagReason.Indonesian);
     }
+
+    console.log('data', data);
+  }, []);
+
+  const pencetKembali = () => {
+    removeLocalStorage('bniva');
+    void router.push('/simulator/bniva');
   };
+
   return (
     <div className="container mx-auto h-screen px-4">
       <div className="flex h-full content-center items-center justify-center">
@@ -54,25 +68,28 @@ const MANDIRIVA = () => {
                 <div className="rounded-md bg-blue-500 text-center text-white">
                   <div className="grid grid-cols-4">
                     <div className="col-span-4 p-5">
-                      SILAHKAN MEMASUKKAN NOMOR VIRTUAL ACCOUNT ANDA
+                      {isError ? 'ERROR' : 'SUKSES'}
                     </div>
                     <div>&nbsp;</div>
-                    <div className="col-span-2">
-                      <input
-                        type="text"
-                        name="va_nbr"
-                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        placeholder="Nomor VA"
-                        value={va}
-                        onChange={(event) => setVa(event.target.value)}
-                      />
+                    <div className="col-span-2 p-5">
+                      {description}
+                      {va.length > 0 && (
+                        <div className="grid grid-cols-2">
+                          <div className="text-left">Name</div>
+                          <div className="text-left">: {name}</div>
+                          <div className="text-left">VA No</div>
+                          <div className="text-left">: {va}</div>
+                          <div className="text-left">Amount</div>
+                          <div className="text-left">: {amount}</div>
+                        </div>
+                      )}
                     </div>
                     <div>&nbsp;</div>
                     <div className="text-bold mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
-                    <div className="col-span-2">&nbsp;</div>
-                    <div className="text-bold mb-2 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
+                    <div className="">&nbsp;</div>
+                    <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
                       ---&gt;
                     </div>
                     <div className="text-bold mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
@@ -80,7 +97,7 @@ const MANDIRIVA = () => {
                     </div>
                     <div className="col-span-2">&nbsp;</div>
                     <div className="text-bold mb-1 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
-                      BENAR ---&gt;
+                      ---&gt;
                     </div>
                     <div className="text-bold mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
@@ -88,7 +105,7 @@ const MANDIRIVA = () => {
                     <div>&nbsp;</div>
                     <div>&nbsp;</div>
                     <div className="text-bold mb-1 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
-                      SALAH ---&gt;
+                      KEMBALI ---&gt;
                     </div>
                     <div className="text-bold mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
@@ -110,13 +127,18 @@ const MANDIRIVA = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetBenar();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>
                   </div>
                   <div>
-                    <button className="h-10 w-16 bg-white hover:bg-orange-400"></button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        void pencetKembali();
+                      }}
+                      className="h-10 w-16 bg-white hover:bg-orange-400"
+                    ></button>
                   </div>
                   <div>
                     <button className="h-10 w-16 bg-white hover:bg-orange-400"></button>
@@ -134,4 +156,4 @@ const MANDIRIVA = () => {
   );
 };
 
-export default MANDIRIVA;
+export default BNIVAPayment;
