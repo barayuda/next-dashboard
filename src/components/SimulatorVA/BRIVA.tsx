@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
-import { bcavaInquiry } from '../../services/bcava';
+import { bcavaInquiry } from '../../services/simulator';
 import { getDateWithFormat } from '../../utils/commonHelpers';
 
 const BRIVA = () => {

@@ -103,7 +103,6 @@ export const postRouter = router({
           featuredImage: true,
           author: {
             select: {
-              id: true,
               name: true,
               image: true,
               username: true,

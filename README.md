@@ -66,9 +66,7 @@ service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZ
 D:\Applications\Data\ReactNextJS\ultimate-blog-app
 ```
 
-##
-
-Using PM2
+## Using PM2
 
 ```
 npm run build
