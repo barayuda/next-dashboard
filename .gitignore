@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
+/.vscode
 
 # testing
 /coverage
@@ -34,7 +36,9 @@ yarn-error.log*
 # do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
 .env
 .env*.local
+.env*.development
 .env*.dev
+.env*.dev1
 .env*.dev2
 .env*.sbox
 
