@@ -20,7 +20,7 @@ const Simulator = () => {
   const [total, setTotal] = useState(price);
   const [material, setMaterial] = useState('steel');
   const [paymentSourceMethod, setPaymentSourceMethod] = useState('');
-  const [paymentSource, setPaymentSource] = useState('megadebit');
+  const [paymentSource, setPaymentSource] = useState('');
 
   const onSubmit = async () => {
     const data: SimulatorTypes = {
@@ -228,9 +228,11 @@ const Simulator = () => {
                       <option value="allopoint">AlloPoint</option>
                       <option value="bcava">BCA VA</option>
                       <option value="briva">BRI VA</option>
+                      <option value="bniva">BNI VA</option>
+                      <option value="mandiriva">Mandiri VA</option>
+                      <option value="megava">Mega Virtual Account</option>
                       <option value="megadebit">Mega Debit Card</option>
                       <option value="megacc">Mega Credit Card</option>
-                      <option value="megava">Mega Virtual Account</option>
                       <option value="megaqris">Mega QRIS</option>
                     </select>
                   </div>
