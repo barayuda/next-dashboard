@@ -102,7 +102,10 @@ const UserDropdown = () => {
           className={
             'text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal'
           }
-          onClick={onLogOut}
+          onClick={(e) => {
+            e.preventDefault();
+            onLogOut();
+          }}
         >
           Log Out
         </Link>

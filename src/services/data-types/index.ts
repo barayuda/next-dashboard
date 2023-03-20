@@ -3,6 +3,13 @@ export interface LoginTypes {
   password: string;
 }
 
+export interface RegisterTypes {
+  name: string;
+  email: string;
+  password: string;
+  retypePassword: string;
+}
+
 export interface UserTypes {
   id: string;
   email: string;

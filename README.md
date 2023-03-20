@@ -38,6 +38,12 @@ npm install react-google-login --legacy-peer-deps
 
 npx prisma db push
 npm run dev
+nvm list
+nvm use 12.22.12
+nvm use 16.16.0
+/root/.nvm/versions/node/v16.16.0/bin/npm run dev
+/root/.nvm/versions/node/v16.16.0/bin/npm run build
+
 
 npx prisma format
 npx prisma db push
@@ -73,10 +79,11 @@ npm run build
 pm2 --name NextJSPG-DASHBOARD start npm -- start --watch --version 1.0.0
 pm2 logs NextJSPG-DASHBOARD --lines 100
 pm2 stop NextJSPG-DASHBOARD --watch
+pm2 delete NextJSPG-DASHBOARD --watch
 
 npm run build
-pm2 start pm2-nextdashboard.config.js --env development
-pm2 start pm2-nextdashboard.config.js --env production
+pm2 start extras/pm2-nextdashboard.config.js --env development
+pm2 start extras/pm2-nextdashboard.config.js --env production
 
 ```
 

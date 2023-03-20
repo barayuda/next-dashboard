@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
 import { findByAccRef } from '../../services/mega-ipg';
 
-const MANDIRIVA = () => {
+const BNIVA = () => {
   const router = useRouter();
   const [va, setVa] = useState('');
 
@@ -15,14 +15,15 @@ const MANDIRIVA = () => {
       trxType: 'getby.account_ref',
       accountRef: va,
     };
+
     console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
     console.log('response', callApiSpring.data);
     if (!callApiSpring.error) {
       // if (callApiSpring?.data?.statusCode === '00') {
       // }
-      setLocalStorage('mandiriva', callApiSpring.data);
-      void router.push('/simulator/mandiriva/confirm');
+      setLocalStorage('bniva', callApiSpring.data);
+      void router.push('/simulator/bniva/confirm');
     }
   };
   return (
@@ -32,7 +33,7 @@ const MANDIRIVA = () => {
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
             <div className="grid grid-cols-10 rounded-lg bg-black p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
-                MANDIRI VA Simulator
+                BNI VA Simulator
               </div>
               <div className="relative h-full">
                 <div className="absolute bottom-0 right-0 mr-5 grid grid-flow-col grid-rows-4 justify-items-end">
@@ -134,4 +135,4 @@ const MANDIRIVA = () => {
   );
 };
 
-export default MANDIRIVA;
+export default BNIVA;

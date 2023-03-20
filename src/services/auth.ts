@@ -6,13 +6,13 @@
 import Cookies from 'js-cookie';
 
 import callAPI from '../pages/api/call';
-import { LoginTypes } from './data-types';
+import { LoginTypes, RegisterTypes } from './data-types';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 console.log(`ROOT_API: ${ROOT_API}`);
 const API_VERSION = 'v1';
 
-export async function setSignUp(data: FormData) {
+export async function setSignUp(data: RegisterTypes) {
   const url = `${ROOT_API}/${API_VERSION}/auth/signup`;
 
   return callAPI({
@@ -90,7 +90,7 @@ export const authenticate = (response: any, next: any) => {
 };
 
 // Access user info from localstorage
-export const isAuth = () => {
+export function isAuth() {
   const cookieChecked = getCookie('token');
   if (cookieChecked) {
     if (localStorage.getItem('user')) {
@@ -98,7 +98,7 @@ export const isAuth = () => {
     }
   }
   return false;
-};
+}
 
 export const sendSignOut = (next: any) => {
   removeCookie('token');
