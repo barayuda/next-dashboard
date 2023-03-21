@@ -1,8 +1,5 @@
-import React from "react";
-import { FaCircleNotch } from "react-icons/fa";
-
-// reactstrap components
-// import { Spinner } from "reactstrap";
+import React from 'react';
+import { FaCircleNotch } from 'react-icons/fa';
 
 // core components
 
@@ -16,7 +13,7 @@ export default function PageChange(props: PageChangeProps) {
       <div
         className="fixed top-0 left-0 z-40 h-full w-full bg-cover"
         style={{
-          backgroundImage: "url('/img/img-1-1000x600.jpg')",
+          backgroundImage: "url('/assets/img/img-1-1000x600.jpg')",
         }}
       ></div>
       <div className="absolute top-0 left-0 z-50 block h-full w-full bg-black bg-opacity-50"></div>

@@ -49,7 +49,7 @@ const UserDropdown = () => {
             <Image
               alt="..."
               className="w-full rounded-full border-none align-middle shadow-lg"
-              src="/img/team-1-800x800.jpg"
+              src="/assets/img/team-1-800x800.jpg"
               width={48}
               height={48}
             />

@@ -11,15 +11,16 @@ export interface RegisterTypes {
 }
 
 export interface UserTypes {
-  id: string;
+  id?: string;
   email: string;
   name: string;
-  avatar: string;
+  avatar?: string;
 }
 
 export interface JWTPayloadTypes {
-  player: UserTypes;
+  user: UserTypes;
   iat: number;
+  exp: number;
 }
 
 export interface MerchantTransactionTypes {

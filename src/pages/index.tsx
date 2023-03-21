@@ -54,7 +54,7 @@ const Home = () => {
         </div>
         <img
           className="b-auto max-h-860-px absolute top-0 right-0 -mt-48 w-10/12 pt-16 sm:mt-0 sm:w-6/12"
-          src="/img/pattern_nextjs.png"
+          src="/assets/img/pattern_nextjs.png"
           alt="..."
         />
       </section>
@@ -233,32 +233,32 @@ const Home = () => {
               <div className="relative mb-6 mt-48 flex w-full min-w-0 flex-col md:mt-0">
                 <img
                   alt="..."
-                  src="/img/component-btn.png"
+                  src="/assets/img/component-btn.png"
                   className="max-w-100-px left-145-px -top-29-px z-3 absolute w-full rounded align-middle shadow-lg"
                 />
                 <img
                   alt="..."
-                  src="/img/component-profile-card.png"
+                  src="/assets/img/component-profile-card.png"
                   className="max-w-210-px left-260-px -top-160-px absolute w-full rounded-lg align-middle shadow-lg"
                 />
                 <img
                   alt="..."
-                  src="/img/component-info-card.png"
+                  src="/assets/img/component-info-card.png"
                   className="max-w-180-px left-40-px -top-225-px z-2 absolute w-full rounded-lg align-middle shadow-lg"
                 />
                 <img
                   alt="..."
-                  src="/img/component-info-2.png"
+                  src="/assets/img/component-info-2.png"
                   className="max-w-200-px -left-50-px top-25-px absolute w-full rounded-lg align-middle shadow-2xl"
                 />
                 <img
                   alt="..."
-                  src="/img/component-menu.png"
+                  src="/assets/img/component-menu.png"
                   className="max-w-580-px -left-20-px top-210-px absolute w-full rounded align-middle shadow-lg"
                 />
                 <img
                   alt="..."
-                  src="/img/component-btn-pink.png"
+                  src="/assets/img/component-btn-pink.png"
                   className="max-w-120-px left-195-px top-95-px absolute w-full rounded align-middle shadow-xl"
                 />
               </div>
@@ -497,7 +497,7 @@ const Home = () => {
                   transform:
                     'scale(1) perspective(1040px) rotateY(-11deg) rotateX(2deg) rotate(2deg)',
                 }}
-                src="/img/documentation.png"
+                src="/assets/img/documentation.png"
               />
             </div>
           </div>
@@ -529,7 +529,7 @@ const Home = () => {
                       <img
                         alt="..."
                         className="h-auto max-w-full rounded-lg border-none align-middle"
-                        src="/img/login.jpg"
+                        src="/assets/img/login.jpg"
                       />
                     </div>
                   </Link>
@@ -544,7 +544,7 @@ const Home = () => {
                       <img
                         alt="..."
                         className="h-auto max-w-full rounded-lg border-none align-middle"
-                        src="/img/profile.jpg"
+                        src="/assets/img/profile.jpg"
                       />
                     </div>
                   </Link>
@@ -559,7 +559,7 @@ const Home = () => {
                       <img
                         alt="..."
                         className="h-auto max-w-full rounded-lg border-none align-middle"
-                        src="/img/landing.jpg"
+                        src="/assets/img/landing.jpg"
                       />
                     </div>
                   </Link>

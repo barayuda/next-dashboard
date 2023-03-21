@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import Navbar from "../components/Navbars/AuthNavbar";
-import Footer from "../components/Footers/Footer";
+import Navbar from '../components/Navbars/AuthNavbar';
+import Footer from '../components/Footers/Footer';
 
 export default function Profile() {
   return (
@@ -23,7 +23,7 @@ export default function Profile() {
           </div>
           <div
             className="pointer-events-none absolute top-auto bottom-0 left-0 right-0 h-16 w-full overflow-hidden"
-            style={{ transform: "translateZ(0)" }}
+            style={{ transform: 'translateZ(0)' }}
           >
             <svg
               className="absolute bottom-0 overflow-hidden"
@@ -50,7 +50,7 @@ export default function Profile() {
                     <div className="relative">
                       <img
                         alt="..."
-                        src="/img/team-2-800x800.jpg"
+                        src="/assets/img/team-2-800x800.jpg"
                         className="max-w-150-px absolute -m-16 -ml-20 h-auto rounded-full border-none align-middle shadow-xl lg:-ml-16"
                       />
                     </div>
@@ -99,7 +99,7 @@ export default function Profile() {
                     Jenna Stones
                   </h3>
                   <div className="text-blueGray-400 mt-0 mb-2 text-sm font-bold uppercase leading-normal">
-                    <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{" "}
+                    <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{' '}
                     Los Angeles, California
                   </div>
                   <div className="text-blueGray-600 mb-2 mt-10">

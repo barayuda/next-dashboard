@@ -281,7 +281,7 @@ const Landing = () => {
                 <div className="px-6">
                   <Image
                     alt="..."
-                    src="/img/team-1-800x800.jpg"
+                    src="/assets/img/team-1-800x800.jpg"
                     width={120}
                     height={120}
                     className="max-w-120-px mx-auto rounded-full shadow-lg"
@@ -318,7 +318,7 @@ const Landing = () => {
                 <div className="px-6">
                   <Image
                     alt="..."
-                    src="/img/team-2-800x800.jpg"
+                    src="/assets/img/team-2-800x800.jpg"
                     width={120}
                     height={120}
                     className="max-w-120-px mx-auto rounded-full shadow-lg"
@@ -349,7 +349,7 @@ const Landing = () => {
                 <div className="px-6">
                   <Image
                     alt="..."
-                    src="/img/team-3-800x800.jpg"
+                    src="/assets/img/team-3-800x800.jpg"
                     width={120}
                     height={120}
                     className="max-w-120-px mx-auto rounded-full shadow-lg"
@@ -386,7 +386,7 @@ const Landing = () => {
                 <div className="px-6">
                   <Image
                     alt="..."
-                    src="/img/team-4-470x470.png"
+                    src="/assets/img/team-4-470x470.png"
                     width={120}
                     height={120}
                     className="max-w-120-px mx-auto rounded-full shadow-lg"

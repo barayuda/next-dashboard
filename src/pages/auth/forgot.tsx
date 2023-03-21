@@ -1,10 +1,10 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 // layout for page
 
-import AuthLayout from "../../layouts/AuthLayout";
+import AuthLayout from '../../layouts/AuthLayout';
 
 export default function Forgot() {
   return (
@@ -27,7 +27,7 @@ export default function Forgot() {
                     <Image
                       alt="..."
                       className="mr-1 w-5"
-                      src="/img/github.svg"
+                      src="/assets/img/github.svg"
                       width={20}
                       height={20}
                     />
@@ -40,7 +40,7 @@ export default function Forgot() {
                     <Image
                       alt="..."
                       className="mr-1 w-5"
-                      src="/img/google.svg"
+                      src="/assets/img/google.svg"
                       width={20}
                       height={20}
                     />

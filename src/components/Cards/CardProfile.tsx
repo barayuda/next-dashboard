@@ -1,35 +1,43 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { JWTPayloadTypes, UserTypes } from '../../services/data-types';
+import { useSession } from 'next-auth/react';
+import jwtDecode from 'jwt-decode';
+import Image from 'next/image';
+
 // import Image from 'next/image';
 
 // components
-interface UserStateTypes {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-}
+
+const secret = process.env.NEXTAUTH_SECRET;
 
 export default function CardProfile() {
-  const router = useRouter();
-  const [user, setUser] = useState<UserStateTypes>({
+  const [user, setUser] = useState<UserTypes>({
     id: '',
     name: '',
     email: '',
     avatar: '',
   });
-  const [imagePreview, setImagePreview] = useState('/');
+
+  const { data: session } = useSession();
 
   useEffect(() => {
+    if (session) {
+      console.log('session', session);
+    }
     const token = Cookies.get('token');
     if (token) {
       // const jwtToken = atob(token);
-      // const payload: JWTPayloadTypes = jwtDecode(jwtToken);
-      // const userFromPayload: UserTypes = payload.player;
-      // setUser(userFromPayload);
+      const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+      console.log('payload', payload);
+      if (payload.user) {
+        const userFromPayload: UserTypes = payload.user;
+        setUser(userFromPayload);
+      }
     }
   }, []);
 
@@ -40,9 +48,11 @@ export default function CardProfile() {
           <div className="flex flex-wrap justify-center">
             <div className="flex w-full justify-center px-4">
               <div className="relative">
-                <img
+                <Image
                   alt="..."
-                  src="/img/team-2-800x800.jpg"
+                  src={user?.avatar ?? '/assets/img/team-2-800x800.jpg'}
+                  width={150}
+                  height={150}
                   className="max-w-150-px absolute -m-16 -ml-20 h-auto rounded-full border-none align-middle shadow-xl lg:-ml-16"
                 />
               </div>
@@ -72,7 +82,7 @@ export default function CardProfile() {
           </div>
           <div className="mt-12 text-center">
             <h3 className="text-blueGray-700 mb-2 text-xl font-semibold leading-normal">
-              Jenna Stones
+              {user?.name ?? 'Unknown'}
             </h3>
             <div className="text-blueGray-400 mt-0 mb-2 text-sm font-bold uppercase leading-normal">
               <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{' '}

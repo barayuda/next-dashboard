@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 // components
-import Navbar from "../components/Navbars/AuthNavbar";
+import Navbar from '../components/Navbars/AuthNavbar';
 
 interface AuthProps {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export default function AuthLayout(props: AuthProps) {
           <div
             className="bg-blueGray-800 bg-full absolute top-0 h-full w-full bg-no-repeat"
             style={{
-              backgroundImage: "url('/img/register_bg_2.png')",
+              backgroundImage: "url('/assets/img/register_bg_2.png')",
             }}
           ></div>
           {children}

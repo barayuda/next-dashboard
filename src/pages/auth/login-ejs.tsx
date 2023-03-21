@@ -121,7 +121,7 @@ export default function Login() {
                     <Image
                       alt="..."
                       className="mr-1 w-5"
-                      src="/img/github.svg"
+                      src="/assets/img/github.svg"
                       width={20}
                       height={20}
                     />
@@ -141,7 +141,7 @@ export default function Login() {
                         <Image
                           alt="..."
                           className="mr-1 w-5"
-                          src="/img/google.svg"
+                          src="/assets/img/google.svg"
                           width={20}
                           height={20}
                         />

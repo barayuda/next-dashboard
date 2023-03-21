@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Image from "next/image";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Image from 'next/image';
 
 // components
 
-import TableDropdown from "../../components/Dropdowns/TableDropdown";
+import TableDropdown from '../../components/Dropdowns/TableDropdown';
 
 interface CardTableProps {
   color: string;
@@ -16,8 +16,8 @@ export default function CardTable(props: CardTableProps) {
     <>
       <div
         className={
-          "relative mb-6 flex w-full min-w-0 flex-col break-words rounded shadow-lg " +
-          (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")
+          'relative mb-6 flex w-full min-w-0 flex-col break-words rounded shadow-lg ' +
+          (color === 'light' ? 'bg-white' : 'bg-blueGray-700 text-white')
         }
       >
         <div className="mb-0 rounded-t border-0 px-4 py-3">
@@ -25,8 +25,8 @@ export default function CardTable(props: CardTableProps) {
             <div className="relative w-full max-w-full flex-1 flex-grow px-4">
               <h3
                 className={
-                  "text-lg font-semibold " +
-                  (color === "light" ? "text-blueGray-700" : "text-white")
+                  'text-lg font-semibold ' +
+                  (color === 'light' ? 'text-blueGray-700' : 'text-white')
                 }
               >
                 Card Tables
@@ -41,60 +41,60 @@ export default function CardTable(props: CardTableProps) {
               <tr>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 >
                   Project
                 </th>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 >
                   Budget
                 </th>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 >
                   Status
                 </th>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 >
                   Users
                 </th>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 >
                   Completion
                 </th>
                 <th
                   className={
-                    "whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    'whitespace-nowrap border border-l-0 border-r-0 border-solid px-6 py-3 text-left align-middle text-xs font-semibold uppercase ' +
+                    (color === 'light'
+                      ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      : 'bg-blueGray-600 text-blueGray-200 border-blueGray-500')
                   }
                 ></th>
               </tr>
@@ -103,12 +103,12 @@ export default function CardTable(props: CardTableProps) {
               <tr>
                 <th className="flex items-center whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 text-left align-middle text-xs">
                   <Image
-                    src="/img/bootstrap.jpg"
+                    src="/assets/img/bootstrap.jpg"
                     className="h-12 w-12 rounded-full border bg-white"
                     alt="..."
                     width={46}
                     height={46}
-                  ></Image>{" "}
+                  ></Image>{' '}
                   <span
                     className={`"ml-3 " + (color === 'light' ? 'text-blueGray-600' : 'text-white') font-bold`}
                   >
@@ -124,28 +124,28 @@ export default function CardTable(props: CardTableProps) {
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
                   <div className="flex">
                     <Image
-                      src="/img/team-1-800x800.jpg"
+                      src="/assets/img/team-1-800x800.jpg"
                       alt="..."
                       width={36}
                       height={36}
                       className="border-blueGray-50 h-10 w-10 rounded-full border-2 shadow"
                     ></Image>
                     <Image
-                      src="/img/team-2-800x800.jpg"
+                      src="/assets/img/team-2-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-3-800x800.jpg"
+                      src="/assets/img/team-3-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-4-470x470.png"
+                      src="/assets/img/team-4-470x470.png"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
@@ -159,7 +159,7 @@ export default function CardTable(props: CardTableProps) {
                     <div className="relative w-full">
                       <div className="flex h-2 overflow-hidden rounded bg-red-200 text-xs">
                         <div
-                          style={{ width: "60%" }}
+                          style={{ width: '60%' }}
                           className="flex flex-col justify-center whitespace-nowrap bg-red-500 text-center text-white shadow-none"
                         ></div>
                       </div>
@@ -174,15 +174,15 @@ export default function CardTable(props: CardTableProps) {
                 <th className="flex items-center whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 text-left align-middle text-xs">
                   <Image
                     alt="..."
-                    src="/img/angular.jpg"
+                    src="/assets/img/angular.jpg"
                     className="h-12 w-12 rounded-full border bg-white"
                     width={46}
                     height={46}
-                  ></Image>{" "}
+                  ></Image>{' '}
                   <span
                     className={
-                      "ml-3 font-bold " +
-                      (color === "light" ? "text-blueGray-600" : "text-white")
+                      'ml-3 font-bold ' +
+                      (color === 'light' ? 'text-blueGray-600' : 'text-white')
                     }
                   >
                     Angular Now UI Kit PRO
@@ -192,34 +192,34 @@ export default function CardTable(props: CardTableProps) {
                   $1,800 USD
                 </td>
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
-                  <i className="fas fa-circle mr-2 text-emerald-500"></i>{" "}
+                  <i className="fas fa-circle mr-2 text-emerald-500"></i>{' '}
                   completed
                 </td>
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
                   <div className="flex">
                     <Image
-                      src="/img/team-1-800x800.jpg"
+                      src="/assets/img/team-1-800x800.jpg"
                       alt="..."
                       width={36}
                       height={36}
                       className="border-blueGray-50 h-10 w-10 rounded-full border-2 shadow"
                     ></Image>
                     <Image
-                      src="/img/team-2-800x800.jpg"
+                      src="/assets/img/team-2-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-3-800x800.jpg"
+                      src="/assets/img/team-3-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-4-470x470.png"
+                      src="/assets/img/team-4-470x470.png"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
@@ -233,7 +233,7 @@ export default function CardTable(props: CardTableProps) {
                     <div className="relative w-full">
                       <div className="flex h-2 overflow-hidden rounded bg-emerald-200 text-xs">
                         <div
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                           className="flex flex-col justify-center whitespace-nowrap bg-emerald-500 text-center text-white shadow-none"
                         ></div>
                       </div>
@@ -247,16 +247,16 @@ export default function CardTable(props: CardTableProps) {
               <tr>
                 <th className="flex items-center whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 text-left align-middle text-xs">
                   <Image
-                    src="/img/sketch.jpg"
+                    src="/assets/img/sketch.jpg"
                     className="h-12 w-12 rounded-full border bg-white"
                     alt="..."
                     width={46}
                     height={46}
-                  ></Image>{" "}
+                  ></Image>{' '}
                   <span
                     className={
-                      "ml-3 font-bold " +
-                      (color === "light" ? "text-blueGray-600" : "text-white")
+                      'ml-3 font-bold ' +
+                      (color === 'light' ? 'text-blueGray-600' : 'text-white')
                     }
                   >
                     Black Dashboard Sketch
@@ -271,28 +271,28 @@ export default function CardTable(props: CardTableProps) {
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
                   <div className="flex">
                     <Image
-                      src="/img/team-1-800x800.jpg"
+                      src="/assets/img/team-1-800x800.jpg"
                       alt="..."
                       width={36}
                       height={36}
                       className="border-blueGray-50 h-10 w-10 rounded-full border-2 shadow"
                     ></Image>
                     <Image
-                      src="/img/team-2-800x800.jpg"
+                      src="/assets/img/team-2-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-3-800x800.jpg"
+                      src="/assets/img/team-3-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-4-470x470.png"
+                      src="/assets/img/team-4-470x470.png"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
@@ -306,7 +306,7 @@ export default function CardTable(props: CardTableProps) {
                     <div className="relative w-full">
                       <div className="flex h-2 overflow-hidden rounded bg-red-200 text-xs">
                         <div
-                          style={{ width: "73%" }}
+                          style={{ width: '73%' }}
                           className="flex flex-col justify-center whitespace-nowrap bg-red-500 text-center text-white shadow-none"
                         ></div>
                       </div>
@@ -320,16 +320,16 @@ export default function CardTable(props: CardTableProps) {
               <tr>
                 <th className="flex items-center whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 text-left align-middle text-xs">
                   <Image
-                    src="/img/react.jpg"
+                    src="/assets/img/react.jpg"
                     className="h-12 w-12 rounded-full border bg-white"
                     alt="..."
                     width={46}
                     height={46}
-                  ></Image>{" "}
+                  ></Image>{' '}
                   <span
                     className={
-                      "ml-3 font-bold " +
-                      (color === "light" ? "text-blueGray-600" : "text-white")
+                      'ml-3 font-bold ' +
+                      (color === 'light' ? 'text-blueGray-600' : 'text-white')
                     }
                   >
                     React Material Dashboard
@@ -345,28 +345,28 @@ export default function CardTable(props: CardTableProps) {
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
                   <div className="flex">
                     <Image
-                      src="/img/team-1-800x800.jpg"
+                      src="/assets/img/team-1-800x800.jpg"
                       alt="..."
                       width={36}
                       height={36}
                       className="border-blueGray-50 h-10 w-10 rounded-full border-2 shadow"
                     ></Image>
                     <Image
-                      src="/img/team-2-800x800.jpg"
+                      src="/assets/img/team-2-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-3-800x800.jpg"
+                      src="/assets/img/team-3-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-4-470x470.png"
+                      src="/assets/img/team-4-470x470.png"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
@@ -380,7 +380,7 @@ export default function CardTable(props: CardTableProps) {
                     <div className="relative w-full">
                       <div className="flex h-2 overflow-hidden rounded bg-teal-200 text-xs">
                         <div
-                          style={{ width: "90%" }}
+                          style={{ width: '90%' }}
                           className="flex flex-col justify-center whitespace-nowrap bg-teal-500 text-center text-white shadow-none"
                         ></div>
                       </div>
@@ -394,16 +394,16 @@ export default function CardTable(props: CardTableProps) {
               <tr>
                 <th className="flex items-center whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 text-left align-middle text-xs">
                   <Image
-                    src="/img/vue.jpg"
+                    src="/assets/img/vue.jpg"
                     className="h-12 w-12 rounded-full border bg-white"
                     alt="..."
                     width={46}
                     height={46}
-                  ></Image>{" "}
+                  ></Image>{' '}
                   <span
                     className={
-                      "ml-3 font-bold " +
-                      (color === "light" ? "text-blueGray-600" : "text-white")
+                      'ml-3 font-bold ' +
+                      (color === 'light' ? 'text-blueGray-600' : 'text-white')
                     }
                   >
                     React Material Dashboard
@@ -413,34 +413,34 @@ export default function CardTable(props: CardTableProps) {
                   $2,200 USD
                 </td>
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
-                  <i className="fas fa-circle mr-2 text-emerald-500"></i>{" "}
+                  <i className="fas fa-circle mr-2 text-emerald-500"></i>{' '}
                   completed
                 </td>
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-4 px-6 align-middle text-xs">
                   <div className="flex">
                     <Image
-                      src="/img/team-1-800x800.jpg"
+                      src="/assets/img/team-1-800x800.jpg"
                       alt="..."
                       width={36}
                       height={36}
                       className="border-blueGray-50 h-10 w-10 rounded-full border-2 shadow"
                     ></Image>
                     <Image
-                      src="/img/team-2-800x800.jpg"
+                      src="/assets/img/team-2-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-3-800x800.jpg"
+                      src="/assets/img/team-3-800x800.jpg"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
                       height={36}
                     ></Image>
                     <Image
-                      src="/img/team-4-470x470.png"
+                      src="/assets/img/team-4-470x470.png"
                       alt="..."
                       className="border-blueGray-50 -ml-4 h-10 w-10 rounded-full border-2 shadow"
                       width={36}
@@ -454,7 +454,7 @@ export default function CardTable(props: CardTableProps) {
                     <div className="relative w-full">
                       <div className="flex h-2 overflow-hidden rounded bg-emerald-200 text-xs">
                         <div
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                           className="flex flex-col justify-center whitespace-nowrap bg-emerald-500 text-center text-white shadow-none"
                         ></div>
                       </div>
@@ -474,9 +474,9 @@ export default function CardTable(props: CardTableProps) {
 }
 
 CardTable.defaultProps = {
-  color: "light",
+  color: 'light',
 };
 
 CardTable.propTypes = {
-  color: PropTypes.oneOf(["light", "dark"]),
+  color: PropTypes.oneOf(['light', 'dark']),
 };
