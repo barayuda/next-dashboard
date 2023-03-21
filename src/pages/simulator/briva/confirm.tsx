@@ -1,8 +1,13 @@
 import React from 'react';
-import BCAVAConfirm from '../../../components/SimulatorVA/BCAVAConfirm';
+import BRIVAConfirm from '../../../components/SimulatorVA/BRIVAConfirm';
+import SimulatorLayout from '../../../layouts/SimulatorLayout';
 
-const BcavaConfirm = () => {
-  return <BCAVAConfirm />;
+const BrivaConfirm = () => {
+  return (
+    <SimulatorLayout>
+      <BRIVAConfirm />
+    </SimulatorLayout>
+  );
 };
 
-export default BcavaConfirm;
+export default BrivaConfirm;

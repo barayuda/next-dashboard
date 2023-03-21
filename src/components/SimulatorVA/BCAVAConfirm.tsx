@@ -86,7 +86,7 @@ const BCAVAConfirm = () => {
       <div className="flex h-full content-center items-center justify-center">
         <div className="w-full px-4 lg:w-8/12">
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
-            <div className="grid grid-cols-10 rounded-lg bg-black p-5 text-white">
+            <div className="grid grid-cols-10 rounded-lg bg-slate-600 p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
                 BCA VA Simulator
               </div>
@@ -108,7 +108,7 @@ const BCAVAConfirm = () => {
               </div>
               <div className="col-span-8 ">
                 <div className="rounded-md bg-blue-500 text-center text-white">
-                  <div className="grid grid-cols-4">
+                  <div className="grid grid-cols-6">
                     <div className="col-span-6 p-5">
                       {isError ? 'ERROR' : 'BERIKUT DETAIL TRANSAKSI ANDA'}
                     </div>

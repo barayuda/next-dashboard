@@ -1,8 +1,13 @@
 import React from 'react';
-import BCAVAPayment from '../../../components/SimulatorVA/BCAVAPayment';
+import BRIVAPayment from '../../../components/SimulatorVA/BRIVAPayment';
+import SimulatorLayout from '../../../layouts/SimulatorLayout';
 
-const BcavaPayment = () => {
-  return <BCAVAPayment />;
+const BrivaPayment = () => {
+  return (
+    <SimulatorLayout>
+      <BRIVAPayment />
+    </SimulatorLayout>
+  );
 };
 
-export default BcavaPayment;
+export default BrivaPayment;

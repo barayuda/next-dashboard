@@ -9,66 +9,59 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from '../../services/auth';
-import { xenditSimulatePayment } from '../../services/simulator';
+import { brivaPaymentConfirm } from '../../services/simulator';
+import { getDateWithFormat } from '../../utils/commonHelpers';
 
-const BNIVAConfirm = () => {
+const BRIVAConfirm = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(true);
   const [va, setVa] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
-  const [externalID, setExternalID] = useState('');
 
   useEffect(() => {
-    const datava = getLocalStorage('bniva');
+    const data = getLocalStorage('briva');
     if (
-      datava?.data?.inquiryStatus !== undefined &&
-      datava?.data?.statusCode !== undefined &&
-      datava?.data?.accountRef !== undefined &&
-      datava?.data?.amount !== undefined &&
-      datava?.data?.payinquiryData?.decryptedData?.response?.external_id !==
-        undefined &&
-      datava?.data?.statusCode === '00'
+      data?.response?.responseCode !== undefined &&
+      data?.response?.responseDescription !== undefined &&
+      data?.response?.data?.brivaNo !== undefined &&
+      data?.response?.data?.billName !== undefined &&
+      data?.response?.data?.billAmount !== undefined &&
+      (data?.response?.responseCode === '0000' ||
+        data?.response?.responseCode === '0009')
     ) {
       setIsError(false);
-      setVa(datava?.data?.accountRef);
-      setDescription(
-        'Pembayaran : ' +
-          datava?.data?.configData?.merchantData?.merchantName ||
-          'Unknown Merchant'
-      );
-      setAmount(datava?.data?.amount);
-      setName(
-        datava?.data?.payinquiryData?.decryptedData?.response?.name ||
-          'Unknown Name'
-      );
-      setExternalID(
-        datava?.data?.payinquiryData?.decryptedData?.response?.external_id
-      );
+      setVa(data.response.data.brivaNo);
+      setDescription(data.response.responseDescription);
+      setAmount(data?.response?.data?.billAmount || '0.00');
+      setName(data?.response?.data?.billName || 'Unknown');
     } else {
-      setDescription('ERROR ' + datava?.data?.statusCode);
+      setDescription(data?.response?.responseDescription ?? 'Inquiry Gagal');
     }
 
-    console.log('data', datava);
+    console.log('data', data);
   }, []);
 
   const pencetKembali = () => {
-    removeLocalStorage('bniva');
-    void router.push('/simulator/bniva');
+    removeLocalStorage('briva');
+    void router.push('/simulator/briva');
   };
 
   const pencetBayar = async () => {
     console.log('Pencet bener ');
     const dataReq = {
-      amount, //10600,
+      brivaNo: va,
+      billAmount: amount.slice(0, -3),
+      transactionDateTime: getDateWithFormat('YmdHIS'),
+      journalSeq: getDateWithFormat('YmdHIS'),
     };
     console.log('dataReq', dataReq);
-    const callApi = await xenditSimulatePayment(dataReq, externalID);
+    const callApi = await brivaPaymentConfirm(dataReq);
     console.log('response', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('bniva', callApi.data);
-      void router.push('/simulator/bniva/payment');
+      setLocalStorage('briva', callApi.data);
+      void router.push('/simulator/briva/payment');
     }
   };
 
@@ -79,7 +72,7 @@ const BNIVAConfirm = () => {
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
             <div className="grid grid-cols-10 rounded-lg bg-slate-600 p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
-                BNI VA Simulator
+                BRI VA Simulator
               </div>
               <div className="relative h-full">
                 <div className="absolute bottom-0 right-0 mr-5 grid grid-flow-col grid-rows-4 justify-items-end">
@@ -118,8 +111,6 @@ const BNIVAConfirm = () => {
                       )}
                     </div>
                     <div>&nbsp;</div>
-                  </div>
-                  <div className="grid grid-cols-6">
                     <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
@@ -192,4 +183,4 @@ const BNIVAConfirm = () => {
   );
 };
 
-export default BNIVAConfirm;
+export default BRIVAConfirm;

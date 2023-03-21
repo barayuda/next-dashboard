@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
-import { bcavaInquiry } from '../../services/simulator';
-import { getDateWithFormat } from '../../utils/commonHelpers';
+import { brivaInquiry } from '../../services/simulator';
 
 const BRIVA = () => {
   const router = useRouter();
@@ -11,15 +10,10 @@ const BRIVA = () => {
   const pencetBenar = async () => {
     console.log('Pencet bener ');
     const data = {
-      CompanyCode: va.substring(0, 5),
-      CustomerNumber: va.slice(5),
-      RequestID: getDateWithFormat('YmdHISZ'), //'8347937383283730',
-      ChannelType: '6017',
-      TransactionDate: getDateWithFormat('d/m/Y H:I:S'), //'15/03/2014 22:07:40',
-      AdditionalData: 'Simulator Data',
+      brivaNo: va,
     };
     console.log('data', data);
-    const callApi = await bcavaInquiry(data);
+    const callApi = await brivaInquiry(data);
     console.log('response', callApi.data);
     if (!callApi.error) {
       setLocalStorage('briva', callApi.data);
@@ -31,7 +25,7 @@ const BRIVA = () => {
       <div className="flex h-full content-center items-center justify-center">
         <div className="w-full px-4 lg:w-8/12">
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
-            <div className="grid grid-cols-10 rounded-lg bg-black p-5 text-white">
+            <div className="grid grid-cols-10 rounded-lg bg-slate-600 p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
                 BRI VA Simulator
               </div>

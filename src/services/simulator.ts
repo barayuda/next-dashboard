@@ -94,6 +94,30 @@ export async function setSimulator(data: SimulatorTypes) {
   });
 }
 
+export async function brivaInquiry(data: any) {
+  // const url = `${ROOT_API}/${API_VERSION}/simulator/bcava/inquiry`;
+  // const url = `http://10.14.20.49:8088/va/bills`;
+  const url = `${ROOT_API}/simulator/briva/inquiry`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data,
+  });
+}
+
+export async function brivaPaymentConfirm(data: any) {
+  // const url = `${ROOT_API}/${API_VERSION}/simulator/bcava/payconfirm`;
+  // const url = `http://10.14.20.49:8088/va/bills`;
+  const url = `${ROOT_API}/simulator/briva/payconfirm`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data,
+  });
+}
+
 export async function bcavaInquiry(data: any) {
   // const url = `${ROOT_API}/${API_VERSION}/simulator/bcava/inquiry`;
   // const url = `http://10.14.20.49:8088/va/bills`;
