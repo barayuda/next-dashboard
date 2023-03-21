@@ -449,7 +449,7 @@ export default function ApiTable(props: CardTableProps) {
                 >
                   <Dialog.Panel className="relative w-10/12 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full">
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                      <div className="sm:flex sm:items-start">
+                      <div className="">
                         <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
                           <Dialog.Title
                             as="h3"

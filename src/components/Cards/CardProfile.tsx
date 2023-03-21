@@ -1,10 +1,38 @@
-import Link from "next/link";
-import React from "react";
+import Cookies from 'js-cookie';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { JWTPayloadTypes, UserTypes } from '../../services/data-types';
 // import Image from 'next/image';
 
 // components
+interface UserStateTypes {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+}
 
 export default function CardProfile() {
+  const router = useRouter();
+  const [user, setUser] = useState<UserStateTypes>({
+    id: '',
+    name: '',
+    email: '',
+    avatar: '',
+  });
+  const [imagePreview, setImagePreview] = useState('/');
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      // const jwtToken = atob(token);
+      // const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+      // const userFromPayload: UserTypes = payload.player;
+      // setUser(userFromPayload);
+    }
+  }, []);
+
   return (
     <>
       <div className="relative mb-6 mt-16 flex w-full min-w-0 flex-col break-words rounded-lg bg-white shadow-xl">
@@ -47,7 +75,7 @@ export default function CardProfile() {
               Jenna Stones
             </h3>
             <div className="text-blueGray-400 mt-0 mb-2 text-sm font-bold uppercase leading-normal">
-              <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{" "}
+              <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{' '}
               Los Angeles, California
             </div>
             <div className="text-blueGray-600 mb-2 mt-10">
