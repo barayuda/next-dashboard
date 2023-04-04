@@ -17,6 +17,7 @@ import {
   FaTable,
   FaTools,
   FaTv,
+  FaUsers,
 } from 'react-icons/fa';
 import { env } from '../../env/client.mjs';
 
@@ -221,6 +222,31 @@ export default function Sidebar(props: SidebarProps) {
                     <FaCalculator />
                   </i>{' '}
                   {sidebarOpen ? 'Webhook' : ''}
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  href="/admin/user"
+                  className={
+                    'flex items-center py-3 text-xs font-bold uppercase ' +
+                    (router.pathname.indexOf('/admin/user') !== -1
+                      ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                      : 'text-blueGray-700 hover:text-blueGray-500')
+                  }
+                >
+                  <i
+                    className={
+                      'mr-2 text-sm ' +
+                      (router.pathname.indexOf('/admin/user') !== -1
+                        ? 'opacity-75'
+                        : 'text-blueGray-500') +
+                      (sidebarOpen ? '' : ' flex-1')
+                    }
+                  >
+                    <FaUsers />
+                  </i>{' '}
+                  {sidebarOpen ? 'Users' : ''}
                 </Link>
               </li>
 

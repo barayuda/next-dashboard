@@ -290,7 +290,7 @@ export default function CardLineChart() {
         </div>
         <div className="flex-auto p-4">
           {/* Chart */}
-          <div className="h-350-px relative">
+          <div className="relative h-[350px]">
             {/* <canvas id="line-chart"></canvas> */}
             {/* <Line options={options} data={data} /> */}
             <Line options={lineOptions} data={lineData} />

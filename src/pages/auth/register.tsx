@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import jwt from 'jsonwebtoken';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { env } from '../../env/client.mjs';
 
@@ -20,7 +21,7 @@ import {
   sendGoogleToken,
   setSignUp,
 } from '../../services/auth';
-import { RegisterTypes } from '../../services/data-types/index.js';
+import type { RegisterTypes } from '../../services/data-types/index';
 
 export default function Register() {
   const router = useRouter();
@@ -65,6 +66,8 @@ export default function Register() {
         void router.push('/auth/login');
       }
     }
+
+    return;
   };
 
   const responseGoogle = async (response: any) => {
@@ -77,6 +80,13 @@ export default function Register() {
   const responseFailed = (response: any) => {
     console.log('responseFailed', response);
     toast.success('Login Failed !!!');
+  };
+
+  const handleKeyPress = (event: any) => {
+    if (event.key === 'Enter') {
+      console.log('enter press here! ');
+      void onSubmit();
+    }
   };
 
   const informParent = (response: any) => {
@@ -92,6 +102,11 @@ export default function Register() {
   useEffect(() => {
     if (inputReference.current) {
       inputReference.current.focus();
+    }
+    if (isAuth() && isAuth().role === 'admin') {
+      void router.push('/dashboard');
+    } else if (isAuth()) {
+      void router.push('/');
     }
   }, []);
 
@@ -124,7 +139,7 @@ export default function Register() {
                   <GoogleLogin
                     clientId={env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
                     onSuccess={responseGoogle}
-                    // onFailure={responseFailed}
+                    onFailure={responseFailed}
                     cookiePolicy={'single_host_origin'}
                     render={(renderProps) => (
                       <button
@@ -181,7 +196,6 @@ export default function Register() {
                       type="email"
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       placeholder="Email"
-                      ref={inputReference}
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       onFocus={() => setFocusedEmail(true)}
@@ -200,7 +214,6 @@ export default function Register() {
                       type={showPassword ? 'text' : 'password'}
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       placeholder="Password"
-                      ref={inputReference}
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       onFocus={() => setFocusedPassword(true)}
@@ -231,13 +244,17 @@ export default function Register() {
                       type={showRetypePassword ? 'text' : 'password'}
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       placeholder="Retype Password"
-                      ref={inputReference}
                       value={retypePassword}
                       onChange={(event) =>
                         setRetypePassword(event.target.value)
                       }
                       onFocus={() => setFocusedRetypePassword(true)}
-                      onBlur={() => setFocusedRetypePassword(!focusedPassword)}
+                      onBlur={() =>
+                        setFocusedRetypePassword(!focusedRetypePassword)
+                      }
+                      onKeyDown={(e) => {
+                        handleKeyPress(e);
+                      }}
                     ></input>
                     <button
                       onClick={(e) => {

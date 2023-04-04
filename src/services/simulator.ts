@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { v4 as uuidv4, V4Options } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import callAPI from '../pages/api/call';
 import type { ApiHeaders } from '../pages/api/call';
 import type { SimulatorTypes } from './data-types';

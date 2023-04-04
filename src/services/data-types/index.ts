@@ -10,6 +10,16 @@ export interface RegisterTypes {
   retypePassword: string;
 }
 
+export interface ForgotPassTypes {
+  email: string;
+}
+
+export interface ResetPassTypes {
+  resetPasswordToken: string;
+  newPassword: string;
+  retypePassword: string;
+}
+
 export interface UserTypes {
   id?: string;
   email: string;

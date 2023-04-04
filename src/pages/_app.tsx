@@ -13,12 +13,12 @@ import type { Root } from 'react-dom/client';
 import { trpc } from '../utils/trpc';
 
 import '../styles/globals.css';
-import '../styles/tailwind.css';
+// import '../styles/tailwind.css';
 import '../styles/custom.css';
 
 import PageChange from '../components/PageChange/PageChange';
 import GlobalContextProvider from '../contexts/GlobalContextProvider';
-import { AppPropsWithLayout } from '../types';
+import type { AppPropsWithLayout } from '../types';
 
 let root: Root;
 let container: HTMLElement;

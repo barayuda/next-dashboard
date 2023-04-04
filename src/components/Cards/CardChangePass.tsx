@@ -1,20 +1,112 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import type { JWTPayloadTypes } from '../../services/data-types';
+import jwtDecode from 'jwt-decode';
+import { setChangePass } from '../../services/auth';
 import FormInput from '../Elements/FormInput';
 
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+export function getServerSideProps(context: GetServerSideProps) {
+  const { token } = context.req.cookies;
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+  // console.log(payload);
+  const userFromPayload = payload;
+  return {
+    props: {
+      user: userFromPayload,
+    },
+  };
+}
+
+type ChangePassword = {
+  password: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+const schema = z
+  .object({
+    password: z
+      .string()
+      .min(1, { message: 'Old password is required!' })
+      .max(100),
+    newPassword: z
+      .string()
+      .min(1, { message: 'New password is required!' })
+      .max(100),
+    confirmPassword: z
+      .string()
+      .min(1, { message: 'New password is required!' })
+      .max(100),
+  })
+  .superRefine(({ confirmPassword, newPassword }, ctx) => {
+    if (confirmPassword !== newPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Confirm password did not match',
+      });
+    }
+  });
+
 export default function CardChangePass() {
-  const [values, setValues] = useState<{
-    password: string;
-    newPassword: string;
-    confirmPassword: string;
-  }>({
+  const [values, setValues] = useState<ChangePassword>({
     password: '',
     newPassword: '',
     confirmPassword: '',
   });
 
   type ObjectKey = keyof typeof values;
+
+  // Form validation
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ChangePassword>({
+    // defaultValues: {
+    //   name: '',
+    //   email: '',
+    //   // roles: [],
+    //   active: true,
+    // },
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<ChangePassword> = async (
+    props: ChangePassword
+  ) => {
+    const response = await setChangePass(props);
+    if (response) {
+      if (response.error) {
+        console.log('Change password failed: ' + JSON.stringify(response));
+        toast.error('Change password failed:' + response.message);
+      } else {
+        toast.success('Change password success !!!');
+      }
+    }
+  };
 
   const inputs = [
     {
@@ -51,7 +143,7 @@ export default function CardChangePass() {
     },
   ];
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmitOld = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       email: { value: string };
@@ -83,19 +175,36 @@ export default function CardChangePass() {
           </div>
         </div>
         <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <h6 className="text-blueGray-400 mt-3 mb-6 text-sm font-bold uppercase">
               Please fill out all the fields
             </h6>
             <div className="flex flex-wrap">
-              {inputs.map((input) => (
+              {/* {inputs.map((input) => (
                 <FormInput
                   key={input.id}
                   {...input}
                   value={values[input.name as ObjectKey]}
                   onChange={onChange}
                 />
-              ))}
+              ))} */}
+              <FormInput
+                key={'1'}
+                value={1}
+                onChange={function (e: {
+                  target: { name: any; value: any };
+                }): void {
+                  throw new Error('Function not implemented.');
+                }}
+                id={''}
+                name={''}
+                type={''}
+                placeholder={''}
+                errorMessage={''}
+                label={''}
+                pattern={''}
+                required={false}
+              />
             </div>
 
             <hr className="border-b-1 border-blueGray-300 mt-6" />

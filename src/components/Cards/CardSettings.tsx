@@ -1,20 +1,29 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { City, Country, State } from 'country-state-city';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
-import { JWTPayloadTypes, UserTypes } from '../../services/data-types';
+import { useEffect, useState } from 'react';
+import type { JWTPayloadTypes, UserTypes } from '../../services/data-types';
 
 // components
 
 export default function CardSettings() {
+  const { data: session } = useSession();
+
   const [user, setUser] = useState<UserTypes>({
     id: '',
     name: '',
     email: '',
     avatar: '',
   });
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedState, setSelectedState] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
 
-  const { data: session } = useSession();
+  const countryData = Country.getAllCountries();
+  const stateData = State.getStatesOfCountry(selectedCountry);
+  const cityData = City.getCitiesOfState(selectedCountry, selectedState);
 
   useEffect(() => {
     if (session) {
@@ -30,8 +39,7 @@ export default function CardSettings() {
         setUser(userFromPayload);
       }
     }
-  }, []);
-
+  }, [session]);
   return (
     <>
       <div className="bg-blueGray-100 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
@@ -107,22 +115,21 @@ export default function CardSettings() {
                   />
                 </div>
               </div>
-              <div className="w-full px-4 lg:w-4/12">
+              <div className="lg:w-12/12 w-full px-4">
                 <div className="relative mb-3 w-full">
                   <label
                     className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
                     htmlFor="grid-password"
                   >
-                    City
+                    Birth Date
                   </label>
                   <input
-                    type="email"
+                    type="date"
                     className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                    defaultValue="New York"
                   />
                 </div>
               </div>
-              <div className="w-full px-4 lg:w-4/12">
+              <div className="w-full px-4 lg:w-3/12">
                 <div className="relative mb-3 w-full">
                   <label
                     className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
@@ -130,14 +137,77 @@ export default function CardSettings() {
                   >
                     Country
                   </label>
-                  <input
-                    type="text"
+                  <select
+                    name="country"
                     className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                    defaultValue="United States"
-                  />
+                    defaultValue="ID"
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                  >
+                    <option>--Choose Country--</option>
+                    {countryData.map((e, value) => {
+                      return (
+                        <option key={value} value={e.isoCode}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
               </div>
-              <div className="w-full px-4 lg:w-4/12">
+              <div className="w-full px-4 lg:w-3/12">
+                <div className="relative mb-3 w-full">
+                  <label
+                    className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                    htmlFor="grid-password"
+                  >
+                    State
+                  </label>
+                  <select
+                    name="state"
+                    className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                    defaultValue="101"
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                  >
+                    <option>--Choose State--</option>
+                    {stateData.map((e, value) => {
+                      return (
+                        <option key={value} value={e.isoCode}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className="w-full px-4 lg:w-3/12">
+                <div className="relative mb-3 w-full">
+                  <label
+                    className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                    htmlFor="grid-password"
+                  >
+                    City
+                  </label>
+                  <select
+                    name="city"
+                    className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                    defaultValue="101"
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                  >
+                    <option>--Choose City--</option>
+                    {cityData.map((e, value) => {
+                      return (
+                        <option key={value} value={e.name}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className="w-full px-4 lg:w-3/12">
                 <div className="relative mb-3 w-full">
                   <label
                     className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"

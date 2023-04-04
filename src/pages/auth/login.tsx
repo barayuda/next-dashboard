@@ -11,21 +11,44 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-hot-toast';
 import { GoogleLogin } from '@leecheuk/react-google-login';
 import { getSession, signIn } from 'next-auth/react';
-// import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 import { env } from '../../env/client.mjs';
 
 // layout for page
 import AuthLayout from '../../layouts/AuthLayout';
 
-import type { LoginTypes } from '../../services/data-types';
+import type { JWTPayloadTypes, LoginTypes } from '../../services/data-types';
 import {
   authenticate,
   isAuth,
   sendGoogleToken,
   setLogin,
 } from '../../services/auth';
+
+/* interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export function getServerSideProps({ req }: GetServerSideProps) {
+  const { token } = req.cookies;
+  if (token) {
+    toast.success('You are already logged in!');
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+} */
 
 export default function Login() {
   const router = useRouter();
@@ -39,7 +62,7 @@ export default function Login() {
   const inputReference = useRef<HTMLInputElement>(null);
 
   const onSubmit = async () => {
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       email: email,
       password: password,
       redirect: false,
@@ -58,7 +81,6 @@ export default function Login() {
 
         const refreshToken = session.user?.token?.refreshToken;
         console.log('typeof refreshToken', typeof refreshToken);
-        console.log('refreshToken', refreshToken);
         if (typeof refreshToken === 'string') {
           Cookies.set('refreshToken', refreshToken);
           console.log('refreshToken', refreshToken);
@@ -89,44 +111,9 @@ export default function Login() {
           router.push('/admin/dashboard');
         }
       } else {
-        toast.success('Login Failed !!!');
+        toast.error('Login Failed !!!');
       }
     });
-  };
-
-  const onSubmitAxios = async () => {
-    const data: LoginTypes = {
-      email,
-      password,
-    };
-
-    if (!email || !password) {
-      // console.log('Error');
-      toast.error('Email and Password are required !!!');
-    } else {
-      const response = await setLogin(data);
-      if (response.error) {
-        toast.error(response.message);
-      } else {
-        toast.success('Login Success !!!');
-        // localStorage.setItem('user-form', JSON.stringify({name: }));
-        console.log(response.data);
-        const { accessToken, refreshToken } = response?.data;
-        // console.log('response', response);
-        // console.log('response.data', response.data);
-        // console.log('response.data.data', response.data.data);
-        // console.log('token', token);
-        // const tokenBase64 = btoa(token);
-        const tokenBase64 = Buffer.from(accessToken).toString('base64');
-        // console.log('tokenBase64', tokenBase64);
-        Cookies.set('token', tokenBase64);
-        console.log('token', tokenBase64);
-        const jwtBase64 = Buffer.from(refreshToken).toString('base64');
-        Cookies.set('refreshToken', jwtBase64);
-        console.log('refreshToken', jwtBase64);
-        router.push('/admin/dashboard');
-      }
-    }
   };
 
   const informParent = (response: any) => {
@@ -148,11 +135,11 @@ export default function Login() {
 
   const responseFailed = (response: any) => {
     console.log('responseFailed', response);
-    toast.success('Login Failed !!!');
+    toast.error('Login Failed !!!');
   };
 
-  const handleKeyPress = (event: any) => {
-    if (event.key === 'Enter') {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Enter') {
       console.log('enter press here! ');
       onSubmit();
     }
@@ -161,6 +148,11 @@ export default function Login() {
   useEffect(() => {
     if (inputReference.current) {
       inputReference.current.focus();
+    }
+    if (isAuth() && isAuth().role === 'admin') {
+      router.push('/dashboard');
+    } else if (isAuth()) {
+      router.push('/');
     }
   }, []);
 
@@ -193,7 +185,7 @@ export default function Login() {
                   <GoogleLogin
                     clientId={env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
                     onSuccess={responseGoogle}
-                    // onFailure={responseFailed}
+                    onFailure={responseFailed}
                     cookiePolicy={'single_host_origin'}
                     render={(renderProps) => (
                       <button
@@ -234,8 +226,11 @@ export default function Login() {
                       ref={inputReference}
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
-                      onFocus={() => setFocusedEmail(true)}
+                      onFocus={() => setFocusedEmail(focusedEmail)}
                       onBlur={() => setFocusedEmail(true)}
+                      onKeyDown={(e) => {
+                        handleKeyPress(e);
+                      }}
                     />
                   </div>
 
@@ -252,8 +247,11 @@ export default function Login() {
                       placeholder="Password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
-                      onFocus={() => setFocusedPassword(true)}
+                      onFocus={() => setFocusedPassword(focusedPassword)}
                       onBlur={() => setFocusedPassword(true)}
+                      onKeyDown={(e) => {
+                        handleKeyPress(e);
+                      }}
                     />
                   </div>
                   <div>
@@ -271,7 +269,7 @@ export default function Login() {
 
                   <div className="mt-6 text-center">
                     <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none focus:ring"
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
@@ -279,6 +277,9 @@ export default function Login() {
                         // toast.success('Login Process !!!');
                         onSubmit();
                       }}
+                      // onKeyDown={(e) => {
+                      //   handleKeyPress(e);
+                      // }}
                     >
                       Sign In
                     </button>

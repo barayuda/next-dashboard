@@ -121,7 +121,7 @@ export default function CardBarChart() {
         </div>
         <div className="flex-auto p-4">
           {/* Chart */}
-          <div className="h-350-px relative">
+          <div className="relative h-[350px]">
             <canvas id="bar-chart"></canvas>
           </div>
         </div>

@@ -6,7 +6,12 @@
 import Cookies from 'js-cookie';
 
 import callAPI from '../pages/api/call';
-import { LoginTypes, RegisterTypes } from './data-types';
+import type {
+  ForgotPassTypes,
+  LoginTypes,
+  RegisterTypes,
+  ResetPassTypes,
+} from './data-types';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 console.log(`ROOT_API: ${ROOT_API}`);
@@ -32,8 +37,28 @@ export async function setLogin(data: LoginTypes) {
   });
 }
 
-export async function setForgotpass(data: any) {
-  const url = `${ROOT_API}/${API_VERSION}/auth/forgotpassword`;
+export async function setForgotPass(data: ForgotPassTypes) {
+  const url = `${ROOT_API}/${API_VERSION}/auth/forgotpass`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data,
+  });
+}
+
+export async function setResetPass(data: ResetPassTypes) {
+  const url = `${ROOT_API}/${API_VERSION}/auth/resetpass`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data,
+  });
+}
+
+export async function setChangePass(data: any) {
+  const url = `${ROOT_API}/${API_VERSION}/auth/changepass`;
 
   return callAPI({
     url,

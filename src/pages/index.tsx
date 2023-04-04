@@ -234,32 +234,32 @@ const Home = () => {
                 <img
                   alt="..."
                   src="/assets/img/component-btn.png"
-                  className="max-w-100-px left-145-px -top-29-px z-3 absolute w-full rounded align-middle shadow-lg"
+                  className="z-3 absolute left-[145px] -top-[29px] w-full max-w-[100px] rounded align-middle shadow-lg"
                 />
                 <img
                   alt="..."
                   src="/assets/img/component-profile-card.png"
-                  className="max-w-210-px left-260-px -top-160-px absolute w-full rounded-lg align-middle shadow-lg"
+                  className="absolute left-[260px] -top-[160px] w-full max-w-[210px] rounded-lg align-middle shadow-lg"
                 />
                 <img
                   alt="..."
                   src="/assets/img/component-info-card.png"
-                  className="max-w-180-px left-40-px -top-225-px z-2 absolute w-full rounded-lg align-middle shadow-lg"
+                  className="z-2 absolute left-[40px] -top-[225px] w-full max-w-[180px] rounded-lg align-middle shadow-lg"
                 />
                 <img
                   alt="..."
                   src="/assets/img/component-info-2.png"
-                  className="max-w-200-px -left-50-px top-25-px absolute w-full rounded-lg align-middle shadow-2xl"
+                  className="absolute -left-[50px] top-[25px] w-full max-w-[200px] rounded-lg align-middle shadow-2xl"
                 />
                 <img
                   alt="..."
                   src="/assets/img/component-menu.png"
-                  className="max-w-580-px -left-20-px top-210-px absolute w-full rounded align-middle shadow-lg"
+                  className="absolute -left-[20px] top-[210px] w-full max-w-[580px] rounded align-middle shadow-lg"
                 />
                 <img
                   alt="..."
                   src="/assets/img/component-btn-pink.png"
-                  className="max-w-120-px left-195-px top-95-px absolute w-full rounded align-middle shadow-xl"
+                  className="absolute left-[195px] top-[95px] w-full max-w-[120px] rounded align-middle shadow-xl"
                 />
               </div>
             </div>
