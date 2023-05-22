@@ -74,7 +74,7 @@ D:\Applications\Data\ReactNextJS\ultimate-blog-app
 
 ## Using PM2
 
-```
+```sh
 npm run build
 pm2 --name NextJSPG-DASHBOARD start npm -- start --watch --version 1.0.0
 pm2 logs NextJSPG-DASHBOARD --lines 100
@@ -89,7 +89,7 @@ pm2 start extras/pm2-nextdashboard.config.js --env production
 
 ## Run as a service
 
-```
+```sh
 https://computingforgeeks.com/how-to-run-java-jar-application-with-systemd-on-linux/
 
 /lib/systemd/system/multi-user.target/
