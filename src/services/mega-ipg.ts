@@ -5,9 +5,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import callAPI from '../pages/api/call';
 
+const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || '';
+
 export async function findByAccRef(data: any) {
   // const url = `http://10.14.20.49:8090/api/v1/transaction`;
-  const url = `http://10.14.20.49:3000/transaction/sign`;
+  const url = `${clientUrl}/transaction/sign`;
 
   return callAPI({
     url,

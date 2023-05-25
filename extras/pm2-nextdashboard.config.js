@@ -15,8 +15,13 @@ module.exports = {
       watch: true,
       merge_log: true,
       env: {
-        NODE_ENV: 'development',
+        NODE_ENV: 'dev',
         API_URL: 'http://10.14.20.49',
+        PORT: 4000,
+      },
+      env: {
+        NODE_ENV: 'development',
+        API_URL: 'http://10.14.21.56',
         PORT: 4000,
       },
       env_sandbox: {
