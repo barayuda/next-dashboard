@@ -25,7 +25,7 @@ module.exports = {
         PORT: 4000,
       },
       env_sandbox: {
-        NODE_ENV: 'sandbox',
+        NODE_ENV: 'development',
         API_URL: 'http://10.14.21.37',
         PORT: 4000,
       },

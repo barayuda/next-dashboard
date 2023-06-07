@@ -11,13 +11,13 @@ export default function PageChange(props: PageChangeProps) {
   return (
     <div>
       <div
-        className="fixed top-0 left-0 z-40 h-full w-full bg-cover"
+        className="fixed left-0 top-0 z-40 h-full w-full bg-cover"
         style={{
           backgroundImage: "url('/assets/img/img-1-1000x600.jpg')",
         }}
       ></div>
-      <div className="absolute top-0 left-0 z-50 block h-full w-full bg-black bg-opacity-50"></div>
-      <div className="relative top-0 z-50 my-32 mx-auto max-w-sm text-center">
+      <div className="absolute left-0 top-0 z-50 block h-full w-full bg-black bg-opacity-50"></div>
+      <div className="relative top-0 z-50 mx-auto my-32 max-w-sm text-center">
         <div className="mb-4 block">
           <FaCircleNotch className="mx-auto animate-spin text-6xl text-white" />
           {/* <i className="fas fa-circle-notch mx-auto animate-spin text-6xl text-white"></i> */}

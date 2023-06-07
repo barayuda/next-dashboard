@@ -116,6 +116,11 @@ sudo systemd-analyze verify nextjspg-dashboard.service
 sudo systemd-analyze --user verify nextjspg-dashboard.service
 ```
 
+## Note
+
+Perubahan ENV file tidak akan berpengaruh walaupun sudah di stop dan start ulang.
+Harus lakukan npm run build ulang.
+
 ## Reference
 
 [Github Repos](https://github.com/sonipranjal/ultimate-blog-app)
