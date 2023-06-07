@@ -86,7 +86,8 @@ export default async function callAPI({
       const prevRequest = error?.config;
       if (
         (error?.response?.status === 401 || error?.response?.status === 403) &&
-        !prevRequest?.sent
+        !prevRequest?.sent &&
+        session !== undefined
       ) {
         prevRequest.sent = true;
         console.log('session refresh: ' + JSON.stringify(session));

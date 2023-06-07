@@ -45,7 +45,7 @@ export async function setSimulator(data: SimulatorTypes) {
     customer: {
       name: 'Fyan E. Widyantoro',
       email: 'fyanestu@gmail.com',
-      phoneNumber: '082114017471',
+      phoneNumber: '6282114017471',
       country: 'ID',
       postalCode: '12345',
     },

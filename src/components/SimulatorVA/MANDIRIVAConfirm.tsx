@@ -67,7 +67,10 @@ const MANDIRIVAConfirm = () => {
     const callApi = await xenditSimulatePayment(dataReq, externalID);
     console.log('response', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('mandiriva', callApi.data);
+      setLocalStorage('mandiriva', {
+        ...callApi.data,
+        details: { va, amount, name },
+      });
       void router.push('/simulator/mandiriva/payment');
     }
   };

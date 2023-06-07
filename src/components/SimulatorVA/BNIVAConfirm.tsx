@@ -67,7 +67,10 @@ const BNIVAConfirm = () => {
     const callApi = await xenditSimulatePayment(dataReq, externalID);
     console.log('response', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('bniva', callApi.data);
+      setLocalStorage('bniva', {
+        ...callApi.data,
+        details: { va, amount, name },
+      });
       void router.push('/simulator/bniva/payment');
     }
   };
