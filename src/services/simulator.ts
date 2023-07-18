@@ -6,10 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 import callAPI from '../pages/api/call';
 import type { ApiHeaders } from '../pages/api/call';
 import type { SimulatorTypes } from './data-types';
+import axios from 'axios';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 
 const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
+
+const headers = {
+  Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
+  // Add any other headers as needed
+};
 
 export async function setSimulator(data: SimulatorTypes) {
   // START Process Inquiry
@@ -29,7 +35,7 @@ export async function setSimulator(data: SimulatorTypes) {
     amount: data.total,
     currency: 'IDR',
     referenceUrl:
-      process.env.NEXT_PUBLIC_CLIENT_URL || '' + '/simulator/' + orderRefId,
+      (process.env.NEXT_PUBLIC_CLIENT_URL || '') + '/simulator/' + orderRefId,
     order: {
       id: orderRefId,
       disablePromo: true,
@@ -43,9 +49,9 @@ export async function setSimulator(data: SimulatorTypes) {
       ],
     },
     customer: {
-      name: 'Fyan E. Widyantoro',
-      email: 'fyanestu@gmail.com',
-      phoneNumber: '6282114017471',
+      name: 'Daiva',
+      email: 'Daiv@gmail.com',
+      phoneNumber: '7263626424',
       country: 'ID',
       postalCode: '12345',
     },
@@ -54,18 +60,15 @@ export async function setSimulator(data: SimulatorTypes) {
     token: '',
   };
 
+  const apiUrl = '/api/simulator';
   console.log('urlInquiry', urlInquiry);
   console.log('requestData', requestData);
-  const responseData = await callAPI({
-    url: urlInquiry,
-    method: 'POST',
-    data: requestData,
-    headers: {
-      Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
-    } as ApiHeaders,
+  const response = await axios.post<any>(apiUrl, requestData, {
+    timeout: 30000,
   });
-  console.log('responseData', responseData);
 
+  console.log('responseData', response);
+  console.log('Stup');
   // START Save to DB
   const url = `${ROOT_API}/simulator`;
   console.log('url', url);
@@ -78,12 +81,12 @@ export async function setSimulator(data: SimulatorTypes) {
     paymentSource: data.paymentSource,
     paymentSourceMethod: data.paymentSourceMethod,
     amount: data.total,
-    trxToken: responseData?.data?.token,
-    selectionsUrl: responseData?.data?.urls?.selections,
-    checkoutUrl: responseData?.data?.urls?.checkout,
-    statusHttp: responseData?.statusHttp,
+    trxToken: response?.data?.token,
+    selectionsUrl: response?.data?.urls?.selections,
+    checkoutUrl: response?.data?.urls?.checkout,
+    statusHttp: response?.status,
     requestData,
-    responseData,
+    response,
   };
   console.log('payload', payload);
 

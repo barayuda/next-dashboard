@@ -1,28 +1,68 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-// components
-
-import Navbar from '../../components/Navbars/AuthNavbar';
 import Footer from '../../components/Footers/Footer';
+import Navbar from '../../components/Navbars/AuthNavbar';
 
-import { SimulatorTypes } from '../../services/data-types';
+import axios from 'axios';
+import type { SimulatorTypes } from '../../services/data-types';
 import { setSimulator } from '../../services/simulator';
 
 const Simulator = () => {
   const router = useRouter();
-  const price = 2000;
+  const price = 100;
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(price);
   const [material, setMaterial] = useState('steel');
   const [paymentSourceMethod, setPaymentSourceMethod] = useState('');
   const [paymentSource, setPaymentSource] = useState('');
 
+  async function callInqueryApi() {
+    const data: SimulatorTypes = {
+      quantity,
+      total,
+      material,
+      paymentSource,
+      paymentSourceMethod,
+    };
+
+    if (!quantity || !total) {
+      // console.log('Error');
+      toast.error('quantity and total are required !!!');
+    } else {
+      const response = await axios.get('/api/simulator');
+      const responseData = response.data;
+      console.log('responseData', JSON.stringify(responseData));
+      if (responseData.error) {
+        toast.error('Error bla !!!');
+      } else {
+        toast.success('Transaction Created !!!');
+        // const { token } = response.data;
+        // const tokenBase64 = btoa(token);
+        // Cookies.set('token', tokenBase64, { expires: 1 });
+        // router.push('/dashboard/simulator');
+        // window.location.href = response?.data?.urls?.selections;
+      }
+    }
+  }
+
   const onSubmit = async () => {
+    const handleClick = async () => {
+      try {
+        const requestData = {
+          // Your request data here...
+        };
+        const response = await axios.post('/api/simulator', requestData);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
     const data: SimulatorTypes = {
       quantity,
       total,
@@ -59,7 +99,7 @@ const Simulator = () => {
     <>
       <Navbar />
       <main>
-        <div className="min-h-screen-25 relative flex content-center items-center justify-center pt-16 pb-32">
+        <div className="min-h-screen-25 relative flex content-center items-center justify-center pb-32 pt-16">
           <div
             className="absolute top-0 h-full w-full bg-cover bg-center"
             style={{
@@ -87,7 +127,7 @@ const Simulator = () => {
             </div>
           </div>
           <div
-            className="pointer-events-none absolute top-auto bottom-0 left-0 right-0 h-16 w-full overflow-hidden"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 top-auto h-16 w-full overflow-hidden"
             style={{ transform: 'translateZ(0)' }}
           >
             <svg
@@ -110,7 +150,7 @@ const Simulator = () => {
         <section className="bg-blueGray-200 -mt-24 pb-20">
           <div className="container mx-auto px-4">
             <div className="mt-24 flex flex-wrap items-center">
-              <div className="mr-auto ml-auto w-full px-4 pt-8 md:w-4/12">
+              <div className="ml-auto mr-auto w-full px-4 pt-8 md:w-4/12">
                 <div className="bg-blueGray-700 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg shadow-lg">
                   <img
                     alt="..."
@@ -138,16 +178,16 @@ const Simulator = () => {
                 </div>
               </div>
 
-              <div className="mr-auto ml-auto w-full px-4 md:w-5/12">
+              <div className="ml-auto mr-auto w-full px-4 md:w-5/12">
                 <h3 className="mb-2 text-3xl font-semibold leading-normal">
                   Working with us is a pleasure
                 </h3>
-                <p className="text-blueGray-600 mt-4 mb-4 text-lg font-light leading-relaxed">
+                <p className="text-blueGray-600 mb-4 mt-4 text-lg font-light leading-relaxed">
                   Don&apos;t let your uses guess by attaching tooltips and
                   popoves to any element. Just make sure you enable them first
                   via JavaScript.
                 </p>
-                <p className="text-blueGray-600 mt-0 mb-4 text-lg font-light leading-relaxed">
+                <p className="text-blueGray-600 mb-4 mt-0 text-lg font-light leading-relaxed">
                   The kit comes with three pre-built pages to help you get
                   started faster. You can change the text and images and
                   you&apos;re good to go. Just make sure you enable them first
@@ -260,7 +300,7 @@ const Simulator = () => {
                 <div className="">
                   <div className="">
                     <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                      className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                       type="button"
                       name="button"
                       onClick={(e) => {
@@ -278,25 +318,25 @@ const Simulator = () => {
           <div className="container mx-auto px-4">
             <div className="mt-24 flex flex-wrap items-center">
               <Link
-                className="mr-1 mb-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
+                className="mb-1 mr-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
                 href="/simulator/bcava"
               >
                 BCA VA
               </Link>
               <Link
-                className="mr-1 mb-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
+                className="mb-1 mr-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
                 href="/simulator/mandiriva"
               >
                 Mandiri VA
               </Link>
               <Link
-                className="mr-1 mb-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
+                className="mb-1 mr-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
                 href="/simulator/bniva"
               >
                 BNI VA
               </Link>
               <Link
-                className="mr-1 mb-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
+                className="mb-1 mr-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
                 href="/simulator/briva"
               >
                 BRI VA

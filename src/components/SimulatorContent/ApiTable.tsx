@@ -73,7 +73,7 @@ export default function ApiTable(props: CardTableProps) {
               cell && (
                 <button
                   onClick={() => handleClick(props.row.original)}
-                  className="mr-1 mb-1 rounded bg-pink-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
+                  className="mb-1 mr-1 rounded bg-pink-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
                 >
                   {props.value}
                 </button>
@@ -253,13 +253,13 @@ export default function ApiTable(props: CardTableProps) {
             <div className="mr-3 hidden flex-row flex-wrap items-center md:flex lg:ml-auto">
               <div className="relative flex w-full flex-wrap items-stretch">
                 <button
-                  className="bg-lightBlue-400 mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
+                  className="bg-lightBlue-400 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
                   onClick={handleNewSimulation}
                 >
                   New Simulation
                 </button>
                 <button
-                  className="bg-lightBlue-400 mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
+                  className="bg-lightBlue-400 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
                   onClick={loadSimulatorData}
                 >
                   Refresh
@@ -280,7 +280,7 @@ export default function ApiTable(props: CardTableProps) {
         </div>
         <div className="block w-full overflow-x-auto">
           {isLoading && (
-            <div className="ml-auto mr-auto mt-3 mb-3 block w-full items-center px-6 text-center font-semibold">
+            <div className="mb-3 ml-auto mr-auto mt-3 block w-full items-center px-6 text-center font-semibold">
               Loading data....
             </div>
           )}
@@ -330,7 +330,7 @@ export default function ApiTable(props: CardTableProps) {
                         return (
                           // eslint-disable-next-line react/jsx-key
                           <td
-                            className="whitespace-nowrap border-t-0 border-l-0 border-r-0 p-1 px-6 align-middle text-xs"
+                            className="whitespace-nowrap border-l-0 border-r-0 border-t-0 p-1 px-6 align-middle text-xs"
                             {...cell.getCellProps()}
                           >
                             {cell.render('Cell')}
@@ -456,10 +456,10 @@ export default function ApiTable(props: CardTableProps) {
                   leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
-                  <Dialog.Panel className="relative w-10/12 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full">
-                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <Dialog.Panel className="xs:my-8 xs:w-full relative w-10/12 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all">
+                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                       <div className="sm:flex sm:items-start">
-                        <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
+                        <div className="mt-3 sm:ml-4 sm:mt-0 sm:text-left">
                           <Dialog.Title
                             as="h3"
                             className="text-lg font-medium leading-6 text-gray-900"
@@ -470,26 +470,84 @@ export default function ApiTable(props: CardTableProps) {
                             <p className="text-sm text-gray-500">
                               All of your data will be showed bellow.
                             </p>
+                            <div className="text-blueGray-500 my-4 overflow-x-auto text-sm leading-relaxed">
+                              <div className="">
+                                <ul className="">
+                                  <li className="">
+                                    <strong className="">Req ID:</strong> &nbsp;
+                                    {simulator.reqId}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Order Ref ID:</strong>{' '}
+                                    &nbsp;
+                                    {simulator.orderRefId}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">
+                                      Payment Source:
+                                    </strong>{' '}
+                                    &nbsp;
+                                    {simulator.paymentSource}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Status:</strong> &nbsp;
+                                    {simulator.status}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Status Http:</strong>{' '}
+                                    &nbsp;
+                                    {simulator.statusHttp}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Amount:</strong> &nbsp;
+                                    {simulator.amount}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Created At:</strong>{' '}
+                                    &nbsp;
+                                    {simulator.createdAt}
+                                  </li>
+                                  <li className="">
+                                    <strong className="">Updated At:</strong>{' '}
+                                    &nbsp;
+                                    {simulator.updatedAt}
+                                  </li>
+                                </ul>
+                              </div>
+                              <hr className="horizontal gray-light my-4"></hr>
+                            </div>
+                            <div className="grid grid-flow-col-dense grid-cols-2">
+                              <div className="text-blueGray-500 my-4 text-sm leading-relaxed ">
+                                <div className="">
+                                  <strong>Request Data</strong>
+                                  <div className="flex-nowrap overflow-x-auto overscroll-auto rounded bg-black text-sm text-white">
+                                    <JsonPretty
+                                      jsonStr={simulator.requestData}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                            <button
+                              type="button"
+                              className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                              onClick={() => setShowModal(false)}
+                            >
+                              Deactivate
+                            </button>
+                            <button
+                              type="button"
+                              className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
+                              onClick={() => setShowModal(false)}
+                              ref={cancelButtonRef}
+                            >
+                              Cancel
+                            </button>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                      <button
-                        type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Deactivate
-                      </button>
-                      <button
-                        type="button"
-                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        onClick={() => setShowModal(false)}
-                        ref={cancelButtonRef}
-                      >
-                        Cancel
-                      </button>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>

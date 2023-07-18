@@ -1,48 +1,77 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import callAPI from './call';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
+import axios from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
+import type { SimulatorTypes } from '../../services/data-types/';
 
-  switch (method) {
-    case 'GET':
-      return handleGET(req, res);
-    case 'POST':
-      return handlePOST(req, res);
-    default:
-      res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).json({
-        data: null,
-        error: {
-          message: method ? `Method ${method} Not Allowed` : 'Method undefined',
-        },
-      });
+async function inqueryApi(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  data: SimulatorTypes
+) {
+  const record = req.body;
+  try {
+    const refUrl =
+      process.env.NEXT_PUBLIC_CLIENT_URL || 'http://localhost:4000';
+    const requestData = {
+      amount: record.amount,
+      currency: record.currency,
+      referenceUrl: record.referenceUrl,
+      order: {
+        id: record.order.id,
+        disablePromo: record.order.disablePromo,
+        afterDiscount: record.order.afterDiscount,
+        items: record.order.items,
+      },
+      customer: {
+        name: record.customer.name,
+        email: record.customer.email,
+        phoneNumber: record.customer.phoneNumber,
+        country: record.customer.country,
+        postalCode: record.customer.postalCode,
+      },
+      paymentSource: record.paymentSource,
+      paymentSourceMethod: record.paymentSourceMethod,
+      token: record.token,
+    };
+
+    console.log('Request', requestData);
+    const headers = {
+      Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
+      // Add any other headers as needed
+    };
+
+    const PostAddrest = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL || '';
+
+    const response = await axios.post<any>(
+      PostAddrest,
+      requestData,
+      { headers, timeout: 10000 }
+    );
+
+    // Handle the response as needed
+    console.log('Response', response.data);
+    res.status(200).json(response.data);
+  } catch (error) {
+    // Handle error
+    console.error('Error', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-  res.status(200).json({ message: 'Hello World!' });
 }
 
-// Get simulator
-const handleGET = (req: NextApiRequest, res: NextApiResponse) => {
-  return res.status(200).json({ error: null });
-};
-
-// Simulate transaction
-const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL || '';
-  let data = {};
-  if (
-    typeof req.body === 'object' &&
-    req.body !== null &&
-    !(req.body instanceof Array)
-  ) {
-    data = req.body as object;
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  data: SimulatorTypes
+) {
+  try {
+    await inqueryApi(req, res, data);
+  } catch (error) {
+    console.error('API error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  const response = await callAPI({
-    url: urlInquiry,
-    method: 'POST',
-    data,
-  });
-  console.log('response', response);
-  return res.status(200).json({ data: response });
-};
+}
