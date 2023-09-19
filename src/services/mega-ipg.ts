@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import callAPI from '../pages/api/call';
+import callAPI, { ApiHeaders } from '../pages/api/call';
 
 const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
 
@@ -15,5 +15,9 @@ export async function findByAccRef(data: any) {
     url,
     method: 'POST',
     data,
+    headers: {
+      apikey: 'BxAdHzWs8acCmbGwCkan',
+      username: 'test'
+    } as ApiHeaders
   });
 }

@@ -33,6 +33,7 @@ export default function CardProfile() {
     if (token) {
       // const jwtToken = atob(token);
       const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+      console.log("Getchas",token)
       console.log('payload', payload);
       if (payload.user) {
         const userFromPayload: UserTypes = payload.user;

@@ -15,7 +15,7 @@ const BNIVA = () => {
       trxType: 'getby.account_ref',
       accountRef: va,
     };
-
+    
     console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
     console.log('response', callApiSpring.data);

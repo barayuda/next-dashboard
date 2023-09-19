@@ -78,4 +78,26 @@ export interface SimulatorTypes {
   material: string;
   paymentSource: string;
   paymentSourceMethod?: string;
+  email?: string;
+  phoneNumber?: string;
+  token?: string;
+  authData?: string;
+  name?: string;
+  disablePromo?: boolean;
+  recurringId?: string;
+  retryPolicy?: string;
+  orderId?: string;
+  discountAmount?: number;
+  paymentMethod?: string;
+
 }
+// [
+//   {
+//     alloCode?: string;
+//     alloCodeVerifier?: string;
+//     alloOsType?: string;
+//     alloDeviceId?: string;
+//     alloAppType?: string;
+//   }
+
+// ]

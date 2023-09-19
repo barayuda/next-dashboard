@@ -9,26 +9,48 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from '../../services/auth';
-import { xenditSimulatePayment } from '../../services/simulator';
+import { vaMega, xenditSimulatePayment } from '../../services/simulator';
 
-const BNIVAConfirm = () => {
+const MEGAVAConfirm = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(true);
   const [va, setVa] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
+  const [amount1, setAmount1] = useState(0);
   const [externalID, setExternalID] = useState('');
+  const [billAmount,setBillAmount] = useState('');
+  const [billAmount2,setBillAmount2] = useState('');
+//   const [cardNum,setCardNum] = useState('');
+  const [time,setTime] = useState('');
+  const [billStatus,setBillStatus] = useState('');
+  const [operation,setOperation] = useState('');
+  const [customerID,setCustomerID] = useState('');
+  const [processingCode,setProcessingCode] = useState('');
+  const [d1,setD1] = useState('');
+  const [date,setDate] = useState('');
+  const [d2,setD2] =useState('');
+  const [descRepeat,setDescRepeat] = useState('');
+  const [d3,setD3] = useState('');
+  const [tranceNum,setTraceNum] = useState('');
+  const [instCode,setInstCode] = useState('');
+  const [accCredit,setAccCredit] = useState('');
+  const [terminalID,setTerminalID] = useState('');
+  const [accDebit,setAccDebit] = useState('');
+  const [datePlus,setDatePlus] = useState('');
+  const [customerName,setCustomerName] = useState('');
+  const [amountRepeating,setAmountRepeating] = useState('');
 
   useEffect(() => {
-    const datava = getLocalStorage('bniva');
+    const datava = getLocalStorage('megava');
     if (
       datava?.data?.inquiryStatus !== undefined &&
       datava?.data?.statusCode !== undefined &&
       datava?.data?.accountRef !== undefined &&
       datava?.data?.amount !== undefined &&
-      datava?.data?.payinquiryData?.decryptedData?.response?.external_id !==
-        undefined &&
+    //   datava?.data?.payinquiryData?.decryptedData(?.response?.external_id !==
+    //     undefined &&
       datava?.data?.statusCode === '00'
     ) {
       setIsError(false);
@@ -43,9 +65,31 @@ const BNIVAConfirm = () => {
         datava?.data?.payinquiryData?.decryptedData?.response?.name ||
           'Unknown Name'
       );
-      setExternalID(
-        datava?.data?.payinquiryData?.decryptedData?.response?.billing_id
-      );
+    //   setExternalID(
+    //     datava?.data?.payinquiryData?.decryptedData?.response?.external_id
+    //   );
+    // setBillAmount("0");
+    // setCardNum(datava?.data?.);
+    // setBillAmount(amount);
+    // setBillAmount2(amount);
+    // setTime(datava?.data?.createdAt);
+    // setBillStatus(datava?.data?.payinquiryData?.decryptedData?.response?.RC);
+    // setOperation("payment");
+    setCustomerID(datava?.data?.payinquiryData?.decryptedData?.response?.vacctno);
+    // setProcessingCode("171000");
+    // setD1("00000000000000000000IDRA");
+    // setDate("");
+    // setD2("010190012001081++++++++++++++++++++");
+    // setDescRepeat("03");
+    // setD3("010190011555550++++++++++++++++++++");
+    setTraceNum(datava?.data?.payinquiryData?.decryptedData?.response?.billing_id);
+    // setInstCode("VA");
+    // setAccCredit("010190012001081");
+    // setTerminalID("9481");
+    // setAccDebit("010740021014062");
+    // setDatePlus("0715");
+    // setCustomerName(datava?.data?.payinquiryData?.decryptedData?.request?.name);
+    // setAmountRepeating("02");
     } else {
       setDescription('ERROR ' + datava?.data?.statusCode);
     }
@@ -54,25 +98,37 @@ const BNIVAConfirm = () => {
   }, []);
 
   const pencetKembali = () => {
-    removeLocalStorage('bniva');
-    void router.push('/simulator/bniva');
+    removeLocalStorage('megava');
+    void router.push('/simulator/megava');
   };
 
   const pencetBayar = async () => {
     console.log('Pencet bener ');
     const dataReq = {
-      amount, //10600,
+      amount,
+      customerID,     
+      tranceNum,
     };
+    const parsedAmount = parseFloat(amount);
+    setAmount1(parsedAmount)
+    console.log("Saya",amount1,parsedAmount)
     console.log('dataReq', dataReq);
-    const callApi = await xenditSimulatePayment(dataReq, externalID);
-    console.log('response', callApi.data);
+    console.log('dataReq', customerID ,tranceNum,amount);
+    const callApi = await vaMega(
+      customerID,     
+      tranceNum,
+      parsedAmount
+    );
+    console.log('response', callApi);
+    console.log('data sepuh', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('bniva', {
-        ...callApi.data,
+      setLocalStorage('megava', {
+        ...callApi,
         details: { va, amount, name },
       });
-      void router.push('/simulator/bniva/payment');
+      void router.push('/simulator/megava/payment');
     }
+    console.log("Gak sabi Suhu")
   };
 
   return (
@@ -82,7 +138,7 @@ const BNIVAConfirm = () => {
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
             <div className="grid grid-cols-10 rounded-lg bg-slate-600 p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
-                BNI VA Simulator
+                MEGA VA Simulator
               </div>
               <div className="relative h-full">
                 <div className="absolute bottom-0 right-0 mr-5 grid grid-flow-col grid-rows-4 justify-items-end">
@@ -195,4 +251,4 @@ const BNIVAConfirm = () => {
   );
 };
 
-export default BNIVAConfirm;
+export default MEGAVAConfirm;

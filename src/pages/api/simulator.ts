@@ -24,7 +24,11 @@ async function inqueryApi(
       order: {
         id: record.order.id,
         disablePromo: record.order.disablePromo,
+        auth: record.order.auth,
         afterDiscount: record.order.afterDiscount,
+        recurringId: record.order.recurringId,
+        retryPolicy: record.order.retryPolicy,
+        paymentMethod: record.order.paymentMethod,
         items: record.order.items,
       },
       customer: {
@@ -39,7 +43,9 @@ async function inqueryApi(
       token: record.token,
     };
 
+    // console.log('Test Case Name', record);
     console.log('Request', requestData);
+
     const headers = {
       Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
       // Add any other headers as needed
@@ -47,11 +53,13 @@ async function inqueryApi(
 
     const PostAddrest = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL || '';
 
-    const response = await axios.post<any>(
-      PostAddrest,
-      requestData,
-      { headers, timeout: 10000 }
-    );
+    const axiosInit = axios.create({
+      proxy: false,
+    });
+    const response = await axiosInit.post<any>(PostAddrest, requestData, {
+      headers,
+      timeout: 10000,
+    });
 
     // Handle the response as needed
     console.log('Response', response.data);

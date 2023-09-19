@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import Footer from '../../components/Footers/Footer';
@@ -14,12 +14,25 @@ import { setSimulator } from '../../services/simulator';
 
 const Simulator = () => {
   const router = useRouter();
-  const price = 100;
+  // const price = 100;
+  const [price, setPrice] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(price);
-  const [material, setMaterial] = useState('steel');
+  const [material, setMaterial] = useState('');
   const [paymentSourceMethod, setPaymentSourceMethod] = useState('');
   const [paymentSource, setPaymentSource] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [token, setToken] = useState('');
+  const [authData, setAuthData] = useState('');
+  const [name, setName] = useState('');
+  const [disablePromo, setDisablePromo] = useState(false);
+  const [recurringId, setReccuringId] = useState('');
+  const [retryPolicy, setRetryPolicy] = useState('');
+  const [orderId, setOrderId] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState('');
+
 
   async function callInqueryApi() {
     const data: SimulatorTypes = {
@@ -28,6 +41,11 @@ const Simulator = () => {
       material,
       paymentSource,
       paymentSourceMethod,
+      email,
+      phoneNumber,
+      token,
+      authData,
+      name,
     };
 
     if (!quantity || !total) {
@@ -52,15 +70,15 @@ const Simulator = () => {
 
   const onSubmit = async () => {
     const handleClick = async () => {
-      try {
-        const requestData = {
-          // Your request data here...
-        };
-        const response = await axios.post('/api/simulator', requestData);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      // try {
+      //   const requestData = {
+      //     // Your request data here...
+      //   };
+      //   const response = await axios.post('/api/simulator', requestData);
+      //   console.log(response.data);
+      // } catch (error) {
+      //   console.error('Error:', error);
+      // }
     };
 
     const data: SimulatorTypes = {
@@ -69,6 +87,17 @@ const Simulator = () => {
       material,
       paymentSource,
       paymentSourceMethod,
+      email,
+      authData,
+      token,
+      phoneNumber,
+      name,
+      recurringId,
+      retryPolicy,
+      orderId,
+      discountAmount,
+      paymentMethod,
+      disablePromo
     };
 
     if (!quantity || !total) {
@@ -94,7 +123,8 @@ const Simulator = () => {
     document
       .querySelector('body')
       ?.classList.add('g-sidenav-show', 'g-sidenav-pinned');
-  });
+      setTotal(quantity * price);
+  }, [material, quantity, price]);
   return (
     <>
       <Navbar />
@@ -204,15 +234,23 @@ const Simulator = () => {
                       name="material"
                       id="material"
                       data-choice="active"
-                      value={material}
+                      defaultValue={material}
                       onChange={(e) => {
+                        if (e.target.value == 'carbon') {
+                          setPrice(10000);
+                        } else if (e.target.value == 'steel') {
+                          setPrice(100);
+                        } else {
+                          setPrice(1);
+                        }
                         setMaterial(e.target.value);
+                        setTotal(quantity * price);
                       }}
                     >
                       <option value="">- Select One -</option>
-                      <option value="wood">Wood</option>
-                      <option value="steel">Steel</option>
-                      <option value="carbon">Carbon</option>
+                      <option value="wood">Wood - Rp 1</option>
+                      <option value="steel">Steel - Rp 100</option>
+                      <option value="carbon">Carbon - Rp 10.000</option>
                     </select>
                   </div>
                   <div className="">
@@ -230,13 +268,13 @@ const Simulator = () => {
                           setTotal(parseInt(event.target.value) * price);
                         } else {
                           setQuantity(1);
-                          setTotal(1 * price);
+                          setTotal(1 * price);  
                         }
                       }}
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       TOTAL
@@ -249,7 +287,9 @@ const Simulator = () => {
                       readOnly={true}
                     />
                   </div>
-                  <div className="">
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Payment Source
                     </label>
@@ -276,8 +316,6 @@ const Simulator = () => {
                       <option value="megaqris">Mega QRIS</option>
                     </select>
                   </div>
-                </div>
-                <div className="grid">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Payment Source Method
@@ -295,6 +333,219 @@ const Simulator = () => {
                       <option value="">- Keep Empty -</option>
                       <option value="authcapture">authcapture</option>
                     </select>
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Name
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="text"
+                      name="name"
+                      placeholder="Input your name"
+                      value={name}
+                      onChange={(e)=>{
+                        setName(e.target.value)
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Email
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="email"
+                      name="email"
+                      placeholder="Input your email"
+                      value={email}
+                      onChange={(e)=>{
+                        setEmail(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Phone
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="text"
+                      name="phone"
+                      placeholder="Input your mobile phone"
+                      value={phoneNumber}
+                      onChange={(e)=>{
+                        setPhoneNumber(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      After Discount
+                    </label>
+                    <select
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      name="afterDiscount"
+                      id="afterDiscount"
+                      value={paymentSource}
+                      onChange={(event) => {
+                        setPaymentSource(event.target.value);
+                      }}
+                    >
+                      <option value="">- Select One -</option>
+                      <option value="megacards">megacards</option>
+                      <option value="debitmega">debitmega</option>
+                      <option value="creditmega">creditmega</option>
+                    </select>
+                  </div>
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Token
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="text"
+                      name="token"
+                      placeholder="Input your token"
+                      value={token}
+                      onChange={(e)=>{
+                        setToken(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Auth Data
+                    </label>
+                    <textarea
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      name="authData"
+                      placeholder="Input Auth Data"
+                      rows={3}
+                      value={authData}
+                      onChange={(e)=>{
+                        setAuthData(e.target.value);
+                      }}
+                    />
+                    
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                    <label className="inline-flex cursor-pointer items-center">
+                      <input
+                        id="disablePromo"
+                        type="checkbox"
+                        className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
+                        checked={disablePromo}
+                        onChange={(e)=>{
+                          setDisablePromo(e.target.checked);
+                        }}
+                      />
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        Disable Promo
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                {/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */}
+                <div className="grid grid-cols-2 gap-2">
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        RecurringId
+                      </span>
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      <input
+                        id="recurringId"
+                        type="text"
+                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                        value={recurringId}
+                        onChange={(e)=>{
+                          setReccuringId(e.target.value)
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                       RetryPolicy
+                      </span>
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      <input
+                        id="retryPolicy"
+                        type="text"
+                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                        value={retryPolicy}
+                        onChange={(e)=>{setRetryPolicy(e.target.value)}}
+                      />
+                    </label>
+                  </div>
+                </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        OrderId
+                      </span>
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      <input
+                        id="orderId"
+                        type="text"
+                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                        value={orderId}
+                        onChange={ (e)=>{
+                              setOrderId(e.target.value)
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        Discount Ammount
+                      </span>
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      <input
+                        id="discountAmmount"
+                        type="number"
+                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                        value={discountAmount}
+                        onChange={(e) => {
+                          setDiscountAmount(parseInt(e.target.value));
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+                </div>
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                       Payment Method
+                      </span>
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      <input
+                        id="paymentMethod"
+                        type="text"
+                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                        value={paymentMethod}
+                        onChange={(e)=>{
+                          setPaymentMethod(e.target.value)}}
+                      />
+                    </label>
                   </div>
                 </div>
                 <div className="">
@@ -340,6 +591,12 @@ const Simulator = () => {
                 href="/simulator/briva"
               >
                 BRI VA
+              </Link>
+              <Link
+                className="mb-1 mr-1 rounded bg-blue-500 px-6 py-3 text-base font-bold uppercase text-white shadow-md outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-600"
+                href="/simulator/megava"
+              >
+                MEGA VA
               </Link>
             </div>
           </div>

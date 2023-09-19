@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
@@ -55,11 +56,11 @@ import { FaCircleNotch, FaEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { zodResolver } from '@hookform/resolvers/zod';
 import jwtDecode from 'jwt-decode';
 import type { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import * as XLSX from 'xlsx';
 import { z } from 'zod';
 import AdminLayout from '../../../layouts/AdminLayout';
-import type { JWTPayloadTypes } from '../../../services/data-types';
+import type { JWTPayloadTypes, UserTypes } from '../../../services/data-types';
 import type { User } from '../../../services/user';
 import {
   addUser,
@@ -70,7 +71,7 @@ import {
 
 interface GetServerSideProps {
   req: {
-    cookies: {
+    cookies: {  
       token: string;
     };
   };
@@ -138,6 +139,20 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
+export const roles = ['ADMIN','MEMBER','OWNER'] ;
+
+export type Roles = (typeof roles)[number];
+
+type RoleInfo = { value: Roles; label: string };
+
+export const mapperRoles: { [key in Roles]: RoleInfo } = {
+  ["ADMIN"]: { value: "ADMIN", label: "Admin" },
+  ["MEMBER"]: { value: "MEMBER", label: "Member" },
+  ["OWNER"]: { value: "OWNER", label: "Owner" },
+};
+
+export const rolesArray: RoleInfo[] = Object.values(mapperRoles);
+
 export const maritalStatuses = ['single', 'married', 'divorced', 'widowed'];
 
 export type MaritalStatus = (typeof maritalStatuses)[number];
@@ -153,6 +168,7 @@ const schema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, { message: 'A name is required!' }).max(100),
   email: z.string().email({ message: 'An email is required!' }),
+  roles: z.string(),
   /* alias: z
     .string()
     .max(100)
@@ -174,6 +190,7 @@ const schema = z.object({
     .transform((weight) => Number(weight)), */
 });
 
+roles :["ADMIN"];
 export default function User(props: CardTableProps) {
   const { color } = props;
 
@@ -200,6 +217,8 @@ export default function User(props: CardTableProps) {
     const filtered = data.filter((row: any) =>
       row.roles.some((role: string) => role === 'Employee')
     );
+    
+    
 
     /* flatten objects */
     let i = 1;
@@ -250,7 +269,7 @@ export default function User(props: CardTableProps) {
   });
   // console.log(watch('name'));
 
-  const onSubmit: SubmitHandler<User> = (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     if (formAction === 'create') {
       console.log('saving', data);
       void handleAddData(data);
@@ -258,12 +277,47 @@ export default function User(props: CardTableProps) {
       console.log('updating', data);
       void handleEditData(data);
     }
+    const session = await getSession();
+      console.log('session', session);
+      if (session) {
+        const accessToken = session.user?.token?.accessToken;
+        console.log('typeof accessToken', typeof accessToken);
+        console.log('accessToken', accessToken);
+        if (typeof accessToken === 'string') {
+          Cookies.set('token', accessToken);
+          console.log('token', accessToken);
+        }
+
+        const refreshToken = session.user?.token?.refreshToken;
+        console.log('typeof refreshToken', typeof refreshToken);
+        if (typeof refreshToken === 'string') {
+          Cookies.set('refreshToken', refreshToken);
+          console.log('refreshToken', refreshToken);
+        }
+
+        // console.log('response', response);
+        // console.log('response.data', response.data);
+        // console.log('response.data.data', response.data.data);
+        // console.log('token', token);
+        // const tokenBase64 = btoa(token);
+
+        // const tokenBase64 = Buffer.from(accessToken).toString('base64');
+        // console.log('tokenBase64', tokenBase64);
+        // Cookies.set('token', tokenBase64);
+        // console.log('token', tokenBase64);
+
+        // const jwtBase64 = Buffer.from(refreshToken).toString('base64');
+        // Cookies.set('refreshToken', jwtBase64);
+        // console.log('refreshToken', jwtBase64);
+      }
+
   };
 
   const handleFormValue = () => {
     setValue('_id', formData._id);
     setValue('name', formData.name);
     setValue('email', formData.email);
+    setValue('roles', formData.roles);
   };
   const showAddModal = () => {
     setFormAction('create');
@@ -272,7 +326,7 @@ export default function User(props: CardTableProps) {
       _id: '',
       name: '',
       email: '',
-      roles: [],
+      roles: [''],
       active: false,
       dateOfBirth: '',
     });
@@ -286,6 +340,8 @@ export default function User(props: CardTableProps) {
         toast.error('Add data Failed:' + response.message);
       } else {
         toast.success('Add data Success !!!');
+        console.log('APA ISI NYA : ' + JSON.stringify(props));
+        console.log('ikan bilis' + JSON.stringify(props.roles));
         setData({});
         void loadData();
       }
@@ -335,6 +391,13 @@ export default function User(props: CardTableProps) {
     setShowModal(false);
     setIsMutating(false);
   };
+
+  const rolesOptions = Object.entries(mapperRoles).map(([value, { label }]) => (
+    <option value={value} key={value}>
+      {label}
+    </option>
+  ));
+  
 
   const maritalStatusOptions = Object.entries(mapperMaritalStatuses).map(
     ([value, label]) => (
@@ -387,30 +450,21 @@ export default function User(props: CardTableProps) {
       {
         accessorKey: 'email',
         header: 'Email',
+        id: 'email',
         cell: (info) => info.getValue(),
         footer: (props) => props.column.id,
       },
-      // {
-      //   accessorKey: 'roles',
-      //   header: 'Roles',
-      //   cell: ({ row, getValue }) => (
-      //     <div
-      //       style={{
-      //         // Since rows are flattened by default,
-      //         // we can use the row.depth property
-      //         // and paddingLeft to visually indicate the depth
-      //         // of the row
-      //         paddingLeft: `${row.depth * 2}rem`,
-      //       }}
-      //     >
-      //       <>{typeof getValue()}</>
-      //     </div>
-      //   ),
-      //   footer: (props) => props.column.id,
-      // },
+      {
+        accessorKey: 'roles',
+        header: 'Roles',
+        id: 'roles',
+        cell: (info) => info.getValue(),
+        footer: (props) => props.column.id,
+      },
       {
         accessorKey: 'active',
         header: 'Active',
+        id: 'active',
         cell: (info) => (
           <span>{`${info.getValue() === true ? 'ACTIVE' : 'INACTIVE'}`}</span>
         ),
@@ -418,6 +472,7 @@ export default function User(props: CardTableProps) {
       },
       {
         accessorKey: 'createdAt',
+        id: 'createdAt',
         header: () => <span>Created At</span>,
         cell: (info) => new Date(info.getValue() as Date).toUTCString(),
         footer: (props) => props.column.id,
@@ -425,6 +480,7 @@ export default function User(props: CardTableProps) {
       {
         accessorKey: 'updatedAt',
         header: 'Updated At',
+        id: 'updatedAt',
         cell: (info) => new Date(info.getValue() as Date).toUTCString(),
         footer: (props) => props.column.id,
       },
@@ -500,6 +556,28 @@ export default function User(props: CardTableProps) {
       }
     }
   }, []);
+
+  const [user, setUser] = useState<UserTypes>({
+    id: '',
+    name: '',
+    email: '',
+    avatar: '',
+  });
+  useEffect(() => {
+    if (session) {
+      console.log('session', session);
+    }
+    const token = Cookies.get('token');
+    if (token) {
+      // const jwtToken = atob(token);
+      const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+      console.log('payload', payload);
+      if (payload.user) {
+        const userFromPayload: UserTypes = payload.user;
+        setUser(userFromPayload);
+      }
+    }
+  }, [session]);
 
   return (
     <AdminLayout>
@@ -720,6 +798,24 @@ export default function User(props: CardTableProps) {
                                             )}
                                           </div>
                                         </div>
+                                        <div className="w-full px-4 lg:w-4/12">
+                                          <div className="relative mb-3 w-full">
+                                            <label
+                                              className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
+                                              htmlFor="roles"
+                                            >
+                                              Roles
+                                            </label>
+                                            <select
+                                              id="roles"
+                                              disabled={isSubmitting}
+                                              {...register('roles')}
+                                            >
+                                              {rolesOptions}
+                                            </select>
+                                            
+                                          </div>
+                                        </div>
                                       </div>
 
                                       <hr className="border-b-1 border-blueGray-300 mt-6" />
@@ -817,12 +913,24 @@ export default function User(props: CardTableProps) {
             </Transition.Root>
           ) : null}
           <div className="sm:py-10 sm:px-10">
+
+          <div>
+              <h3
+                    className={
+                      'text-lg font-semibold ' +
+                      (color === 'light' ? 'text-blueGray-700' : 'text-black')
+                    }
+                  >
+                    Welcome {user.name}
+                  </h3>
+              </div>
             <div
               className={
                 'relative mb-6 flex w-full min-w-0 flex-col break-words rounded shadow-lg ' +
                 (color === 'light' ? 'bg-white' : 'bg-blueGray-700 text-white')
               }
             >
+             
               <div className="mb-0 rounded-t border-0 px-4 py-3">
                 <div className="mx-autp flex w-full flex-wrap items-center justify-between px-4 md:flex-nowrap md:px-4">
                   <h3

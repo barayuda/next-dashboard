@@ -24,8 +24,7 @@ const FrameComponent: NextPage = () => {
   useEffect(() => {
     const loadSimulatorData = async () => {
       try {
-        const ROOT_API =
-          process.env.NEXT_PUBLIC_API || 'http://10.14.21.56:4010';
+        const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://10.14.21.56:4010';
         const url = `${ROOT_API}/simulator/${id}`;
         const response = await axios.get(url);
         console.log('response', response);
@@ -42,41 +41,51 @@ const FrameComponent: NextPage = () => {
 
   console.log('Test', status);
 
+  const backButton = (
+    <Link href="/simulator">
+      <a className="text-blue-500 hover:underline mt-4 inline-block">
+        Back to Dashboard
+      </a>
+    </Link>
+  );
+
   if (status === 'paid') {
     return (
-      <div className="relative flex h-screen w-full flex-col items-center justify-center bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-pink-300 via-red-300 to-yellow-200">
+      <div className="relative bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-pink-300 via-red-300 to-yellow-200 w-full h-screen flex flex-col items-center justify-center">
         <div className="text-center">
           <div className="flex justify-center">
             <Image
-              className="mb-8 h-[230px] w-[200px]"
+              className="w-[200px] h-[230px] mb-8"
               alt=""
               src="/assets/img/SucessMark-removebg-preview.png"
               width={200}
               height={230}
             />
           </div>
-          <h1 className="mb-4 text-4xl font-medium">Payment Success</h1>
+          <h1 className="text-4xl font-medium mb-4">Payment Success</h1>
           <p className="text-lg font-medium">Thank you for your purchase</p>
           {/* {data && <p>ID: {data.id}</p>} */}
+          {backButton}
         </div>
       </div>
     );
   } else if (status === 'unpaid') {
     return (
-      <div className="relative flex h-screen w-full flex-col items-center justify-center bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-pink-300 via-red-300 to-yellow-200">
+      <div className="relative bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-pink-300 via-red-300 to-yellow-200 w-full h-screen flex flex-col items-center justify-center">
         <div className="text-center">
           <div className="flex justify-center">
             <Image
-              className="mb-8 h-[230px] w-[200px]"
+              className="w-[200px] h-[230px] mb-8"
               alt=""
               src="/assets/img/Xmark-removebg-preview.png"
               width={200}
               height={230}
-            />
+            /> 
           </div>
-          <h1 className="mb-4 text-4xl font-medium">Payment Failed</h1>
+          <h1 className="text-4xl font-medium mb-4">Huh Naosawsdsds</h1>
           <p className="text-lg font-medium">Please try again</p>
           {/* {data && <p>ID: {data.id}</p>} */}
+          {backButton}
         </div>
       </div>
     );

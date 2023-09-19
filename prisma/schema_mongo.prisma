@@ -51,7 +51,7 @@ model Session {
 }
 
 model VerificationToken {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -60,22 +60,22 @@ model VerificationToken {
 }
 
 model User {
-  id            String     @id @default(cuid()) @map("_id") @db.ObjectId
-  username      String     @unique
+  id            String       @id @default(cuid()) @map("_id") @db.ObjectId
+  username      String       @unique
   name          String?
-  email         String?    @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   teamMembers   TeamMember[]
   invitations   Invitation[]
-  followers     Follows[]  @relation("following")
-  followings    Follows[]  @relation("follower")
+  followers     Follows[]    @relation("following")
+  followings    Follows[]    @relation("follower")
   posts         Post[]
   comments      Comment[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   likes         Like[]
   bookmarks     Bookmark[]
 }
@@ -126,7 +126,7 @@ model Invitation {
 
 // our models
 model Follows {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   follower    User   @relation("follower", fields: [followerId], references: [id])
   followerId  String
   following   User   @relation("following", fields: [followingId], references: [id])
@@ -138,7 +138,7 @@ model Follows {
 model Post {
   id            String  @id @default(cuid()) @map("_id") @db.ObjectId
   title         String  @unique
-  description   String  //@db.Text
+  description   String //@db.Text
   slug          String
   featuredImage String?
 
@@ -148,8 +148,8 @@ model Post {
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
 
-  tagIDs    String[] @db.ObjectId
-  tags      Tag[]   @relation(fields: [tagIDs], references: [id])
+  tagIDs    String[]   @db.ObjectId
+  tags      Tag[]      @relation(fields: [tagIDs], references: [id])
   comments  Comment[]
   likes     Like[]
   bookmarks Bookmark[]
@@ -163,17 +163,17 @@ model Post {
 }
 
 model Tag {
-  id          String  @id @default(cuid()) @map("_id") @db.ObjectId
-  name        String  @unique
+  id          String   @id @default(cuid()) @map("_id") @db.ObjectId
+  name        String   @unique
   description String? //@db.Text
   slug        String
   postIDs     String[] @db.ObjectId
-  posts       Post[]  @relation(fields: [postIDs], references: [id])
+  posts       Post[]   @relation(fields: [postIDs], references: [id])
 }
 
 model Comment {
   id        String   @id @default(cuid()) @map("_id") @db.ObjectId
-  text      String   //@db.Text
+  text      String //@db.Text
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   post      Post     @relation(fields: [postId], references: [id])

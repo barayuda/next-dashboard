@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -22,6 +23,20 @@ export async function setSimulator(data: SimulatorTypes) {
   console.log('dataSimulator', data);
   const reqId = uuidv4();
 
+  const allo = data.authData || "{ }";
+  let alloJson;
+
+
+  try {
+    alloJson = JSON.parse(allo);
+  } catch (error) {
+
+    console.error("NO JSON VALUE:", error);
+    alloJson = {};
+  }
+
+  const testCaseName = data.name || "Test Name";
+
   const date = new Date();
   const orderRefId =
     date.getFullYear().toString() +
@@ -31,15 +46,30 @@ export async function setSimulator(data: SimulatorTypes) {
     date.getMinutes().toString() +
     date.getSeconds().toString();
 
+  // [
+  //   {
+  //     alloCode: data.authData.alloCode,
+  //     alloCodeVerifier: data.alloCodeVerifier,
+  //     alloOsType: data.alloOsType,
+  //     alloDeviceId: data.alloDeviceId,
+  //     alloAppType: data.alloAppType
+  //   }
+
+  // ]
   const requestData = {
     amount: data.total,
     currency: 'IDR',
     referenceUrl:
       (process.env.NEXT_PUBLIC_CLIENT_URL || '') + '/simulator/' + orderRefId,
     order: {
-      id: orderRefId,
-      disablePromo: true,
+      id: data.orderId || orderRefId,
+      recurringId: data.recurringId || "",
+      disablePromo: data.disablePromo || false,
+      auth: alloJson || "",
       afterDiscount: '', // megacards, debitmega, creditmega
+      retryPolicy: data.retryPolicy || "failed",
+      discountAmmount: data.discountAmount || "",
+      paymentMethod: data.paymentMethod || "",
       items: [
         {
           name: data.material,
@@ -49,15 +79,15 @@ export async function setSimulator(data: SimulatorTypes) {
       ],
     },
     customer: {
-      name: 'Daiva',
-      email: 'Daiv@gmail.com',
-      phoneNumber: '7263626424',
+      name: testCaseName,
+      email: data.email || "Daivaayala@yahoo.com",
+      phoneNumber: data.phoneNumber || "081318291877",
       country: 'ID',
       postalCode: '12345',
     },
     paymentSource: data.paymentSource,
     paymentSourceMethod: data.paymentSourceMethod,
-    token: '',
+    token: data.token || "",
   };
 
   const apiUrl = '/api/simulator';
@@ -72,6 +102,7 @@ export async function setSimulator(data: SimulatorTypes) {
   // START Save to DB
   const url = `${ROOT_API}/simulator`;
   console.log('url', url);
+  console.log('Json', data.authData)
 
   const payload = {
     reqId,
@@ -79,6 +110,7 @@ export async function setSimulator(data: SimulatorTypes) {
     orderRefId,
     currency: 'IDR',
     paymentSource: data.paymentSource,
+    auth: data.authData,
     paymentSourceMethod: data.paymentSourceMethod,
     amount: data.total,
     trxToken: response?.data?.token,
@@ -178,3 +210,24 @@ export async function xenditGetVaPayment(payment_id: string) {
     method: 'GET',
   });
 }
+
+export async function vaMega(customerID: string, tranceNum: string, parsedAmount: number) {
+  const url = `/api/vaMega`;
+
+  const requestBody = {
+    customerID,
+    tranceNum,
+    parsedAmount
+  };
+  console.log(requestBody)
+  try {
+    const response = await axios.post(url, requestBody);
+    return response.data;
+  } catch (error) {
+    console.log("Error Suhu")
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+

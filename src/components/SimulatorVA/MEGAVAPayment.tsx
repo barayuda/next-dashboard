@@ -4,75 +4,42 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import {
-  getLocalStorage,
-  removeLocalStorage,
-  setLocalStorage,
-} from '../../services/auth';
-import { xenditSimulatePayment } from '../../services/simulator';
+import { getLocalStorage, removeLocalStorage } from '../../services/auth';
 
-const BNIVAConfirm = () => {
+const MEGAVAPayment = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(true);
   const [va, setVa] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
-  const [externalID, setExternalID] = useState('');
 
   useEffect(() => {
-    const datava = getLocalStorage('bniva');
+    const data = getLocalStorage('megava');
+    const responseValue = data.Data.Response;
+    const amountValue = data.Data.Amount;
+    const vaValue = data.details.va;
+
     if (
-      datava?.data?.inquiryStatus !== undefined &&
-      datava?.data?.statusCode !== undefined &&
-      datava?.data?.accountRef !== undefined &&
-      datava?.data?.amount !== undefined &&
-      datava?.data?.payinquiryData?.decryptedData?.response?.external_id !==
-        undefined &&
-      datava?.data?.statusCode === '00'
+      responseValue !== undefined &&
+      responseValue === '00'
     ) {
       setIsError(false);
-      setVa(datava?.data?.accountRef);
-      setDescription(
-        'Pembayaran : ' +
-          datava?.data?.configData?.merchantData?.merchantName ||
-          'Unknown Merchant'
-      );
-      setAmount(datava?.data?.amount);
-      setName(
-        datava?.data?.payinquiryData?.decryptedData?.response?.name ||
-          'Unknown Name'
-      );
-      setExternalID(
-        datava?.data?.payinquiryData?.decryptedData?.response?.billing_id
-      );
+      setVa(vaValue || 'XXX');
+      setDescription('Pembayaran Berhasil');
+      setAmount(amountValue || '0.00');
+      setName(data?.details?.name || 'Unknown');
     } else {
-      setDescription('ERROR ' + datava?.data?.statusCode);
+      setDescription('Pembayaran Gagal');
     }
 
-    console.log('data', datava);
+    console.log('data', data);
+    console.log('data', responseValue);
   }, []);
 
   const pencetKembali = () => {
-    removeLocalStorage('bniva');
-    void router.push('/simulator/bniva');
-  };
-
-  const pencetBayar = async () => {
-    console.log('Pencet bener ');
-    const dataReq = {
-      amount, //10600,
-    };
-    console.log('dataReq', dataReq);
-    const callApi = await xenditSimulatePayment(dataReq, externalID);
-    console.log('response', callApi.data);
-    if (!callApi.error) {
-      setLocalStorage('bniva', {
-        ...callApi.data,
-        details: { va, amount, name },
-      });
-      void router.push('/simulator/bniva/payment');
-    }
+    removeLocalStorage('megava');
+    void router.push('/simulator/megava');
   };
 
   return (
@@ -82,7 +49,7 @@ const BNIVAConfirm = () => {
           <div className="bg-blueGray-200 relative mb-10 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
             <div className="grid grid-cols-10 rounded-lg bg-slate-600 p-5 text-white">
               <div className="col-span-10 p-5 text-center text-xl text-white">
-                BNI VA Simulator
+                MEGA VA Simulator
               </div>
               <div className="relative h-full">
                 <div className="absolute bottom-0 right-0 mr-5 grid grid-flow-col grid-rows-4 justify-items-end">
@@ -104,7 +71,7 @@ const BNIVAConfirm = () => {
                 <div className="rounded-md bg-blue-500 text-center text-white">
                   <div className="grid grid-cols-6">
                     <div className="col-span-6 p-5">
-                      {isError ? 'ERROR' : 'BERIKUT DETAIL TRANSAKSI ANDA'}
+                      {isError ? 'ERROR' : 'SUKSES'}
                     </div>
                     <div>&nbsp;</div>
                     <div className="col-span-4 p-5">
@@ -121,36 +88,32 @@ const BNIVAConfirm = () => {
                       )}
                     </div>
                     <div>&nbsp;</div>
-                  </div>
-                  <div className="grid grid-cols-6">
-                    <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
+                    <div className="text-bold mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
-                    <div className="col-span-2">&nbsp;</div>
+                    <div className="col-span-3">&nbsp;</div>
                     <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
                       ---&gt;
                     </div>
-                    <div className="text-bold col-span-2 mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
+                    <div className="text-bold mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
-                    <div className="col-span-2">&nbsp;</div>
-                    <div className="text-bold col-span-2 mb-1 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
-                      BAYAR ---&gt;
+                    <div className="col-span-4">&nbsp;</div>
+                    <div className="text-bold mb-1 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
+                      ---&gt;
                     </div>
-                    <div className="text-bold col-span-2 mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
+                    <div className="text-bold mb-1 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
+                    <div className="col-span-3">&nbsp;</div>
                     <div className="text-bold col-span-2 mb-1 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
                       KEMBALI ---&gt;
                     </div>
-                    <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
+                    <div className="text-bold mb-2 inline-block h-10 py-2 pl-5 text-left align-middle font-extrabold">
                       &lt;---
                     </div>
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
-                    <div className="text-bold col-span-2 mb-2 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
+                    <div className="col-span-4">&nbsp;</div>
+                    <div className="text-bold mb-2 inline-block h-10 py-2 pr-5 text-right align-middle font-extrabold">
                       ---&gt;
                     </div>
                   </div>
@@ -165,7 +128,6 @@ const BNIVAConfirm = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetBayar();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>
@@ -195,4 +157,4 @@ const BNIVAConfirm = () => {
   );
 };
 
-export default BNIVAConfirm;
+export default MEGAVAPayment;

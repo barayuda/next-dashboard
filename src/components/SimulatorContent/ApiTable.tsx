@@ -25,6 +25,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { env } from '../../env/server.mjs';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 type Data = {
   _id: string;
@@ -69,18 +70,20 @@ export default function ApiTable(props: CardTableProps) {
             accessor: 'reqId', // accessor is the "key" in the data
             sortType: 'basic',
             disableSortBy: true,
-            Cell: (props: any, cell: any) =>
+            Cell: (props: { value: string; row: any }, cell: any) =>
               cell && (
                 <button
                   onClick={() => handleClick(props.row.original)}
                   className="mb-1 mr-1 rounded bg-pink-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
                 >
-                  {props.value}
+                  {props.value && props.value?.length > 0
+                    ? props.value.slice(-12)
+                    : ''}
                 </button>
               ),
           },
           {
-            Header: 'Payment_Source',
+            Header: 'Pay_Source',
             accessor: 'paymentSource',
           },
         ],
@@ -91,7 +94,7 @@ export default function ApiTable(props: CardTableProps) {
         // Second group columns
         columns: [
           {
-            Header: 'Order_Ref_Id',
+            Header: 'Order_Id',
             accessor: 'orderRefId',
           },
           {
@@ -105,6 +108,10 @@ export default function ApiTable(props: CardTableProps) {
           {
             Header: 'Amount',
             accessor: 'amount',
+          },
+          {
+            Header: 'Token',
+            accessor: 'token',
           },
           {
             Header: 'Created_At',
@@ -252,12 +259,14 @@ export default function ApiTable(props: CardTableProps) {
             </h3>
             <div className="mr-3 hidden flex-row flex-wrap items-center md:flex lg:ml-auto">
               <div className="relative flex w-full flex-wrap items-stretch">
-                <button
+                <Link
+                  href={'/simulator'}
                   className="bg-lightBlue-400 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
-                  onClick={handleNewSimulation}
+                  // onClick={handleNewSimulation}
+                  target="_blank"
                 >
                   New Simulation
-                </button>
+                </Link>
                 <button
                   className="bg-lightBlue-400 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
                   onClick={loadSimulatorData}

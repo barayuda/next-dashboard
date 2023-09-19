@@ -23,8 +23,8 @@ const defaultData = {
   password: 'secret',
   name: '',
   active: true,
+  // roles: [''],
   roles: ['MEMBER'],
-  // roles: ['ADMIN', 'OWNER', 'MEMBER'],
   // createdAt: '',
   // updatedAt: ''
 };
@@ -81,6 +81,19 @@ export async function deleteUser(id: string) {
     url,
     token: true,
     method: 'DELETE',
+    data: payload,
+  });
+}
+
+export async function updatePassword(data: User) {
+  const url = `${ROOT_API}/users`;
+  const payload = { ...defaultData, ...data };
+  payload.id = data._id;
+  console.log('payload', payload);
+  return await callAPI({
+    url,
+    token: true,
+    method: 'PATCH',
     data: payload,
   });
 }

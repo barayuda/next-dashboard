@@ -1,142 +1,142 @@
-import React from 'react';
+  import React, { ChangeEvent, useEffect, useState } from "react";
 
-import Navbar from '../components/Navbars/AuthNavbar';
-import Footer from '../components/Footers/Footer';
+  // components
 
-export default function Profile() {
-  return (
-    <>
-      <Navbar />
-      <main className="profile-page">
-        <section className="h-500-px relative block">
-          <div
-            className="absolute top-0 h-full w-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
-            }}
-          >
-            <span
-              id="blackOverlay"
-              className="absolute h-full w-full bg-black opacity-50"
-            ></span>
-          </div>
-          <div
-            className="pointer-events-none absolute top-auto bottom-0 left-0 right-0 h-16 w-full overflow-hidden"
-            style={{ transform: 'translateZ(0)' }}
-          >
-            <svg
-              className="absolute bottom-0 overflow-hidden"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-              <polygon
-                className="text-blueGray-200 fill-current"
-                points="2560 0 2560 100 0 100"
-              ></polygon>
-            </svg>
-          </div>
-        </section>
-        <section className="bg-blueGray-200 relative py-16">
-          <div className="container mx-auto px-4">
-            <div className="relative mb-6 -mt-64 flex w-full min-w-0 flex-col break-words rounded-lg bg-white shadow-xl">
-              <div className="px-6">
-                <div className="flex flex-wrap justify-center">
-                  <div className="flex w-full justify-center px-4 lg:order-2 lg:w-3/12">
-                    <div className="relative">
-                      <img
-                        alt="..."
-                        src="/assets/img/team-2-800x800.jpg"
-                        className="max-w-150-px absolute -m-16 -ml-20 h-auto rounded-full border-none align-middle shadow-xl lg:-ml-16"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4 lg:order-3 lg:w-4/12 lg:self-center lg:text-right">
-                    <div className="mt-32 py-6 px-3 sm:mt-0">
-                      <button
-                        className="bg-blueGray-700 active:bg-blueGray-600 mb-1 rounded px-4 py-2 text-xs font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-md focus:outline-none sm:mr-2"
-                        type="button"
-                      >
-                        Connect
-                      </button>
-                    </div>
-                  </div>
-                  <div className="w-full px-4 lg:order-1 lg:w-4/12">
-                    <div className="flex justify-center py-4 pt-8 lg:pt-4">
-                      <div className="mr-4 p-3 text-center">
-                        <span className="text-blueGray-600 block text-xl font-bold uppercase tracking-wide">
-                          22
-                        </span>
-                        <span className="text-blueGray-400 text-sm">
-                          Friends
-                        </span>
-                      </div>
-                      <div className="mr-4 p-3 text-center">
-                        <span className="text-blueGray-600 block text-xl font-bold uppercase tracking-wide">
-                          10
-                        </span>
-                        <span className="text-blueGray-400 text-sm">
-                          Photos
-                        </span>
-                      </div>
-                      <div className="p-3 text-center lg:mr-4">
-                        <span className="text-blueGray-600 block text-xl font-bold uppercase tracking-wide">
-                          89
-                        </span>
-                        <span className="text-blueGray-400 text-sm">
-                          Comments
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-12 text-center">
-                  <h3 className="text-blueGray-700 mb-2 text-4xl font-semibold leading-normal">
-                    Jenna Stones
-                  </h3>
-                  <div className="text-blueGray-400 mt-0 mb-2 text-sm font-bold uppercase leading-normal">
-                    <i className="fas fa-map-marker-alt text-blueGray-400 mr-2 text-lg"></i>{' '}
-                    Los Angeles, California
-                  </div>
-                  <div className="text-blueGray-600 mb-2 mt-10">
-                    <i className="fas fa-briefcase text-blueGray-400 mr-2 text-lg"></i>
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div className="text-blueGray-600 mb-2">
-                    <i className="fas fa-university text-blueGray-400 mr-2 text-lg"></i>
-                    University of Computer Science
-                  </div>
-                </div>
-                <div className="border-blueGray-200 mt-10 border-t py-10 text-center">
-                  <div className="flex flex-wrap justify-center">
-                    <div className="w-full px-4 lg:w-9/12">
-                      <p className="text-blueGray-700 mb-4 text-lg leading-relaxed">
-                        An artist of considerable range, Jenna the name taken by
-                        Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                        performs and records all of his own music, giving it a
-                        warm, intimate feel with a solid groove structure. An
-                        artist of considerable range.
-                      </p>
-                      <a
-                        href="#pablo"
-                        className="text-lightBlue-500 font-normal"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Show more
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  import CardTable from "../components/Cards/CardTable";
+
+  // layout for page
+
+  import AdminLayout from "../layouts/AdminLayout";
+  import { useSession } from "next-auth/react";
+  import { JWTPayloadTypes, UserTypes } from "../services/data-types";
+  import Cookies from "js-cookie";
+  import jwtDecode from "jwt-decode";
+  import Link from "next/link";
+  import { FaSearch } from "react-icons/fa";
+  import UserDropdown from "../components/Dropdowns/UserDropdown";
+  import Image from 'next/image';
+
+
+
+  export default function Tables() {
+  // Function to handle file upload
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; // Use optional chaining for null check
+    if (file) {
+      // Handle the file upload logic here (e.g., send the file to the server and update the user's profile picture).
+      //place holder kali
+    }
+  };
+  const [isHovered, setIsHovered] = useState(false);
+    const { data: session } = useSession();
+
+    const [user, setUser] = useState<UserTypes>({
+      id: '',
+      name: '',
+      email: '',
+      avatar: '',
+    });
+    useEffect(() => {
+      if (session) {
+        console.log('session', session);
+      }
+      const token = Cookies.get('token');
+      if (token) {
+        // const jwtToken = atob(token);
+        const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+        console.log('payload', payload);
+        if (payload.user) {
+          const userFromPayload: UserTypes = payload.user;
+          setUser(userFromPayload);
+        }
+      }
+    }, [session]);
+    
+    return (
+      <AdminLayout>
+        <div className="flex py-2 px-4 rounded-lg bg-gray-950 ">
+    <div className="ml-4 flex flex-col justify-between w-full ">
+      <h1 className="mb-6 text-white">Employee Details</h1>
+
+  
+      <div className="flex items-center">
+        {/* Image Div */}
+        <label
+          htmlFor="upload-avatar"
+          className="relative w-48 h-48 rounded-full overflow-hidden shadow-lg cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <Image
+            alt="..."
+            src={user.avatar || "/assets/img/team-1-800x800.jpg"}
+            layout="responsive"
+            width={186}
+            height={190}
+          />
+          {isHovered && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <Image
+                src="/assets/img/cameraLog.png"
+                alt="Camera Logo"
+                width={32}
+                height={32}
+              />
             </div>
+          )}
+          <input
+            type="file"
+            id="upload-avatar"
+            accept="image/*"
+            className="opacity-0 w-0 h-0 absolute"
+            onChange={handleFileChange}
+          />
+        </label>
+
+        {/* Employee Name */}
+        <div className="grid grid-rows-2 gap-4 text-gray-400  ">
+        <h2 className="ml-4 mb-4 text-white text-lg font-semibold block">{user.name}</h2>
+        <div className="ml-4 grid grid-cols-3 gap-4 text-gray-400 justify-items-stretch place-content-center w-full">
+          <div className="flex flex-col items-center">
+            <span className="block mb-1">Role</span>
+            <span className="block text-white">Manager</span>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
-}
+          <div className="flex flex-col items-center">
+            <span className="block mb-1">Phone Number</span>
+            <span className="block text-white">+62 823 7263-7364</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="block mb-1">Email</span>
+            <span className="block text-white">{user.email}</span>
+          </div>
+        </div>
+
+        </div>
+      </div>
+
+    
+      
+  
+
+      
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 mt-4">
+            <Link
+              href="/admin/settings"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center"
+            >
+              Profile Edit
+            </Link>
+            <Link
+              href="/admin/account/change-pass"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center"
+            >
+              Change Password
+            </Link>
+        
+      </div>
+    </div>
+  
+  </div>
+      </AdminLayout>
+    );
+  }

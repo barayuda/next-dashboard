@@ -18,7 +18,9 @@ export interface CallAPIProps extends AxiosRequestConfig {
 }
 
 export interface ApiHeaders extends AxiosHeaders {
-  Authorization: string;
+  Authorization?: string;
+  apikey?: string;
+  username?: string;
 }
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://127.0.0.1:4010';
@@ -41,6 +43,7 @@ export default async function callAPI({
       } as ApiHeaders;
     }
   } else if (token) {
+    //JGN DI GANTIIII
     const tokenCookies = Cookies.get('token');
     console.log('tokenCookies', tokenCookies);
     // const tokenCookies = '';
@@ -69,9 +72,8 @@ export default async function callAPI({
         !config.headers['Authorization'] &&
         session?.user?.token?.accessToken
       ) {
-        config.headers['Authorization'] = `Bearer ${
-          session?.user?.token?.accessToken as string
-        }`;
+        config.headers['Authorization'] = `Bearer ${session?.user?.token?.accessToken as string
+          }`;
       } else {
         console.log('requestIntercept else');
       }
@@ -101,9 +103,8 @@ export default async function callAPI({
           session.user.token.accessToken = res.data.accessToken;
           Cookies.set('token', res.data.accessToken);
           if (res.data.accessToken) {
-            prevRequest.headers['Authorization'] = `Bearer ${
-              res.data.accessToken as string
-            }`;
+            prevRequest.headers['Authorization'] = `Bearer ${res.data.accessToken as string
+              }`;
             return callAPI(prevRequest);
           }
         } else {
@@ -114,16 +115,14 @@ export default async function callAPI({
           });
           console.log('response refresh2: ' + JSON.stringify(res));
           if (res.data.accessToken) {
-            prevRequest.headers['Authorization'] = `Bearer ${
-              res.data.accessToken as string
-            }`;
+            prevRequest.headers['Authorization'] = `Bearer ${res.data.accessToken as string
+              }`;
             return callAPI(prevRequest);
           }
         }
         if (res.data.accessToken) {
-          prevRequest.headers['Authorization'] = `Bearer ${
-            res.data.accessToken as string
-          }`;
+          prevRequest.headers['Authorization'] = `Bearer ${res.data.accessToken as string
+            }`;
           return callAPI(prevRequest);
         }
       } else {
