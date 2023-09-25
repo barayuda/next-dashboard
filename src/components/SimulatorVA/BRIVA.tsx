@@ -6,8 +6,11 @@ import { brivaInquiry } from '../../services/simulator';
 const BRIVA = () => {
   const router = useRouter();
   const [va, setVa] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const pencetBenar = async () => {
+    setIsLoading(true);
+    try {
     console.log('Pencet bener ');
     const data = {
       brivaNo: va,
@@ -19,6 +22,12 @@ const BRIVA = () => {
       setLocalStorage('briva', callApi.data);
       void router.push('/simulator/briva/confirm');
     }
+  }catch(error){
+    throw error
+  }
+  finally {
+    setIsLoading(false); // Stop loading
+  }
   };
   return (
     <div className="container mx-auto h-screen px-4">
@@ -46,6 +55,15 @@ const BRIVA = () => {
                 </div>
               </div>
               <div className="col-span-8 ">
+              <div className="col-center">
+                  {isLoading ? (
+                    <div>Loading Please Wait....</div>
+                  ) : (
+                    <div>
+                      {/* Your regular component content */}
+                    </div>
+                  )}
+                </div>
                 <div className="rounded-md bg-blue-500 text-center text-white">
                   <div className="grid grid-cols-4">
                     <div className="col-span-4 p-5">
