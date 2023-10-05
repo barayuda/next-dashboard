@@ -5,7 +5,9 @@ import ApiTable from '../../components/WebhookContent/ApiTable';
 
 // layout for page
 import AdminLayout from '../../layouts/AdminLayout';
+import { getServerSideProps } from './index';
 
+export { getServerSideProps };
 export default function Webhook() {
   return (
     <AdminLayout>

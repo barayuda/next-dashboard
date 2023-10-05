@@ -5,8 +5,10 @@ import React from "react";
 import CardTable from "../../components/Cards/CardTable";
 
 // layout for page
-
+import { getServerSideProps } from "./index";
 import AdminLayout from "../../layouts/AdminLayout";
+
+export { getServerSideProps };
 
 export default function Tables() {
   return (

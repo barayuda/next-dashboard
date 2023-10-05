@@ -15,6 +15,10 @@
   import { FaSearch } from "react-icons/fa";
   import UserDropdown from "../components/Dropdowns/UserDropdown";
   import Image from 'next/image';
+  import { getServerSideProps } from "./admin/index";
+
+
+  export { getServerSideProps };
 
 
 

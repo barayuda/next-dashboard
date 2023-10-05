@@ -72,9 +72,9 @@ export async function setSimulator(data: SimulatorTypes) {
       paymentMethod: data.paymentMethod || "",
       items: [
         {
-          name: data.material,
-          quantity: data.quantity,
-          amount: data.total,
+          name: data.material || "Wood",
+          quantity: data.quantity || 1,
+          amount: data.total || 1,
         },
       ],
     },

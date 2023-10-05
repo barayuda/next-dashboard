@@ -8,6 +8,9 @@ import CardProfile from "../../components/Cards/CardProfile";
 // layout for page
 
 import AdminLayout from "../../layouts/AdminLayout";
+import { getServerSideProps } from "./index";
+
+export { getServerSideProps };
 
 export default function Settings() {
   return (

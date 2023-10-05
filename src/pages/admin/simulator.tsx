@@ -5,6 +5,8 @@ import ApiTable from '../../components/SimulatorContent/ApiTable';
 
 // layout for page
 import AdminLayout from '../../layouts/AdminLayout';
+import { getServerSideProps } from './index';
+export { getServerSideProps };
 
 export default function Monitoring() {
   return (

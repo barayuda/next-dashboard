@@ -8,6 +8,10 @@ import TabsWithIcon from "../../components/Tabs/TabWithIcon";
 
 // layout for page
 import AdminLayout from "../../layouts/AdminLayout";
+import { getServerSideProps } from "./index";
+
+export { getServerSideProps };
+
 
 export default function Components() {
   return (

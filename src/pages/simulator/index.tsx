@@ -21,6 +21,7 @@ const Simulator = () => {
   const [material, setMaterial] = useState('');
   const [paymentSourceMethod, setPaymentSourceMethod] = useState('');
   const [paymentSource, setPaymentSource] = useState('');
+  const [afterdiscount, setAfterDiscount] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState('');
@@ -393,9 +394,9 @@ const Simulator = () => {
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       name="afterDiscount"
                       id="afterDiscount"
-                      value={paymentSource}
+                      value={afterdiscount}
                       onChange={(event) => {
-                        setPaymentSource(event.target.value);
+                        setAfterDiscount(event.target.value);
                       }}
                     >
                       <option value="">- Select One -</option>
