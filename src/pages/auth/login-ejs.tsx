@@ -61,10 +61,10 @@ export default function Login() {
         // const tokenBase64 = btoa(token);
         const tokenBase64 = Buffer.from(accessToken).toString('base64');
         // console.log('tokenBase64', tokenBase64);
-        Cookies.set('token', tokenBase64);
+        Cookies.set('token', tokenBase64, { secure: true });
         console.log('token', tokenBase64);
         const jwtBase64 = Buffer.from(refreshToken).toString('base64');
-        Cookies.set('refreshToken', jwtBase64);
+        Cookies.set('refreshToken', jwtBase64, { secure: true });
         console.log('refreshToken', jwtBase64);
         router.push('/admin/dashboard');
       }

@@ -1,6 +1,7 @@
-import callAPI from '../pages/api/call';
+import callAPI, { ApiHeaders } from '../pages/api/call';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
+const KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
 const API_VERSION = 'api/v1';
 
 export async function getMonitoringTransaction(valueParams?: string) {
@@ -20,6 +21,9 @@ export async function getMonitoringTransaction(valueParams?: string) {
     url,
     token: true,
     method: 'POST',
+    headers: {
+      apikey: KEY,
+    } as ApiHeaders,
     data
   });
 }
@@ -33,5 +37,8 @@ export async function getTransactionDetail(id: string, token: string) {
     url,
     method: 'GET',
     serverToken: token,
+    headers: {
+      apikey: KEY,
+    } as ApiHeaders
   });
 }

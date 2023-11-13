@@ -18,9 +18,5 @@ export async function findByAccRef(data: any) {
     url,
     method: 'POST',
     data,
-    // headers: {
-    //   apikey: 'BxAdHzWs8acCmbGwCkan',
-    //   username: 'test'
-    // } as ApiHeaders
   });
 }

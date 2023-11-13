@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -13,11 +14,18 @@ async function getAll(
 
 
     const ROOT_API = process.env.NEXT_PUBLIC_API || '';
+    const API_KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
     console.log(`  Idk//`);
     // ${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail
     //${ROOT_API}/${API_VERSION}/monitoring/${params}
     const record = req.body;
     console.log("Happier", record)
+
+    const apiKey = req.headers.apikey;
+    if (!apiKey || apiKey !== API_KEY) {
+        return res.status(400).json({ error: 'Missing or invalid API key' });
+    }
+
 
     try {
 

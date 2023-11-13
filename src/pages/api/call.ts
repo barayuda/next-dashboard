@@ -101,7 +101,7 @@ export default async function callAPI({
           console.log('response refresh1: ' + JSON.stringify(res));
 
           session.user.token.accessToken = res.data.accessToken;
-          Cookies.set('token', res.data.accessToken);
+          Cookies.set('token', res.data.accessToken, { secure: true });
           if (res.data.accessToken) {
             prevRequest.headers['Authorization'] = `Bearer ${res.data.accessToken as string
               }`;
