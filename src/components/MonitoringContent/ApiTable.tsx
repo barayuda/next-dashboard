@@ -208,7 +208,7 @@ export default function ApiTable(props: CardTableProps) {
   const loadMonitoringData = async () => {
     setIsLoading(true);
     const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://10.14.20.49:4010';
-    const url = `${ROOT_API}/apierrmon`;
+    const url = `../api/getMonitoringAll`;
     console.log('url', url);
     const result = await axios(url);
     console.log('result', result);

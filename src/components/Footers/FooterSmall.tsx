@@ -20,12 +20,12 @@ export default function FooterSmall(props: FooterSmallProps) {
           <div className="flex flex-wrap items-center justify-center md:justify-between">
             <div className="w-full px-4 md:w-4/12">
               <div className="text-blueGray-500 py-1 text-center text-sm font-semibold md:text-left">
-                Copyright © {new Date().getFullYear()}{" "}
+              Copyright © {new Date().getFullYear()} Bank Mega by{' '}
                 <Link
-                  href="https://www.creative-tim.com?ref=nnjs-footer-small"
-                  className="hover:text-blueGray-300 py-1 text-sm font-semibold text-white"
+                  href="https://www.bankmega.com"
+                  className="text-blueGray-500 hover:text-blueGray-800"
                 >
-                  Creative Tim
+                  ITEC - CDS Developer
                 </Link>
               </div>
             </div>

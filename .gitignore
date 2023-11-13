@@ -42,6 +42,7 @@ yarn-error.log*
 .env*.dev1
 .env*.dev2
 .env*.sbox
+.env*.sandbox
 .env*.prod*
 
 # vercel

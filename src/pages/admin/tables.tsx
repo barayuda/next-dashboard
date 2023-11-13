@@ -8,7 +8,7 @@ import CardTable from "../../components/Cards/CardTable";
 import { getServerSideProps } from "./index";
 import AdminLayout from "../../layouts/AdminLayout";
 
-export { getServerSideProps };
+// export { getServerSideProps };
 
 export default function Tables() {
   return (

@@ -10,17 +10,24 @@ export async function getMonitoringTransaction(valueParams?: string) {
   } else {
     params = `?status=${valueParams || ''}`;
   }
-  const url = `${ROOT_API}/${API_VERSION}/monitoring/${params}`;
-
+  const url = `../api/getMonitoringAll`;
+  const data = {
+    H1: params,
+  }
+  //api/getMonitoringAll
+  //${ROOT_API}/${API_VERSION}/monitoring/${params}
   return await callAPI({
     url,
     token: true,
-    method: 'GET',
+    method: 'POST',
+    data
   });
 }
 
 export async function getTransactionDetail(id: string, token: string) {
-  const url = `${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail`;
+  const url = 'api/getMonitoringAll';
+
+  //`${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail`
 
   return callAPI({
     url,

@@ -13,7 +13,7 @@ else
 fi
 
 # src/node_modules/.bin/env-cmd -f src/.env.dev pm2 start extras/pm2-dashboard.config.js
-pm2 start extras/pm2-nextdashboard.config.js --env development
+pm2 start extras/pm2-nextdashboard.config.js --env sandbox
 
 echo "DONE EXEC => NextJSPG-DASHBOARD"
 pm2 logs ExpressPG-DASHBOARD --lines 100

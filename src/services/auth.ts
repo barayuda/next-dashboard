@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -13,12 +14,13 @@ import type {
   ResetPassTypes,
 } from './data-types';
 
+const ROOT_SELF = '/api/signUp'
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 console.log(`ROOT_API: ${ROOT_API}`);
 const API_VERSION = 'v1';
 
 export async function setSignUp(data: RegisterTypes) {
-  const url = `${ROOT_API}/${API_VERSION}/auth/signup`;
+  const url = `${ROOT_SELF}`;
 
   return callAPI({
     url,

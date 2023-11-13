@@ -12,7 +12,7 @@ export default function HeaderStats() {
         <div className="mx-auto w-full px-4 md:px-10">
           <div>
             {/* Card stats */}
-            <div className="flex flex-wrap">
+            {/* <div className="flex flex-wrap">
               <div className="w-full px-4 lg:w-6/12 xl:w-3/12">
                 <CardStats
                   statSubtitle="TRAFFIC"
@@ -61,7 +61,7 @@ export default function HeaderStats() {
                   statIconColor="bg-lightBlue-500"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

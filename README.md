@@ -101,8 +101,8 @@ example:
 
 /etc/systemd/system/multi-user.target.wants/nextjspg-dashboard.service
 
-chmod +x /var/www/nextjspg-dashboard/extras/start-service.sh
-chmod +x /var/www/nextjspg-dashboard/extras/stop-service.sh
+chmod +x /var/www/monitoring/nextjspg-dashboard/extras/start-service.sh
+chmod +x /var/www/monitoring/nextjspg-dashboard/extras/stop-service.sh
 
 sudo systemctl daemon-reload
 systemctl start nextjspg-dashboard.service

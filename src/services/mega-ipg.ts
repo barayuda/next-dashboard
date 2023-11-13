@@ -9,15 +9,18 @@ const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
 
 export async function findByAccRef(data: any) {
   // const url = `http://10.14.20.49:8090/api/v1/transaction`;
-  const url = `${urlIPG}/transaction/sign`;
+  // const url = `${urlIPG}/transaction/sign`;
+
+  const url = `/api/vaMegaInquiry`;
+
 
   return callAPI({
     url,
     method: 'POST',
     data,
-    headers: {
-      apikey: 'BxAdHzWs8acCmbGwCkan',
-      username: 'test'
-    } as ApiHeaders
+    // headers: {
+    //   apikey: 'BxAdHzWs8acCmbGwCkan',
+    //   username: 'test'
+    // } as ApiHeaders
   });
 }

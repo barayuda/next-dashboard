@@ -4,8 +4,8 @@ import callAPI from '../pages/api/call';
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 
 export async function changeUserPassword(data: {
-    id: string;
-    currentPassword: string;
+    // id: string;
+    // currentPassword: string;
     newPassword: string;
 }) {
     const url = `${ROOT_API}/users/password`;

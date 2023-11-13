@@ -21,7 +21,6 @@ const Simulator = () => {
   const [material, setMaterial] = useState('');
   const [paymentSourceMethod, setPaymentSourceMethod] = useState('');
   const [paymentSource, setPaymentSource] = useState('');
-  const [afterdiscount, setAfterDiscount] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState('');
@@ -135,7 +134,7 @@ const Simulator = () => {
             className="absolute top-0 h-full w-full bg-cover bg-center"
             style={{
               backgroundImage:
-                "url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80')",
+                "url('assets/img/gaktau1.jpg')",
             }}
           >
             <span
@@ -146,20 +145,20 @@ const Simulator = () => {
           <div className="container relative mx-auto">
             <div className="flex flex-wrap items-center">
               <div className="ml-auto mr-auto w-full px-4 text-center lg:w-6/12">
-                <div className="pr-12">
-                  <h1 className="text-5xl font-semibold text-white">
-                    Your story starts with us.
-                  </h1>
-                  <p className="text-blueGray-200 mt-4 text-lg">
-                    This is a simple example of a Landing Page you can build.
-                  </p>
-                </div>
+              <div>
+                <span>
+
+                </span>
+              </div>
               </div>
             </div>
           </div>
           <div
             className="pointer-events-none absolute bottom-0 left-0 right-0 top-auto h-16 w-full overflow-hidden"
-            style={{ transform: 'translateZ(0)' }}
+            style={{
+    transform: 'translateZ(0)',
+    backgroundColor: 'linear-gradient(135deg, #000, #FFA500)'
+  }}
           >
             <svg
               className="absolute bottom-0 overflow-hidden"
@@ -170,10 +169,7 @@ const Simulator = () => {
               x="0"
               y="0"
             >
-              <polygon
-                className="text-blueGray-200 fill-current"
-                points="2560 0 2560 100 0 100"
-              ></polygon>
+
             </svg>
           </div>
         </div>
@@ -185,44 +181,25 @@ const Simulator = () => {
                 <div className="bg-blueGray-700 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg shadow-lg">
                   <img
                     alt="..."
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80"
+                    src="/assets/img/gaktau4.jpg"
                     className="w-full rounded-t-lg align-middle"
                     width={336}
                     height={224}
                   />
-                  <blockquote className="relative mb-4 p-8">
-                    <svg
-                      preserveAspectRatio="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 583 95"
-                      className="h-95-px -top-94-px absolute left-0 block w-full"
-                    >
-                      <polygon
-                        points="-30,95 583,95 583,65"
-                        className="text-blueGray-700 fill-current"
-                      ></polygon>
-                    </svg>
-                    <h4 className="text-xl font-bold text-white">
-                      Top Notch Services
-                    </h4>
-                  </blockquote>
+
                 </div>
               </div>
 
-              <div className="ml-auto mr-auto w-full px-4 md:w-5/12">
+              <div className="ml-auto mr-auto w-full px-4 md:w-5/12 ">
                 <h3 className="mb-2 text-3xl font-semibold leading-normal">
                   Working with us is a pleasure
                 </h3>
                 <p className="text-blueGray-600 mb-4 mt-4 text-lg font-light leading-relaxed">
                   Don&apos;t let your uses guess by attaching tooltips and
-                  popoves to any element. Just make sure you enable them first
-                  via JavaScript.
+                  popoves to any element. Just make sure you enable them first.
                 </p>
                 <p className="text-blueGray-600 mb-4 mt-0 text-lg font-light leading-relaxed">
-                  The kit comes with three pre-built pages to help you get
-                  started faster. You can change the text and images and
-                  you&apos;re good to go. Just make sure you enable them first
-                  via JavaScript.
+                 Lets check how Mega Ipg works 
                 </p>
                 <hr />
                 <div className="grid grid-cols-2 gap-2">
@@ -394,9 +371,9 @@ const Simulator = () => {
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       name="afterDiscount"
                       id="afterDiscount"
-                      value={afterdiscount}
+                      value={paymentSource}
                       onChange={(event) => {
-                        setAfterDiscount(event.target.value);
+                        setPaymentSource(event.target.value);
                       }}
                     >
                       <option value="">- Select One -</option>

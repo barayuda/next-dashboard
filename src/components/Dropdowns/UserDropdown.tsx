@@ -72,23 +72,6 @@ const UserDropdown = () => {
           Profile
         </Link>
         <Link
-          href="#pablo"
-          className={
-            'text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal'
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Another action a
-        </Link>
-        <Link
-          href="/admin/settings"
-          className={
-            'text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal'
-          }
-        >
-          Account Settings
-        </Link>
-        <Link
           href="/admin/account/change-pass"
           className={
             'text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal'

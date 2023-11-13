@@ -82,7 +82,7 @@ const FrameComponent: NextPage = () => {
               height={230}
             /> 
           </div>
-          <h1 className="text-4xl font-medium mb-4">Payment Failed</h1>
+          <h1 className="text-4xl font-medium mb-4">Huh Naosawsdsds</h1>
           <p className="text-lg font-medium">Please try again</p>
           {/* {data && <p>ID: {data.id}</p>} */}
           {backButton}

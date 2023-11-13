@@ -26,12 +26,12 @@ module.exports = {
       },
       env_sandbox: {
         NODE_ENV: 'development',
-        API_URL: 'http://10.14.21.37',
+        API_URL: 'http://10.95.1.45',
         PORT: 4000,
       },
       env_production: {
         NODE_ENV: 'production',
-        API_URL: 'http://monitorcommerce.bankmega.com',
+        API_URL: 'http://10.14.42.160',
         PORT: 4000,
       },
     },

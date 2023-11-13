@@ -124,12 +124,7 @@
 
       
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 mt-4">
-            <Link
-              href="/admin/settings"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center"
-            >
-              Profile Edit
-            </Link>
+
             <Link
               href="/admin/account/change-pass"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block text-center"

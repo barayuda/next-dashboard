@@ -48,9 +48,7 @@ export default function ChangePass() {
         <div className="w-full px-4 lg:w-8/12">
           <CardChangePass />
         </div>
-        <div className="w-full px-4 lg:w-4/12">
-          <CardProfile />
-        </div>
+
       </div>
     </AdminLayout>
   );

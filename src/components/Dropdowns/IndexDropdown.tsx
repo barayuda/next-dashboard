@@ -65,22 +65,6 @@ const IndexDropdown = () => {
         >
           Settings
         </Link>
-        <Link
-          href="/admin/tables"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Tables
-        </Link>
-        <Link
-          href="/admin/maps"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Maps
-        </Link>
         <div className="border-blueGray-100 mx-4 my-2 h-0 border border-solid" />
         <span
           className={
@@ -114,14 +98,6 @@ const IndexDropdown = () => {
           No Layout
         </span>
         <Link
-          href="/landing"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Landing
-        </Link>
-        <Link
           href="/profile"
           className={
             "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
@@ -136,30 +112,6 @@ const IndexDropdown = () => {
           }
         >
           Simulator
-        </Link>
-        <Link
-          href="/blog"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Blog
-        </Link>
-        <Link
-          href="/portfolio"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Portfolio
-        </Link>
-        <Link
-          href="/shop"
-          className={
-            "text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal"
-          }
-        >
-          Shop
         </Link>
       </div>
     </>
