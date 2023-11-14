@@ -44,7 +44,7 @@ const BNIVAConfirm = () => {
           'Unknown Name'
       );
       setExternalID(
-        datava?.data?.payinquiryData?.decryptedData?.response?.billing_id
+        datava?.data?.payinquiryData?.decryptedData?.response?.external_id
       );
     } else {
       setDescription('ERROR ' + datava?.data?.statusCode);
@@ -62,6 +62,7 @@ const BNIVAConfirm = () => {
     console.log('Pencet bener ');
     const dataReq = {
       amount, //10600,
+      externalID
     };
     console.log('dataReq', dataReq);
     const callApi = await xenditSimulatePayment(dataReq, externalID);

@@ -10,6 +10,8 @@ async function vaMegaInquiry(
     res: NextApiResponse
 ) {
     const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
+    const API_KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
+    const USER_NAME = process.env.NEXT_PUBLIC_IPG_USERNAME || '';
 
     const record = req.body;
     console.log("Happy", record)
@@ -28,8 +30,8 @@ async function vaMegaInquiry(
         }
         console.log("Data HASHSAHSAHSAH", data)
         const headers = {
-            apikey: 'BxAdHzWs8acCmbGwCkan',
-            username: 'test'
+            apikey: API_KEY,
+            username: USER_NAME
         }
         const response = await axiosInstance.post<any>(url, data, {
             headers

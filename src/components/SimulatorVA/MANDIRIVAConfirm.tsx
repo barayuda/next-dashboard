@@ -62,6 +62,7 @@ const MANDIRIVAConfirm = () => {
     console.log('Pencet bener ');
     const dataReq = {
       amount, //10600,
+      externalID
     };
     console.log('dataReq', dataReq);
     const callApi = await xenditSimulatePayment(dataReq, externalID);
