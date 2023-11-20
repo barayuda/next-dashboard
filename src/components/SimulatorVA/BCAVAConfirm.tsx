@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -9,7 +10,7 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from '../../services/auth';
-import { bcavaPaymentConfirm } from '../../services/simulator';
+import { bcavaPaymentConfirm, xenditSimulatePayment } from '../../services/simulator';
 import { getDateWithFormat } from '../../utils/commonHelpers';
 
 const BCAVAConfirm = () => {
@@ -20,26 +21,39 @@ const BCAVAConfirm = () => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
   const [requestID, setRequestID] = useState('');
+  const [externalID, setExternalID] = useState('');
 
   useEffect(() => {
-    const data = getLocalStorage('bcava');
+    const datava = getLocalStorage('bcava');
     if (
-      data?.response?.InquiryStatus !== undefined &&
-      data?.response?.CompanyCode !== undefined &&
-      data?.response?.CustomerNumber !== undefined &&
-      data?.response?.InquiryStatus === '00'
+      datava?.data?.inquiryStatus !== undefined &&
+      datava?.data?.statusCode !== undefined &&
+      datava?.data?.accountRef !== undefined &&
+      datava?.data?.amount !== undefined &&
+      datava?.data?.payinquiryData?.decryptedData?.response?.external_id !==
+        undefined &&
+      datava?.data?.statusCode === '00'
     ) {
       setIsError(false);
-      setVa(data.response.CompanyCode + '' + data.response.CustomerNumber);
-      setDescription(data.response.InquiryReason.Indonesian);
-      setAmount(data?.response?.TotalAmount || '0.00');
-      setName(data?.response?.CustomerName || 'Unknown');
-      setRequestID(data?.response?.RequestID);
-    } else if (data?.response?.InquiryStatus === '01') {
-      setDescription(data.response.InquiryReason.Indonesian);
+      setVa(datava?.data?.accountRef);
+      setDescription(
+        'Pembayaran : ' +
+          datava?.data?.configData?.merchantData?.merchantName ||
+          'Unknown Merchant'
+      );
+      setAmount(datava?.data?.amount);
+      setName(
+        datava?.data?.payinquiryData?.decryptedData?.response?.name ||
+          'Unknown Name'
+      );
+      setExternalID(
+        datava?.data?.payinquiryData?.decryptedData?.response?.external_id
+      );
+    } else {
+      setDescription('ERROR ' + datava?.data?.statusCode);
     }
 
-    console.log('data', data);
+    console.log('data', datava);
   }, []);
 
   const pencetKembali = () => {
@@ -50,33 +64,17 @@ const BCAVAConfirm = () => {
   const pencetBayar = async () => {
     console.log('Pencet bener ');
     const dataReq = {
-      CompanyCode: va.substring(0, 5), //'12345',
-      CustomerNumber: va.slice(5), //'394965418',
-      RequestID: requestID, //'8347937383283730',
-      ChannelType: '6014',
-      CustomerName: 'Customer Name BCA VA',
-      CurrencyCode: 'IDR',
-      PaidAmount: amount, //'10600.00',
-      TotalAmount: amount, //'10600.00',
-      SubCompany: '00000',
-      TransactionDate: getDateWithFormat('d/m/Y H:I:S'), //'15/03/2014 22:07:40',
-      Reference: 's' + getDateWithFormat('YmdHIS'), //'tP17i83dC',
-      DetailBills: [
-        {
-          BillAmount: amount, //'5300.00',
-          BillNumber: '1234567890',
-          BillSubCompany: '00000',
-          BillReference: '12345678900',
-        },
-      ],
-      FlagAdvice: 'N',
-      Additionaldata: 'Simulator Data',
+      amount, //10600,
+      externalID
     };
     console.log('dataReq', dataReq);
-    const callApi = await bcavaPaymentConfirm(dataReq);
+    const callApi = await xenditSimulatePayment(dataReq, externalID);
     console.log('response', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('bcava', callApi.data);
+      setLocalStorage('bcava', {
+        ...callApi.data,
+        details: { va, amount, name },
+      });
       void router.push('/simulator/bcava/payment');
     }
   };

@@ -17,24 +17,21 @@ const BRIVAPayment = () => {
   useEffect(() => {
     const data = getLocalStorage('briva');
     if (
-      data?.response?.responseCode !== undefined &&
-      data?.response?.responseDescription !== undefined &&
-      data?.response?.data?.brivaNo !== undefined &&
-      data?.response?.data?.billName !== undefined &&
-      data?.response?.data?.billAmount !== undefined &&
-      data?.response?.responseCode === '0000'
+      data?.response?.status !== undefined &&
+      data?.response?.status === 'COMPLETED'
     ) {
       setIsError(false);
-      setVa(data.response.data.brivaNo);
-      setDescription(data.response.responseDescription);
-      setAmount(data?.response?.data?.billAmount || '0.00');
-      setName(data?.response?.data?.billName || 'Unknown');
+      setVa(data?.details?.va || 'XXX');
+      setDescription('Pembayaran Berhasil');
+      setAmount(data?.details?.amount || '0.00');
+      setName(data?.details?.name || 'Unknown');
     } else {
-      setDescription(data?.response?.responseDescription ?? 'Payment Gagal');
+      setDescription('Pembayaran Gagal');
     }
 
     console.log('data', data);
   }, []);
+
 
   const pencetKembali = () => {
     removeLocalStorage('briva');

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
 import { brivaInquiry } from '../../services/simulator';
+import { findByAccRef } from '../../services/mega-ipg';
 
 const BRIVA = () => {
   const router = useRouter();
@@ -12,14 +13,18 @@ const BRIVA = () => {
     setIsLoading(true);
     try {
     console.log('Pencet bener ');
-    const data = {
-      brivaNo: va,
+    const dataFindByAccRef = {
+      trxType: 'getby.account_ref',
+      accountRef: va,
     };
-    console.log('data', data);
-    const callApi = await brivaInquiry(data);
-    console.log('response', callApi.data);
-    if (!callApi.error) {
-      setLocalStorage('briva', callApi.data);
+    
+    console.log('dataFindByAccRef', dataFindByAccRef);
+    const callApiSpring = await findByAccRef(dataFindByAccRef);
+    console.log('response', callApiSpring.data);
+    if (!callApiSpring.error) {
+      // if (callApiSpring?.data?.statusCode === '00') {
+      // }
+      setLocalStorage('briva', callApiSpring.data);
       void router.push('/simulator/briva/confirm');
     }
   }catch(error){

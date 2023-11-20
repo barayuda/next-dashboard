@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
 import { bcavaInquiry } from '../../services/simulator';
 import { getDateWithFormat } from '../../utils/commonHelpers';
+import { findByAccRef } from '../../services/mega-ipg';
 
 const BCAVA = () => {
   const router = useRouter();
@@ -13,19 +14,18 @@ const BCAVA = () => {
     setIsLoading(true);
     try {
     console.log('Pencet bener ');
-    const data = {
-      CompanyCode: va.substring(0, 5),
-      CustomerNumber: va.slice(5),
-      RequestID: getDateWithFormat('YmdHISZ'), //'8347937383283730',
-      ChannelType: '6017',
-      TransactionDate: getDateWithFormat('d/m/Y H:I:S'), //'15/03/2014 22:07:40',
-      AdditionalData: 'Simulator Data',
+    const dataFindByAccRef = {
+      trxType: 'getby.account_ref',
+      accountRef: va,
     };
-    console.log('data', data);
-    const callApi = await bcavaInquiry(data);
-    console.log('response', callApi.data);
-    if (!callApi.error) {
-      setLocalStorage('bcava', callApi.data);
+    
+    console.log('dataFindByAccRef', dataFindByAccRef);
+    const callApiSpring = await findByAccRef(dataFindByAccRef);
+    console.log('response', callApiSpring.data);
+    if (!callApiSpring.error) {
+      // if (callApiSpring?.data?.statusCode === '00') {
+      // }
+      setLocalStorage('bcava', callApiSpring.data);
       void router.push('/simulator/bcava/confirm');
     }
   }catch(error){

@@ -9,7 +9,7 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from '../../services/auth';
-import { brivaPaymentConfirm } from '../../services/simulator';
+import { brivaPaymentConfirm, xenditSimulatePayment } from '../../services/simulator';
 import { getDateWithFormat } from '../../utils/commonHelpers';
 
 const BRIVAConfirm = () => {
@@ -19,28 +19,39 @@ const BRIVAConfirm = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
+  const [externalID, setExternalID] = useState('');
 
   useEffect(() => {
-    const data = getLocalStorage('briva');
+    const datava = getLocalStorage('briva');
     if (
-      data?.response?.responseCode !== undefined &&
-      data?.response?.responseDescription !== undefined &&
-      data?.response?.data?.brivaNo !== undefined &&
-      data?.response?.data?.billName !== undefined &&
-      data?.response?.data?.billAmount !== undefined &&
-      (data?.response?.responseCode === '0000' ||
-        data?.response?.responseCode === '0009')
+      datava?.data?.inquiryStatus !== undefined &&
+      datava?.data?.statusCode !== undefined &&
+      datava?.data?.accountRef !== undefined &&
+      datava?.data?.amount !== undefined &&
+      datava?.data?.payinquiryData?.decryptedData?.response?.external_id !==
+        undefined &&
+      datava?.data?.statusCode === '00'
     ) {
       setIsError(false);
-      setVa(data.response.data.brivaNo);
-      setDescription(data.response.responseDescription);
-      setAmount(data?.response?.data?.billAmount || '0.00');
-      setName(data?.response?.data?.billName || 'Unknown');
+      setVa(datava?.data?.accountRef);
+      setDescription(
+        'Pembayaran : ' +
+          datava?.data?.configData?.merchantData?.merchantName ||
+          'Unknown Merchant'
+      );
+      setAmount(datava?.data?.amount);
+      setName(
+        datava?.data?.payinquiryData?.decryptedData?.response?.name ||
+          'Unknown Name'
+      );
+      setExternalID(
+        datava?.data?.payinquiryData?.decryptedData?.response?.external_id
+      );
     } else {
-      setDescription(data?.response?.responseDescription ?? 'Inquiry Gagal');
+      setDescription('ERROR ' + datava?.data?.statusCode);
     }
 
-    console.log('data', data);
+    console.log('data', datava);
   }, []);
 
   const pencetKembali = () => {
@@ -51,16 +62,17 @@ const BRIVAConfirm = () => {
   const pencetBayar = async () => {
     console.log('Pencet bener ');
     const dataReq = {
-      brivaNo: va,
-      billAmount: amount.slice(0, -3),
-      transactionDateTime: getDateWithFormat('YmdHIS'),
-      journalSeq: getDateWithFormat('YmdHIS'),
+      amount, //10600,
+      externalID
     };
     console.log('dataReq', dataReq);
-    const callApi = await brivaPaymentConfirm(dataReq);
+    const callApi = await xenditSimulatePayment(dataReq, externalID);
     console.log('response', callApi.data);
     if (!callApi.error) {
-      setLocalStorage('briva', callApi.data);
+      setLocalStorage('briva', {
+        ...callApi.data,
+        details: { va, amount, name },
+      });
       void router.push('/simulator/briva/payment');
     }
   };

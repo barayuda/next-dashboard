@@ -17,18 +17,16 @@ const BCAVAPayment = () => {
   useEffect(() => {
     const data = getLocalStorage('bcava');
     if (
-      data?.response?.PaymentFlagStatus !== undefined &&
-      data?.response?.CompanyCode !== undefined &&
-      data?.response?.CustomerNumber !== undefined &&
-      data?.response?.PaymentFlagStatus === '00'
+      data?.response?.status !== undefined &&
+      data?.response?.status === 'COMPLETED'
     ) {
       setIsError(false);
-      setVa(data.response.CompanyCode + '' + data.response.CustomerNumber);
-      setDescription(data.response.PaymentFlagReason.Indonesian);
-      setAmount(data?.response?.TotalAmount || '0.00');
-      setName(data?.response?.CustomerName || 'Unknown');
-    } else if (data?.response?.PaymentFlagStatus === '01') {
-      setDescription(data.response.PaymentFlagReason.Indonesian);
+      setVa(data?.details?.va || 'XXX');
+      setDescription('Pembayaran Berhasil');
+      setAmount(data?.details?.amount || '0.00');
+      setName(data?.details?.name || 'Unknown');
+    } else {
+      setDescription('Pembayaran Gagal');
     }
 
     console.log('data', data);
