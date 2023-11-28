@@ -6,26 +6,33 @@
 
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
 
 async function getAll(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
 
-    const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
+    // const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
     const ROOT_API = process.env.NEXT_PUBLIC_API || '';
-    const API_KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
+    // const API_KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
     console.log(`ROOT_API: ${ROOT_API}`);
-    const API_VERSION = 'v1';
-    const params = req.body.params
+    // const API_VERSION = 'v1';
+    // const params = req.body.params
     // ${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail
     //${ROOT_API}/${API_VERSION}/monitoring/${params}
     const record = req.body;
     console.log("Happy", record)
 
-    const apiKey = req.headers.apikey;
-    if (!apiKey || apiKey !== API_KEY) {
-        return res.status(400).json({ error: 'Missing or invalid API key' });
+    // const apiKey = req.headers.apikey;
+    // if (!apiKey || apiKey !== API_KEY) {
+    //     return res.status(400).json({ error: 'Missing or invalid API key' });
+    // }
+
+    const session = await getSession({ req });
+
+    if (!session) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
 

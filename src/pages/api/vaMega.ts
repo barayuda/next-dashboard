@@ -1,9 +1,19 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { encrypt } from '../../services/encryptor';
+import Cookies from 'js-cookie';
+import fs from "fs";
+import https from "https";
+
+
+const url = process.env.NEXT_PUBLIC_SIMULATOR_TF || '';
+const apikey = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
 
 async function vaMega(
     req: NextApiRequest,
@@ -11,28 +21,111 @@ async function vaMega(
 ) {
     const record = req.body;
 
-    const customerID1 = record.customerID;
+    const certPath = "/tmp/cert/bankmegalocal.crt";
+    const keyPath = "/tmp/cert/bankmegalocal.key";
+
+    const cert = fs.readFileSync(certPath);
+    const key = fs.readFileSync(keyPath);
+
+    const agent = new https.Agent({
+        cert: cert,
+        key: key,
+        rejectUnauthorized: false, // Set this to true to validate the SSL certificate
+    });
+
+
+    // const customerID1 = record.customerID;
     const tranceNum1 = record.tranceNum;
-    const amount1 = record.parsedAmount;
+    // const amount1 = record.parsedAmount;
+    const tokens1 = record.tokenss;
+    const tokenss = "Bearer " + tokens1;
+    console.log("tokenss", tokenss)
     // Construct the query parameters
-    const queryParams = `?BillAmount=${amount1}00&Amount=${amount1}00&BillAmount2=000&CardNum=4214088888888888&Time=172000&BillStatus=0&Operation=payment&CustomerID=${customerID1}&ProcessingCode=171000&D1=00000000000000000000IDRA&Date=0914&D2=010190012001081++++++++++++++++++++&DescRepeat=03&D3=010190011555550++++++++++++++++++++&TraceNum=${tranceNum1}&InstCode=VA&AccCredit=010190012001081&TerminalID=9481&AccDebit=010740021014062&DatePlus=0715&CustomerName=BAKTI+SOSIAL+TEST+++++++++++++&AmountRepeating=02`;
+
+    const body = {
+
+        Data: {
+            AccDebit: "010740025111569",
+            AccCredit: "010740020679820",
+            ProcessingCode: "490001",
+            TransmissionDateTime: "1410212121",
+            TraceID: "trx_trace_umc",
+            Time: "212121",
+            Date: "1410",
+            DatePlus: "1114",
+            MerchType: "6017",
+            ReferenceNumber: tranceNum1,
+            CardAcceptorTerminalID: "MSMILE",
+            DE48: {
+                TransactionBranch: "074",
+                AmountDebit: "000005000",
+                CurrencyDebit: "IDR",
+                RateDebit: "100",
+                AmountCredit: "000005000",
+                CurrencyCredit: "IDR",
+                RateCredit: "",
+                AccountReserve: "",
+                CurrencyReserve: "",
+                AmountReserve: "",
+                Remark1: "",
+                Remark2: "dari depan",
+                Remark3: "dari depan",
+                PassbookBalance: "",
+                TellerID: "",
+                JurnalSequence: "",
+                DealNumber: "",
+                DealEntryProfit: "",
+                DealEntryLoss: ""
+            }
+        }
+
+    }
+
+
 
     try {
         // Create an Axios instance with no proxy
         const axiosInstance = axios.create({
             proxy: false // or proxy: {}
         });
-        const uri = `http://10.14.20.174:9081/toPCE${queryParams}`;
-        console.log(uri);
-        const response = await axiosInstance.get(uri);
-        console.log("Test", response);
-        // Handle the response from the API as needed
-        res.status(200).json(response.data);
+
+        const encription = await encrypt(body);
+        console.log("Body nya ", encription)
+
+        if (encription) {
+
+
+            const bodySend = encription.encryptedBody;
+            const sigma = encription.signature
+            const chrono = encription.timestamp
+            const cred = encription.credential
+            const prometheus = apikey
+
+            const response = await axiosInstance.post<any>(url, bodySend, {
+                headers: {
+                    Authorization: tokenss,
+                    'Content-Type': 'application/json',
+                    'X-SIGNATURE': sigma,
+                    'X-TIMESTAMP': chrono,
+                    'X-PARTNER-ID': prometheus,
+                    'X-EXTERNAL-ID': '418075533589500931',
+                    'CHANNEL-ID': '95221',
+                    'Host': 'openapidev1.bankmega.local',
+                    'X-CREDENTIAL-KEY': cred
+                },
+                httpsAgent: agent
+            });
+            // Handle the response from the API as needed
+            console.log("Test", response);
+            res.status(200).json(response);
+        }
+        res.status(500).json({ error: 'An error occurred durring enc' });
     } catch (error) {
         console.error('Error:', error);
         console.log("Error Suuhu");
         res.status(500).json({ error: 'An error occurred' });
     }
+
 }
 
 export default async function handler(

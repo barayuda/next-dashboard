@@ -6,6 +6,7 @@
 
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
 
 async function getAll(
     req: NextApiRequest,
@@ -21,9 +22,14 @@ async function getAll(
     const record = req.body;
     console.log("Happier", record)
 
-    const apiKey = req.headers.apikey;
-    if (!apiKey || apiKey !== API_KEY) {
-        return res.status(400).json({ error: 'Missing or invalid API key' });
+    // const apiKey = req.headers.apikey;
+    // if (!apiKey || apiKey !== API_KEY) {
+    //     return res.status(400).json({ error: 'Missing or invalid API key' });
+    // }
+    const session = await getSession({ req });
+
+    if (!session) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
 

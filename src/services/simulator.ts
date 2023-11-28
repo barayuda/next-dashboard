@@ -211,13 +211,14 @@ export async function xenditGetVaPayment(payment_id: string) {
   });
 }
 
-export async function vaMega(customerID: string, tranceNum: string, parsedAmount: number) {
+export async function vaMega(customerID: string, tranceNum: string, parsedAmount: number, tokenss: any) {
   const url = `/api/vaMega`;
 
   const requestBody = {
     customerID,
     tranceNum,
-    parsedAmount
+    parsedAmount,
+    tokenss
   };
   console.log(requestBody)
   try {

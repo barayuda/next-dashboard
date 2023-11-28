@@ -9,6 +9,8 @@ async function signUp(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    const apiKey = process.env.NEXT_PUBLIC_IPG_SIM_KEY || '';
+    const userApi = process.env.NEXT_PUBLIC_IPG_USERNAME || '';
     const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
     const ROOT_API = process.env.NEXT_PUBLIC_API || '';
     console.log(`ROOT_API: ${ROOT_API}`);
@@ -34,8 +36,8 @@ async function signUp(
         }
         console.log("Data HASHSAHSAHSAH", data)
         const headers = {
-            apikey: 'BxAdHzWs8acCmbGwCkan',
-            username: 'test'
+            apikey: apiKey,
+            username: userApi
         }
         const response = await axiosInstance.post<any>(url, data, {
             headers

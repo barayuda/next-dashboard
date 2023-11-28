@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
-import { findByAccRef } from '../../services/mega-ipg';
+import { findByAccRef, openAdds } from '../../services/mega-ipg';
+import Cookies from 'js-cookie';
 
 
 
@@ -24,7 +26,12 @@ const MEGAVA = () => {
     };
     console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
+    const callApiOpen = await openAdds();
     console.log('response', callApiSpring.data);
+    console.log('responding', callApiOpen.data);
+    setLocalStorage('openAdds', callApiSpring.data);
+    const token = callApiOpen.data.access_token;
+    Cookies.set('tokenss',token)
     if (!callApiSpring.error) {
       // if (callApiSpring?.data?.statusCode === '00') {
       // }

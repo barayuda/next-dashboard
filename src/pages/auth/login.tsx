@@ -69,20 +69,22 @@ export default function Login() {
       callbackUrl: '/',
     }).then(async (res) => {
       const session = await getSession();
-      console.log('session', session);
+      //console.log('session', session);
       if (session) {
         const accessToken = session.user?.token?.accessToken;
         console.log('typeof accessToken', typeof accessToken);
         console.log('accessToken', accessToken);
         if (typeof accessToken === 'string') {
-          Cookies.set('token', accessToken, { secure: true });
+          //Cookies.set('token', accessToken, { secure: true });
+          Cookies.set('token', accessToken);
           console.log('token', accessToken);
         }
 
         const refreshToken = session.user?.token?.refreshToken;
         console.log('typeof refreshToken', typeof refreshToken);
         if (typeof refreshToken === 'string') {
-          Cookies.set('refreshToken', refreshToken, { secure: true });
+          // Cookies.set('refreshToken', refreshToken, { secure: true });
+          Cookies.set('refreshToken', refreshToken);
           console.log('refreshToken', refreshToken);
         }
 

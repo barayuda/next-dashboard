@@ -20,3 +20,16 @@ export async function findByAccRef(data: any) {
     data,
   });
 }
+
+export async function openAdds() {
+  // const url = `http://10.14.20.49:8090/api/v1/transaction`;
+  // const url = `${urlIPG}/transaction/sign`;
+
+  const url = `/api/getAcsMa`;
+
+
+  return callAPI({
+    url,
+    method: 'GET',
+  });
+}

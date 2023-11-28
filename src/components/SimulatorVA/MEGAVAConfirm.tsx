@@ -10,6 +10,7 @@ import {
   setLocalStorage,
 } from '../../services/auth';
 import { vaMega, xenditSimulatePayment } from '../../services/simulator';
+import Cookies from 'js-cookie';
 
 const MEGAVAConfirm = () => {
   const router = useRouter();
@@ -109,6 +110,8 @@ const MEGAVAConfirm = () => {
       customerID,     
       tranceNum,
     };
+    const tokenss = Cookies.get('tokenss');
+            console.log("hah", tokenss);
     const parsedAmount = parseFloat(amount);
     setAmount1(parsedAmount)
     console.log("Saya",amount1,parsedAmount)
@@ -117,7 +120,8 @@ const MEGAVAConfirm = () => {
     const callApi = await vaMega(
       customerID,     
       tranceNum,
-      parsedAmount
+      parsedAmount,
+      tokenss
     );
     console.log('response', callApi);
     console.log('data sepuh', callApi.data);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 import Link from "next/link";
 
@@ -10,6 +11,10 @@ import Image from "next/image";
 import { HiHeart } from "react-icons/hi";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import CardInvoice from "../../../components/Cards/CardInvoice";
+import { JWTPayloadTypes } from "../../../services/data-types";
+import jwtDecode from "jwt-decode";
+
+
 
 const InvoiceList = () => {
   const cardinvoice = {
@@ -103,3 +108,33 @@ const InvoiceList = () => {
 };
 
 export default InvoiceList;
+
+
+interface GetServerSideProps {
+  req: {
+    cookies: {  
+      token: string;
+    };
+  };
+}
+
+export function getServerSideProps(context: GetServerSideProps) {
+  const { token } = context.req.cookies;
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const payload: JWTPayloadTypes = jwtDecode<JWTPayloadTypes>(token);
+  // console.log(payload);
+  const userFromPayload = payload;
+  return {
+    props: {
+      user: userFromPayload,
+    },
+  };
+}
