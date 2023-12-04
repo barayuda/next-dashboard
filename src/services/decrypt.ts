@@ -23,9 +23,7 @@ export async function decrypt(body: any): Promise<DecryptionResult> {
     console.log('Encrypted Response Body: ' + responseBody);
 
     const decryptedBytes = CryptoJS.AES.decrypt(
-        {
-            ciphertext: rawData,
-        },
+        rawData.toString(CryptoJS.enc.Base64),  // Assuming rawData is a WordArray
         CryptoJS.enc.Base64.parse(key),
         { iv: CryptoJS.enc.Base64.parse(iv) }
     );

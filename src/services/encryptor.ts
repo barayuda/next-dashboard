@@ -83,7 +83,7 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
     const public_key =
         '-----BEGIN PUBLIC KEY-----' + public_public_key + '-----END PUBLIC KEY-----';
     console.log("Pubs", public_key)
-    const publicKey = KEYUTIL.getKey(public_key);
+    const publicKey = KEYUTIL.getKey(public_key) as RSAKey;
     const req1 = bodd;
     console.log("Pala Yoan", req1)
     const body2 = JSON.parse(req1);
