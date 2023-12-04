@@ -16,8 +16,9 @@ const MEGAVAPayment = () => {
 
   useEffect(() => {
     const data = getLocalStorage('megava');
-    const responseValue = data.Data.Response;
-    const amountValue = data.Data.Amount;
+    console.log("XASX",data)
+    const responseValue = data.Response;
+    const amountValue = data.Amount;
     const vaValue = data.details.va;
 
     if (

@@ -15,6 +15,8 @@ const MEGAVA = () => {
   const [va, setVa] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const apikey = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
+
   
   const pencetBenar = async () => {
     setIsLoading(true);
@@ -26,7 +28,10 @@ const MEGAVA = () => {
     };
     console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
-    const callApiOpen = await openAdds();
+    const header = {
+      fire:apikey
+    }
+    const callApiOpen = await openAdds(header);
     console.log('response', callApiSpring.data);
     console.log('responding', callApiOpen.data);
     setLocalStorage('openAdds', callApiSpring.data);

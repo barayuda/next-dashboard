@@ -10,7 +10,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import https from "https";
 
-async function getAll(
+async function dunk(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
@@ -27,15 +27,17 @@ async function getAll(
         rejectUnauthorized: false, // Set this to true to validate the SSL certificate
     });
 
-    const API_KEY = process.env.NEXT_PUBLIC_IPG_API_KEY || '';
+    const API_KEY = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
     const API_ADDS = process.env.NEXT_PUBLIC_SIMULATOR_ADDS || '';
     console.log(`  Idk//`);
     // ${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail
     //${ROOT_API}/${API_VERSION}/monitoring/${params}
-    const record = req.body;
+    const record = req.headers;
     console.log("Happier", record)
 
-    const apiKey = req.headers.apikey;
+    const apiKey = req.headers.fire;
+    console.log("t1", record)
+    console.log("t2", apiKey)
     if (!apiKey || apiKey !== API_KEY) {
         return res.status(400).json({ error: 'Missing or invalid API key' });
     }
@@ -85,7 +87,7 @@ export default async function handler(
     res: NextApiResponse,
 ) {
     try {
-        await getAll(req, res);
+        await dunk(req, res);
     } catch (error) {
         console.error('API error:', error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -16,6 +16,7 @@ import { getDateWithFormat } from '../../utils/commonHelpers';
 const BCAVAConfirm = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [va, setVa] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -62,13 +63,15 @@ const BCAVAConfirm = () => {
   };
 
   const pencetBayar = async () => {
+    setIsLoading(true);
     console.log('Pencet bener ');
     const dataReq = {
       amount, //10600,
       externalID
     };
     console.log('dataReq', dataReq);
-    const callApi = await xenditSimulatePayment(dataReq, externalID);
+    try{
+      const callApi = await xenditSimulatePayment(dataReq, externalID);
     console.log('response', callApi.data);
     if (!callApi.error) {
       setLocalStorage('bcava', {
@@ -77,6 +80,14 @@ const BCAVAConfirm = () => {
       });
       void router.push('/simulator/bcava/payment');
     }
+
+    
+  }catch(error){
+    throw error
+  }
+  finally {
+    setIsLoading(false); // Stop loading
+  }
   };
 
   return (
@@ -105,6 +116,15 @@ const BCAVAConfirm = () => {
                 </div>
               </div>
               <div className="col-span-8 ">
+              <div className="col-center">
+                  {isLoading ? (
+                    <div>Loading Please Wait....</div>
+                  ) : (
+                    <div>
+                      {/* Your regular component content */}
+                    </div>
+                  )}
+                </div>
                 <div className="rounded-md bg-blue-500 text-center text-white">
                   <div className="grid grid-cols-6">
                     <div className="col-span-6 p-5">

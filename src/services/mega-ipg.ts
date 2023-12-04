@@ -21,7 +21,7 @@ export async function findByAccRef(data: any) {
   });
 }
 
-export async function openAdds() {
+export async function openAdds(headers: any) {
   // const url = `http://10.14.20.49:8090/api/v1/transaction`;
   // const url = `${urlIPG}/transaction/sign`;
 
@@ -31,5 +31,6 @@ export async function openAdds() {
   return callAPI({
     url,
     method: 'GET',
+    headers,
   });
 }

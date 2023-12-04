@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
@@ -10,7 +11,24 @@ import { encrypt } from '../../services/encryptor';
 import Cookies from 'js-cookie';
 import fs from "fs";
 import https from "https";
+import { KJUR } from 'jsrsasign';
+import CryptoJS from 'crypto-js';
+import { decrypt } from '../../services/decrypt';
 
+
+function generateRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Function to generate a 4-digit random number as a string
+function generateRandomValueString() {
+    const randomInt = generateRandomInt(1000, 9999); // Ensuring a 4-digit number
+    return randomInt.toString();
+}
+
+// Generating a 4-digit random number as a string
+const randomValueString = generateRandomValueString();
+console.log('Random 4-Digit Number String:', randomValueString);
 
 const url = process.env.NEXT_PUBLIC_SIMULATOR_TF || '';
 const apikey = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
@@ -20,6 +38,8 @@ async function vaMega(
     res: NextApiResponse
 ) {
     const record = req.body;
+    const tokensss = record.tokenss
+    console.log("sasa", record)
 
     const certPath = "/tmp/cert/bankmegalocal.crt";
     const keyPath = "/tmp/cert/bankmegalocal.key";
@@ -34,97 +54,133 @@ async function vaMega(
     });
 
 
-    // const customerID1 = record.customerID;
+    const customerID1 = record.customerID;
     const tranceNum1 = record.tranceNum;
-    // const amount1 = record.parsedAmount;
+    const amount1 = record.parsedAmount;
     const tokens1 = record.tokenss;
     const tokenss = "Bearer " + tokens1;
-    console.log("tokenss", tokenss)
     // Construct the query parameters
 
     const body = {
 
-        Data: {
-            AccDebit: "010740025111569",
-            AccCredit: "010740020679820",
-            ProcessingCode: "490001",
-            TransmissionDateTime: "1410212121",
-            TraceID: "trx_trace_umc",
-            Time: "212121",
-            Date: "1410",
-            DatePlus: "1114",
-            MerchType: "6017",
-            ReferenceNumber: tranceNum1,
-            CardAcceptorTerminalID: "MSMILE",
-            DE48: {
-                TransactionBranch: "074",
-                AmountDebit: "000005000",
-                CurrencyDebit: "IDR",
-                RateDebit: "100",
-                AmountCredit: "000005000",
-                CurrencyCredit: "IDR",
-                RateCredit: "",
-                AccountReserve: "",
-                CurrencyReserve: "",
-                AmountReserve: "",
-                Remark1: "",
-                Remark2: "dari depan",
-                Remark3: "dari depan",
-                PassbookBalance: "",
-                TellerID: "",
-                JurnalSequence: "",
-                DealNumber: "",
-                DealEntryProfit: "",
-                DealEntryLoss: ""
-            }
-        }
+
+        "BillAmount": amount1 + "00",
+        "Amount": amount1 + "00",
+        "BillAmount2": "000",
+        "CardNum": "4214088888888888",
+        "Time": "172000",
+        "BillStatus": "0",
+        "Operation": "payment",
+        "CustomerID": customerID1,
+        "ProcessingCode": "171000",
+        "D1": "00000000000000000000IDRF",
+        "Date": "0914",
+        "D2": "010190012001081++++++++++++++++++++",
+        "DescRepeat": "03",
+        "D3": "010190011555550++++++++++++++++++++",
+        "TraceNum": tranceNum1,
+        "InstCode": "VA",
+        "AccCredit": "010190012001081",
+        "TerminalID": "9481",
+        "AccDebit": "010740021014062",
+        "DatePlus": "0715",
+        "CustomerName": "JHONEDDI+SETIAWAN+++++++++++++",
+        "AmountRepeating": "02"
+
+        // tokenss: tokensss
 
     }
+    const requestBody = JSON.stringify(body);
+
+    console.log("saw", requestBody)
+
+    const axiosInstance = axios.create({
+        proxy: false // or proxy: {}
+    });
+
+    // try {
+    // Create an Axios instance with no proxy
+
+    const encription = await encrypt(requestBody);
+    console.log(13212312, encription)
 
 
 
-    try {
-        // Create an Axios instance with no proxy
-        const axiosInstance = axios.create({
-            proxy: false // or proxy: {}
+    if (encription) {
+
+        const bodySend = encription.encryptedBody.toString();
+        console.log("Check ", bodySend)
+        const chrono = encription.timestamp
+        const cred = encription.credential
+        const prometheus = 123
+
+
+        const clientSecret = "Jie2LHVWOBnHE1OQUU7XlpLXiFSOFXH5";
+        // Calculate X-SIGNATURE Header
+        const method = 'POST';
+        const path = '/openapi/v1.0/va/payment-transfer';
+        const access_token = tokens1
+        console.log("Acssss", access_token)
+        const md = new KJUR.crypto.MessageDigest({ alg: 'sha256', prov: 'cryptojs' });
+        md.updateString(requestBody);
+        const mdHex = md.digest();
+        const stringToSign = method + ':' + path + ':' + access_token + ':' + mdHex + ':' + chrono;
+        const hash = CryptoJS.HmacSHA512(stringToSign, clientSecret);
+        const signature = CryptoJS.enc.Base64.stringify(hash);
+        console.log('Seyan: ' + stringToSign);
+        Cookies.set('signature', signature);
+
+
+        const sigma = signature
+
+
+        const response = await axiosInstance.request({
+            method: "POST",
+            url,
+            data: bodySend,
+            headers: {
+                Authorization: tokenss,
+                'Content-Type': 'text/plain',
+                'X-SIGNATURE': sigma,
+                'X-TIMESTAMP': chrono,
+                'X-PARTNER-ID': prometheus,
+                'X-EXTERNAL-ID': '4180755335895009318416' + randomValueString,
+                'CHANNEL-ID': '95221',
+                'Host': 'openapidev1.bankmega.local',
+                'X-CREDENTIAL-KEY': cred
+            },
+            httpsAgent: agent
         });
 
-        const encription = await encrypt(body);
-        console.log("Body nya ", encription)
-
-        if (encription) {
-
-
-            const bodySend = encription.encryptedBody;
-            const sigma = encription.signature
-            const chrono = encription.timestamp
-            const cred = encription.credential
-            const prometheus = apikey
-
-            const response = await axiosInstance.post<any>(url, bodySend, {
-                headers: {
-                    Authorization: tokenss,
-                    'Content-Type': 'application/json',
-                    'X-SIGNATURE': sigma,
-                    'X-TIMESTAMP': chrono,
-                    'X-PARTNER-ID': prometheus,
-                    'X-EXTERNAL-ID': '418075533589500931',
-                    'CHANNEL-ID': '95221',
-                    'Host': 'openapidev1.bankmega.local',
-                    'X-CREDENTIAL-KEY': cred
-                },
-                httpsAgent: agent
-            });
-            // Handle the response from the API as needed
-            console.log("Test", response);
-            res.status(200).json(response);
+        console.log(13212312, encription)
+        console.log(13212312, response)
+        // Handle the response from the API as needed
+        const aes = encription.randomAESKey
+        const four = encription.randomAESIv
+        const decryptBody = response.data
+        const bbody = {
+            decryptBody,
+            aes,
+            four
         }
-        res.status(500).json({ error: 'An error occurred durring enc' });
-    } catch (error) {
-        console.error('Error:', error);
-        console.log("Error Suuhu");
-        res.status(500).json({ error: 'An error occurred' });
+        console.log("ubud", bbody)
+        const decrtpt = await decrypt(bbody)
+
+        const restab = decrtpt.decryptedBody
+
+        console.log("res", restab)
+
+        console.log("decrtpt", decrtpt)
+        res.status(200).json(restab);
+
+        // console.log("decrtpt", decrtpt)
+        // res.status(500).json({ error: 'Internal Server Error' });
     }
+    // res.status(500).json({ error: 'An error occurred durring enc' });
+    // } catch (error) {
+    //     console.error('Error:', error);
+    //     res.status(500).json({ error: 'An error occurred' });
+    // }
 
 }
 

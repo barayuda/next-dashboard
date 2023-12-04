@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -11,9 +12,11 @@ import {
 } from '../../services/auth';
 import { vaMega, xenditSimulatePayment } from '../../services/simulator';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const MEGAVAConfirm = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(true);
   const [va, setVa] = useState('');
   const [name, setName] = useState('');
@@ -89,7 +92,7 @@ const MEGAVAConfirm = () => {
     // setTerminalID("9481");
     // setAccDebit("010740021014062");
     // setDatePlus("0715");
-    // setCustomerName(datava?.data?.payinquiryData?.decryptedData?.request?.name);
+    setCustomerName(datava?.data?.payinquiryData?.decryptedData?.request?.name);
     // setAmountRepeating("02");
     } else {
       setDescription('ERROR ' + datava?.data?.statusCode);
@@ -104,36 +107,63 @@ const MEGAVAConfirm = () => {
   };
 
   const pencetBayar = async () => {
-    console.log('Pencet bener ');
+    setIsLoading(true);
     const dataReq = {
       amount,
       customerID,     
       tranceNum,
     };
     const tokenss = Cookies.get('tokenss');
-            console.log("hah", tokenss);
     const parsedAmount = parseFloat(amount);
     setAmount1(parsedAmount)
-    console.log("Saya",amount1,parsedAmount)
-    console.log('dataReq', dataReq);
-    console.log('dataReq', customerID ,tranceNum,amount);
-    const callApi = await vaMega(
-      customerID,     
-      tranceNum,
-      parsedAmount,
-      tokenss
-    );
-    console.log('response', callApi);
-    console.log('data sepuh', callApi.data);
-    if (!callApi.error) {
-      setLocalStorage('megava', {
-        ...callApi,
-        details: { va, amount, name },
+    try{
+
+      const callApi = await axios.post("/api/vaMega", {
+        customerID,     
+        tranceNum,
+        parsedAmount,
+        tokenss
       });
-      void router.push('/simulator/megava/payment');
+      const responseData: string = callApi.data;
+  
+      const parsedData = JSON.parse(responseData);
+      console.log("Gru",parsedData);
+  
+      if (parsedData) {
+        setLocalStorage('megava', {
+          ...parsedData.Data,
+          details: { va, amount, name },
+        });
+        void router.push('/simulator/megava/payment');
+      }
+  
+
+    }catch(error){
+      throw error
     }
-    console.log("Gak sabi Suhu")
-  };
+    finally {
+      setIsLoading(false); // Stop loading
+    }
+   
+   
+    // console.log("callApi",callApi)
+
+    //   setLocalStorage('megava',{
+    //     details: { va, amount, name },
+    //   })
+    //   void router.push('/simulator/megava/payment');
+
+  }
+   
+  //   if (!callApi.error) {
+  //     setLocalStorage('megava', {
+  //       ...callApi,
+  //       details: { va, amount, name },
+  //     });
+  //     void router.push('/simulator/megava/payment');
+  //   }
+  //   console.log("Gak sabi Suhu")
+  // };
 
   return (
     <div className="container mx-auto h-screen px-4">
@@ -161,6 +191,15 @@ const MEGAVAConfirm = () => {
                 </div>
               </div>
               <div className="col-span-8 ">
+              <div className="col-center">
+                  {isLoading ? (
+                    <div>Loading Please Wait....</div>
+                  ) : (
+                    <div>
+                      {/* Your regular component content */}
+                    </div>
+                  )}
+                </div>
                 <div className="rounded-md bg-blue-500 text-center text-white">
                   <div className="grid grid-cols-6">
                     <div className="col-span-6 p-5">
