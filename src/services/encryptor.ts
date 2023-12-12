@@ -59,7 +59,7 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
 
     const dt = new Date();
     const timestamp = utils.toIsoString(dt);
-    Cookies.set('timestamp', timestamp);
+    Cookies.set('timestamp', timestamp, { secure: true });
     console.log('X-TIMESTAMP: ' + timestamp);
 
 
@@ -68,13 +68,13 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
     const randomAESKeyBytes = CryptoJS.PBKDF2('itec-cds-is-the-beast', salt, { keySize: 256 / 32 });
     const randomAESKey = CryptoJS.enc.Base64.stringify(randomAESKeyBytes);
     console.log('Random AES Key (256): ' + randomAESKey);
-    Cookies.set('random_aes_key', randomAESKey);
+    Cookies.set('random_aes_key', randomAESKey, { secure: true });
 
     // Generate Random IV
     const IvBytes = CryptoJS.lib.WordArray.random(128 / 8);
     const randomAESIv = CryptoJS.enc.Base64.stringify(IvBytes);
     console.log('Random IV (16): ' + randomAESIv);
-    Cookies.set('random_aes_iv', randomAESIv);
+    Cookies.set('random_aes_iv', randomAESIv, { secure: true });
 
     console.log(public_public_key);
     console.log("HOXTON");
@@ -103,7 +103,7 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
     console.log('Plain Body: ' + body1);
     console.log('Encrypted Body: ' + encryptedBody.toString());
     console.log('Encrypted Body HAHAHAHAH: ' + encryptedBody);
-    Cookies.set('encrypted_body', encryptedBody.toString());
+    Cookies.set('encrypted_body', encryptedBody.toString(), { secure: true });
 
 
 

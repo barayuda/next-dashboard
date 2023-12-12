@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from 'next/link';
@@ -114,7 +115,7 @@ const Simulator = () => {
         // const tokenBase64 = btoa(token);
         // Cookies.set('token', tokenBase64, { expires: 1 });
         // router.push('/dashboard/simulator');
-        window.location.href = response?.data?.selectionsUrl;
+        window.location.href = response?.data;
       }
     }
   };

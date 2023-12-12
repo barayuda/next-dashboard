@@ -128,7 +128,7 @@ async function vaMega(
         const hash = CryptoJS.HmacSHA512(stringToSign, clientSecret);
         const signature = CryptoJS.enc.Base64.stringify(hash);
         console.log('Seyan: ' + stringToSign);
-        Cookies.set('signature', signature);
+        Cookies.set('signature', signature, { secure: true });
 
 
         const sigma = signature

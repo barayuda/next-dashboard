@@ -60,7 +60,7 @@ export async function setSimulator(data: SimulatorTypes) {
     amount: data.total,
     currency: 'IDR',
     referenceUrl:
-      (process.env.NEXT_PUBLIC_CLIENT_URL || '') + '/simulator/' + orderRefId,
+      ('https://demo-commerce.bankmega.com' || '') + '/simulator/' + orderRefId,
     order: {
       id: data.orderId || orderRefId,
       recurringId: data.recurringId || "",
@@ -100,7 +100,7 @@ export async function setSimulator(data: SimulatorTypes) {
   console.log('responseData', response);
   console.log('Stup');
   // START Save to DB
-  const url = `${ROOT_API}/simulator`;
+  const url = '/api/simulatorSaveDb';
   console.log('url', url);
   console.log('Json', data.authData)
 
@@ -110,7 +110,7 @@ export async function setSimulator(data: SimulatorTypes) {
     orderRefId,
     currency: 'IDR',
     paymentSource: data.paymentSource,
-    auth: data.authData,
+    auth: data.authData || "nihil",
     paymentSourceMethod: data.paymentSourceMethod,
     amount: data.total,
     trxToken: response?.data?.token,
@@ -127,6 +127,10 @@ export async function setSimulator(data: SimulatorTypes) {
     method: 'POST',
     data: payload,
   });
+
+
+
+
 }
 
 export async function brivaInquiry(data: any) {

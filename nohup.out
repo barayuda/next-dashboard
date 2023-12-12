@@ -1,0 +1,10 @@
+
+> nextjs-dashboard@0.1.0 start
+> next start -p 4000
+
+[Error: ENOENT: no such file or directory, open '/var/www/monitoring/nextjspg-dashboard/.next/BUILD_ID'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/var/www/monitoring/nextjspg-dashboard/.next/BUILD_ID'
+}

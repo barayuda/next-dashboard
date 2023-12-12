@@ -10,8 +10,6 @@ import { type AppType } from 'next/app';
 import { type Session } from 'next-auth';
 import type { Root } from 'react-dom/client';
 
-import { trpc } from '../utils/trpc';
-
 import '../styles/globals.css';
 // import '../styles/tailwind.css';
 import '../styles/custom.css';
@@ -76,7 +74,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <title>EMPIS BANK MEGA</title>
+        <title>SIM</title>
         {/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> */}
       </Head>
       <SessionProvider session={session}>
@@ -89,4 +87,4 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default trpc.withTRPC(MyApp);
+export default MyApp;

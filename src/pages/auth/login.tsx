@@ -76,7 +76,7 @@ export default function Login() {
         console.log('accessToken', accessToken);
         if (typeof accessToken === 'string') {
           //Cookies.set('token', accessToken, { secure: true });
-          Cookies.set('token', accessToken);
+          Cookies.set('token', accessToken, { secure: true });
           console.log('token', accessToken);
         }
 
@@ -84,7 +84,7 @@ export default function Login() {
         console.log('typeof refreshToken', typeof refreshToken);
         if (typeof refreshToken === 'string') {
           // Cookies.set('refreshToken', refreshToken, { secure: true });
-          Cookies.set('refreshToken', refreshToken);
+          Cookies.set('refreshToken', refreshToken, { secure: true });
           console.log('refreshToken', refreshToken);
         }
 
