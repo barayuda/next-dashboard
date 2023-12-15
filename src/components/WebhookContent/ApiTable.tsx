@@ -13,9 +13,7 @@ import {
   useGlobalFilter,
 } from 'react-table';
 
-// import Footer from '../MainContent/Footer';
 import GlobalFilter from './GlobalFilter';
-// import { ButtonGroup, ToggleButton } from 'react-bootstrap';
 import JsonPretty from './JsonPretty';
 import { Dialog, Transition } from '@headlessui/react';
 import { FaSearch } from 'react-icons/fa';
@@ -147,48 +145,23 @@ export default function ApiTable(props: CardTableProps) {
 
   const { globalFilter } = state;
 
-  // PopUp
   const [showModal, setShowModal] = useState(false);
-  const handleClose = (status: boolean) => {
-    setShowModal(false);
-    // const body = document.body;
-    // body.style.position = '';
-    // body.style.top = '';
-    // body.style.height = '';
-    // body.style.overflowY = '';
-  };
   const handleShow = (webhook: Data) => {
     console.log('webhook', webhook);
     setWebhook(webhook);
     setShowModal(true);
-    // const body = document.body;
-    // body.style.height = '100vh';
-    // body.style.overflowY = 'hidden';
   };
-
-  // const [autoRefresh, setAutoRefresh] = useState(false);
-  // const handleAutoRefresh = () => {};
-  // const [radioValue, setRadioValue] = useState('3');
-
-  // const radios = [
-  // 	{ name: 'Manual Refresh', value: '0' },
-  // 	{ name: 'Auto Refresh', value: '1' },
-  // ];
 
   const [webhook, setWebhook] = useState(Object);
 
-  function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const loadWebhookData = async () => {
     setIsLoading(true);
-    const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://10.14.20.49:4010';
-    const url = `${ROOT_API}/simulator/webhook-list`;
-    console.log('url', url);
+    const url = `../api/webhook/list`;
+    
     const result = await axios(url);
-    console.log('result', result);
+
     console.log('data', result?.data?.data);
+
     setData(result?.data?.data);
     setIsLoading(false);
   };

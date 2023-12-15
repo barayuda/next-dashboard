@@ -5,24 +5,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { Fragment, useRef, useMemo, useState, useEffect } from 'react';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import {
   useTable,
   usePagination,
   useSortBy,
   useGlobalFilter,
 } from 'react-table';
-// import Modal from 'react-bootstrap/Modal';
-// import Button from 'react-bootstrap/Button';
-import Image from 'next/image';
-
-// import Footer from '../MainContent/Footer';
 import GlobalFilter from './GlobalFilter';
-// import { ButtonGroup, ToggleButton } from 'react-bootstrap';
 import JsonPretty from './JsonPretty';
-import TableDropdown from '../Dropdowns/TableDropdown';
 import { Dialog, Transition } from '@headlessui/react';
-import { env } from '../../env/server.mjs';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -164,79 +156,24 @@ export default function ApiTable(props: CardTableProps) {
   const [showModal, setShowModal] = useState(false);
   const [simulator, setSimulator] = useState(Object);
 
-  const handleClose = (status: boolean) => {
-    setShowModal(false);
-    // const body = document.body;
-    // body.style.position = '';
-    // body.style.top = '';
-    // body.style.height = '';
-    // body.style.overflowY = '';
-  };
-  const handleShow = (simulator: Data) => {
-    console.log('simulator', simulator);
-    setShowModal(true);
-    // const body = document.body;
-    // body.style.height = '100vh';
-    // body.style.overflowY = 'hidden';
-  };
-
-  const handleNewSimulation = () => {
-    router.push('/simulator');
-  };
-
   const handleClick = (simulatorData: Data) => {
     // console.log('simulator', simulator);
     setShowModal(true);
     setSimulator(simulatorData);
   };
 
-  // const [autoRefresh, setAutoRefresh] = useState(false);
-  // const handleAutoRefresh = () => {};
-  // const [radioValue, setRadioValue] = useState('3');
-
-  // const radios = [
-  // 	{ name: 'Manual Refresh', value: '0' },
-  // 	{ name: 'Auto Refresh', value: '1' },
-  // ];
-
-  function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  // const automateRefresh = async () => {
-  // 	var reloadEvery = 10000;
-  // 	await delay(reloadEvery);
-  // 	while (parseInt(radioValue) === 1) {
-  // 		console.log('auto refresh ' + radioValue);
-  // 		loadSimulatorData();
-  // 		await delay(reloadEvery);
-  // 	}
-  // };
-
   const loadSimulatorData = async () => {
     setIsLoading(true);
-    const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://10.14.20.49:4010';
-    const url = `${ROOT_API}/simulator`;
-    console.log('url', url);
+    const url = `../api/simulator/list`;
+    
     const result = await axios(url);
-    console.log('result', result);
-    console.log('data', result?.data?.data);
+
     setData(result?.data?.data);
     setIsLoading(false);
   };
 
-  // Using useEffect to call the API once mounted and set the data
   useEffect(() => {
     loadSimulatorData();
-    /* (async () => {
-			const ROOT_API = process.env.NEXT_PUBLIC_API;
-			const API_VERSION = 'api/v1';
-			const url = `${ROOT_API}/${API_VERSION}/monitoring`;
-			const result = await axios(url);
-			console.log('result', result);
-			console.log('data', result.data.data);
-			setData(result.data.data);
-		})(); */
   }, []);
 
   return (

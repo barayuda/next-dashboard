@@ -125,8 +125,7 @@ export default function CardLineChart() {
 
   React.useEffect(() => {
     void (async () => {
-      const ROOT_API = process.env.NEXT_PUBLIC_API || 'http://10.14.20.49:4010';
-      const url = `../api/getLineDay`; 
+      const url = `../api/dashboard/line-day`; 
       //${ROOT_API}/apierrmon/lineday
       const result = await axios(url);
       
