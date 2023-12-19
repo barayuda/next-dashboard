@@ -1,10 +1,7 @@
 import React from "react";
 
 // components
-import CardBarChart from "../../components/Cards/CardBarChart";
 import CardLineChart from "../../components/Cards/CardLineChart";
-import CardPageVisits from "../../components/Cards/CardPageVisits";
-import CardSocialTraffic from "../../components/Cards/CardSocialTraffic";
 import { getServerSideProps } from "./index";
 // layout for page
 import AdminWithStatsLayout from "../../layouts/AdminWithStatsLayout";

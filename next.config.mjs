@@ -7,48 +7,48 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  // async headers() {
-  //   return [
-  //     {
-  //       source: '/(.*)?', // Matches all pages
-  //       headers: [
-  //         {
-  //           key: 'X-Frame-Options',
-  //           value: 'DENY',
-  //         },
-  //         {
-  //           key: 'X-Content-Type-Options',
-  //           value: 'nosniff',
-  //         },
-  //         {
-  //           key: 'Content-Security-Policy',
-  //           value:
-  //             "default-src https: data: 'unsafe-inline' 'unsafe-eval'; connect-src *;",
-  //         },
-  //         {
-  //           key: 'Referrer-Policy',
-  //           value: 'origin',
-  //         },
-  //         {
-  //           key: 'Permissions-Policy',
-  //           value: 'geolocation=()',
-  //         },
-  //         {
-  //           key: 'Cross-Origin-Embedder-Policy',
-  //           value: 'unsafe-none',
-  //         },
-  //         {
-  //           key: 'Cross-Origin-Resource-Policy',
-  //           value: 'cross-origin',
-  //         },
-  //         {
-  //           key: 'Cross-Origin-Opener-Policy',
-  //           value: 'unsafe-none',
-  //         },
-  //       ],
-  //     },
-  //   ];
-  // },
+  async headers() {
+    return [
+      {
+        source: '/(.*)?', // Matches all pages
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; connect-src *;",
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'geolocation=()',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'unsafe-none',
+          },
+        ],
+      },
+    ];
+  },
   reactStrictMode: false,
   swcMinify: true,
   /* If trying out the experimental appDir, comment the i18n config out
