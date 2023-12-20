@@ -6,40 +6,35 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import CryptoJS from 'crypto-js';
 
-async function webHook(
+function webHook(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const headSignature = req.headers?.signature as String;
-    if (headSignature) {
-      const splitSignature = headSignature.split(";");
-      const secretKey = process.env.NEXT_PUBLIC_IPG_SECRET_KEY || '';
-      const signature = splitSignature[0];
-      const timestamps = splitSignature[1];
-      
-      let stringVS = secretKey + signature + timestamps;
-      let hash = CryptoJS.MD5(stringVS).toString();
+    const headSignature = req.headers?.signature as string;
+    const splitSignature = headSignature.split(";");
+    const secretKey = process.env.NEXT_PUBLIC_IPG_SECRET_KEY || '';
+    const signature = splitSignature[0];
+    const timestamps = splitSignature[1];
+    
+    const stringVS = `${String(secretKey)}${String(signature)}${String(timestamps)}`;
+    const hash =  CryptoJS.MD5(stringVS).toString();
 
-      console.log(
-        `ValidateSignature: ${stringVS} (${typeof stringVS}), hash: ${hash}`
-      );
+    console.log(
+    `ValidateSignature: ${stringVS} (${typeof stringVS}), hash: ${hash}`
+    );
 
-      res.status(200).json({
-            status: "ok",
-            validateSignature: CryptoJS.MD5(
-                secretKey + signature + timestamps
-            ).toString(),
-            });
-    }
-
+    res.status(200).json({
+        status: "ok",
+        validateSignature: hash,
+        });
 }
 
-export default async function handler(
+export default function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
     try {
-        await webHook(req, res);
+        webHook(req, res);
     } catch (error) {
         console.error('API error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
