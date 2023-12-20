@@ -13,12 +13,7 @@ async function vaMegaInquiry(
     const API_KEY = process.env.NEXT_PUBLIC_IPG_SIM_KEY || '';
     const USER_NAME = process.env.NEXT_PUBLIC_IPG_USERNAME || '';
 
-    const record = req.body;
-    console.log("Happy", record)
-
     try {
-
-
         const axiosInstance = axios.create({
             proxy: false // or proxy: {}
         });
@@ -28,7 +23,6 @@ async function vaMegaInquiry(
             trxType: req.body.trxType,
             accountRef: req.body.accountRef,
         }
-        console.log("Data HASHSAHSAHSAH", data)
 
         const headers = {
             apikey: API_KEY,
@@ -39,19 +33,10 @@ async function vaMegaInquiry(
             headers
         });
 
-        console.log("Test", response);
-
-
-        // const response = await axiosInit.post<any>(PostAddrest, requestData, {
-        //     headers,
-        //     timeout: 10000,
-        //   });
-
-
+        console.log("Response:", response);
         res.status(200).json(response.data);
     } catch (error) {
         console.error('Error:', error);
-        console.log("Error Suuhu");
         res.status(500).json({ error: 'An error occurred' });
     }
 }

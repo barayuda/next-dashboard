@@ -3,7 +3,7 @@ import Link from "next/link";
 // components
 
 import IndexDropdown from "../Dropdowns/IndexDropdown";
-import { FaBars, FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);

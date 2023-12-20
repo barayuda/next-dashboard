@@ -15,8 +15,6 @@ async function inqueryApi(
 ) {
   const record = req.body;
   try {
-    const refUrl =
-      process.env.NEXT_PUBLIC_CLIENT_URL || 'http://localhost:4000';
     const requestData = {
       amount: record.amount,
       currency: record.currency,
@@ -56,13 +54,14 @@ async function inqueryApi(
     const axiosInit = axios.create({
       proxy: false,
     });
+
     const response = await axiosInit.post<any>(PostAddrest, requestData, {
       headers,
       timeout: 10000,
     });
 
-    // Handle the response as needed
-    console.log('Response', response.data);
+    console.log('Response', response);
+
     res.status(200).json(response.data);
   } catch (error) {
     // Handle error

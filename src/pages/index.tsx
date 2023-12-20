@@ -1,15 +1,10 @@
 import React from 'react';
-import Link from 'next/link';
 
-import IndexNavbar from '../components/Navbars/IndexNavbar';
 import Footer from '../components/Footers/Footer';
-
-
 
 const Home = () => {
   return (
     <>
-      <IndexNavbar />
       <section className="header max-h-860-px relative flex h-screen items-center pt-16">
       <style>
           {`
@@ -41,22 +36,9 @@ const Home = () => {
                 >
                  IPG Simulator
                 </a>
-                <a
-                  href="/admin/dashboard"
-                  className="github-star bg-blueGray-700 active:bg-blueGray-600 ml-1 mr-1 mb-1 rounded px-6 py-4 text-sm font-bold uppercase text-white shadow outline-none hover:shadow-lg focus:outline-none"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                 IPG Admin Menu
-                </a>
               </div>
             </div>
           </div>
-          {/* <img
-          className="b-auto max-h-860-px absolute top-0 right-0 -mt-48 w-10/12 pt-16 sm:mt-0 sm:w-6/12"
-          src="/assets/img/gaktau1.jpg"
-          alt="..."
-        /> */}
         </div>
      
       </section>

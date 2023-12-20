@@ -46,16 +46,6 @@ export async function setSimulator(data: SimulatorTypes) {
     date.getMinutes().toString() +
     date.getSeconds().toString();
 
-  // [
-  //   {
-  //     alloCode: data.authData.alloCode,
-  //     alloCodeVerifier: data.alloCodeVerifier,
-  //     alloOsType: data.alloOsType,
-  //     alloDeviceId: data.alloDeviceId,
-  //     alloAppType: data.alloAppType
-  //   }
-
-  // ]
   const requestData = {
     amount: data.total,
     currency: 'IDR',

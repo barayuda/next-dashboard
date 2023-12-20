@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import Footer from '../../components/Footers/Footer';
@@ -60,27 +60,11 @@ const Simulator = () => {
         toast.error('Error bla !!!');
       } else {
         toast.success('Transaction Created !!!');
-        // const { token } = response.data;
-        // const tokenBase64 = btoa(token);
-        // Cookies.set('token', tokenBase64, { expires: 1 });
-        // router.push('/dashboard/simulator');
-        // window.location.href = response?.data?.urls?.selections;
       }
     }
   }
 
   const onSubmit = async () => {
-    const handleClick = async () => {
-      // try {
-      //   const requestData = {
-      //     // Your request data here...
-      //   };
-      //   const response = await axios.post('/api/simulator', requestData);
-      //   console.log(response.data);
-      // } catch (error) {
-      //   console.error('Error:', error);
-      // }
-    };
 
     const data: SimulatorTypes = {
       quantity,
@@ -111,10 +95,6 @@ const Simulator = () => {
         toast.error(response.message);
       } else {
         toast.success('Transaction Created !!!');
-        // const { token } = response.data;
-        // const tokenBase64 = btoa(token);
-        // Cookies.set('token', tokenBase64, { expires: 1 });
-        // router.push('/dashboard/simulator');
         window.location.href = response?.data;
       }
     }

@@ -3,41 +3,34 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-
+import CryptoJS from 'crypto-js';
 
 async function webHook(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const urlIPG = process.env.NEXT_PUBLIC_IPG_URL || '';
-    const API_KEY = process.env.NEXT_PUBLIC_IPG_SIM_KEY || '';
-    const USER_NAME = process.env.NEXT_PUBLIC_IPG_USERNAME || '';
-    const API_URL = process.env.NEXT_PUBLIC_API || '';
+    const headSignature = req.headers?.signature as String;
+    if (headSignature) {
+      const splitSignature = headSignature.split(";");
+      const secretKey = process.env.NEXT_PUBLIC_IPG_SECRET_KEY || '';
+      const signature = splitSignature[0];
+      const timestamps = splitSignature[1];
+      
+      let stringVS = secretKey + signature + timestamps;
+      let hash = CryptoJS.MD5(stringVS).toString();
 
+      console.log(
+        `ValidateSignature: ${stringVS} (${typeof stringVS}), hash: ${hash}`
+      );
 
-
-    console.log("First", req.headers)
-    const headers = req.headers
-    const body = req.body
-    const url = `${API_URL}/simulator/validhook`;
-    console.log("Serst", body)
-    const axiosInit = axios.create({
-        proxy: false,
-    });
-
-    const response = await axiosInit.post<any>(url, body, {
-        headers: headers,
-        timeout: 30000,
-    });
-
-    console.log("Checkers", response.data)
-
-    res.status(200).json(response.data);
-
-
-
+      res.status(200).json({
+            status: "ok",
+            validateSignature: CryptoJS.MD5(
+                secretKey + signature + timestamps
+            ).toString(),
+            });
+    }
 
 }
 

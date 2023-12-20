@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setLocalStorage } from '../../services/auth';
-import { bcavaInquiry } from '../../services/simulator';
-import { getDateWithFormat } from '../../utils/commonHelpers';
 import { findByAccRef } from '../../services/mega-ipg';
 
 const BCAVA = () => {
@@ -13,7 +11,6 @@ const BCAVA = () => {
   const pencetBenar = async () => {
     setIsLoading(true);
     try {
-    console.log('Pencet bener ');
     const dataFindByAccRef = {
       trxType: 'getby.account_ref',
       accountRef: va,
@@ -22,9 +19,8 @@ const BCAVA = () => {
     console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
     console.log('response', callApiSpring.data);
+
     if (!callApiSpring.error) {
-      // if (callApiSpring?.data?.statusCode === '00') {
-      // }
       setLocalStorage('bcava', callApiSpring.data);
       void router.push('/simulator/bcava/confirm');
     }
