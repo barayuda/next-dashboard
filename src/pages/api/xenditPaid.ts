@@ -5,7 +5,6 @@
 import axios from 'axios';
 import { request } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
-const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 
 async function xenditPaid(
     req: NextApiRequest,
@@ -14,30 +13,37 @@ async function xenditPaid(
     const record = req.body;
     console.log("saw", record)
     try {
+
         const axiosInstance = axios.create({
             proxy: false // or proxy: {}
         });
         const external_id = record.externalID;
         const amount = record.amount.toString(); // Convert to string
-        const url = `${ROOT_API}/simulator/xendit/simulatepay/${external_id}`;
-        console.log({
-            url, amount, header: {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        });
+        const url = `https://api.xendit.co/callback_virtual_accounts/external_id=${external_id}/simulate_payment`;
+        const headers = {
+            Authorization:
+            "Basic " +
+            Buffer.from(`${String(process.env.XENDIT_SECRETKEY)}:`).toString("base64"),
+        };
+
         const response = await axiosInstance.post<any>(url, { amount }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
         });
-        console.log("Zessssst", request);
-        console.log("Test", response.data);
-        res.status(200).json(response.data);
+
+        const result = {
+            "status": "ok",
+            "statusHttp": 200,
+            "message": "Called",
+            "request": {
+                "amount": amount
+            },
+            "response": response.data
+        }
+
+        console.log(`success to pay: ${request}, response: ${result}`);
+        res.status(200).json(result);
     } catch (error) {
         console.error('Error:', error);
-        console.log("Error Suuhu");
         res.status(500).json({ error: 'An error occurred' });
     }
 }

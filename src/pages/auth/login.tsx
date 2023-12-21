@@ -3,52 +3,16 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { toast } from 'react-hot-toast';
-import { GoogleLogin } from '@leecheuk/react-google-login';
 import { getSession, signIn } from 'next-auth/react';
-
-import { env } from '../../env/client.mjs';
+import CryptoJS from 'crypto-js';
 
 // layout for page
 import AuthLayout from '../../layouts/AuthLayout';
-
-import type { JWTPayloadTypes, LoginTypes } from '../../services/data-types';
-import {
-  authenticate,
-  isAuth,
-  sendGoogleToken,
-  setLogin,
-} from '../../services/auth';
-
-/* interface GetServerSideProps {
-  req: {
-    cookies: {
-      token: string;
-    };
-  };
-}
-
-export function getServerSideProps({ req }: GetServerSideProps) {
-  const { token } = req.cookies;
-  if (token) {
-    toast.success('You are already logged in!');
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-} */
 
 export default function Login() {
   const router = useRouter();
@@ -64,16 +28,18 @@ export default function Login() {
   const onSubmit = async () => {
     await signIn('credentials', {
       email: email,
-      password: password,
+      password: CryptoJS.MD5(password).toString(),
       redirect: false,
       callbackUrl: '/',
     }).then(async (res) => {
       const session = await getSession();
-      //console.log('session', session);
+
       if (session) {
         const accessToken = session.user?.token?.accessToken;
         console.log('typeof accessToken', typeof accessToken);
         console.log('accessToken', accessToken);
+
+        debugger;
         if (typeof accessToken === 'string') {
           //Cookies.set('token', accessToken, { secure: true });
           Cookies.set('token', accessToken, { secure: true });
@@ -87,21 +53,6 @@ export default function Login() {
           Cookies.set('refreshToken', refreshToken, { secure: true });
           console.log('refreshToken', refreshToken);
         }
-
-        // console.log('response', response);
-        // console.log('response.data', response.data);
-        // console.log('response.data.data', response.data.data);
-        // console.log('token', token);
-        // const tokenBase64 = btoa(token);
-
-        // const tokenBase64 = Buffer.from(accessToken).toString('base64');
-        // console.log('tokenBase64', tokenBase64);
-        // Cookies.set('token', tokenBase64);
-        // console.log('token', tokenBase64);
-
-        // const jwtBase64 = Buffer.from(refreshToken).toString('base64');
-        // Cookies.set('refreshToken', jwtBase64);
-        // console.log('refreshToken', jwtBase64);
       }
 
       console.log('result', res);
@@ -110,34 +61,12 @@ export default function Login() {
           toast.error(res.error);
         } else {
           toast.success('Login Success !!!');
-          router.push('/admin/dashboard');
+          router.push('/simulator');
         }
       } else {
         toast.error('Login Failed !!!');
       }
     });
-  };
-
-  const informParent = (response: any) => {
-    authenticate(response, () => {
-      if (isAuth() && isAuth().role === 'admin') {
-        router.push('/dashboard');
-      } else {
-        router.push('/');
-      }
-    });
-  };
-
-  const responseGoogle = async (response: any) => {
-    console.log('GOOGLE CLIENT ID', env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
-    console.log('responseGoogle', response);
-    const res = await sendGoogleToken(response.tokenId);
-    informParent(res);
-  };
-
-  const responseFailed = (response: any) => {
-    console.log('responseFailed', response);
-    toast.error('Login Failed !!!');
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,17 +75,6 @@ export default function Login() {
       onSubmit();
     }
   };
-
-  useEffect(() => {
-    if (inputReference.current) {
-      inputReference.current.focus();
-    }
-    if (isAuth() && isAuth().role === 'admin') {
-      router.push('/dashboard');
-    } else if (isAuth()) {
-      router.push('/');
-    }
-  }, []);
 
   return (
     <AuthLayout>
@@ -230,7 +148,6 @@ export default function Login() {
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
-                        console.log('Sign in lagi ');
                         // toast.success('Login Process !!!');
                         onSubmit();
                       }}
@@ -238,7 +155,7 @@ export default function Login() {
                       //   handleKeyPress(e);
                       // }}
                     >
-                      Sign In
+                      Sign Ini
                     </button>
                   </div>
                 </form>

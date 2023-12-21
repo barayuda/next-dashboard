@@ -7,12 +7,13 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import Footer from '../../components/Footers/Footer';
-import Navbar from '../../components/Navbars/AuthNavbar';
+import Navbar from '../../components/Navbars/SimpleNavbar';
 
 import axios from 'axios';
 import type { SimulatorTypes } from '../../services/data-types';
 import { setSimulator } from '../../services/simulator';
 
+import { getServerSideProps } from '../index';
 const Simulator = () => {
   const router = useRouter();
   // const price = 100;
@@ -110,49 +111,7 @@ const Simulator = () => {
     <>
       <Navbar />
       <main>
-        <div className="min-h-screen-25 relative flex content-center items-center justify-center pb-32 pt-16">
-          <div
-            className="absolute top-0 h-full w-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('assets/img/gaktau1.jpg')",
-            }}
-          >
-            <span
-              id="blackOverlay"
-              className="absolute h-full w-full bg-black opacity-75"
-            ></span>
-          </div>
-          <div className="container relative mx-auto">
-            <div className="flex flex-wrap items-center">
-              <div className="ml-auto mr-auto w-full px-4 text-center lg:w-6/12">
-              <div>
-                <span>
-
-                </span>
-              </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 top-auto h-16 w-full overflow-hidden"
-            style={{
-    transform: 'translateZ(0)',
-    backgroundColor: 'linear-gradient(135deg, #000, #FFA500)'
-  }}
-          >
-            <svg
-              className="absolute bottom-0 overflow-hidden"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-
-            </svg>
-          </div>
+        <div className="min-h-screen-25 relative flex content-center items-center justify-center pb-18 pt-16">
         </div>
 
         <section className="bg-blueGray-200 -mt-24 pb-20">
@@ -565,5 +524,7 @@ const Simulator = () => {
     </>
   );
 };
+
+export { getServerSideProps };
 
 export default Simulator;

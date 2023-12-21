@@ -172,8 +172,6 @@ export async function bcavaPaymentConfirm(data: any) {
 }
 
 export async function xenditSimulatePayment(data: any, external_id: string) {
-  // const url = `https://api.xendit.co/callback_virtual_accounts/external_id=${external_id}/simulate_payment`;
-  // const url = `${ROOT_API}/${API_VERSION}/simulator/xendit/simulatepay/${external_id}`;
   const url = `/api/xenditPaid`;
 
   return callAPI({
