@@ -17,11 +17,7 @@ export default function SimulatorLayout(props: AuthProps) {
       <main>
         <section className="relative h-full min-h-screen w-full">
           <div
-            className="bg-blueGray-800 bg-full absolute top-0 h-full w-full bg-no-repeat"
-            style={{
-              backgroundImage: "url('/assets/img/register_bg_2.png')",
-            }}
-          ></div>
+            className="bg-full absolute top-0 h-full w-full bg-no-repeat"></div>
           {children}
         </section>
       </main>

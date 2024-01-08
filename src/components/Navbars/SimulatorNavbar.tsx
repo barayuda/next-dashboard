@@ -12,7 +12,7 @@ export default function SimulatorNavbar() {
           <div className="relative flex w-full justify-between lg:static lg:block lg:w-auto lg:justify-start">
             <Link
               href="/"
-              className="mr-4 inline-block whitespace-nowrap py-2 text-sm font-bold uppercase leading-relaxed text-white"
+              className="mr-4 inline-block whitespace-nowrap py-2 text-sm font-bold uppercase leading-relaxed text-black"
             >
               Bank Mega
             </Link>

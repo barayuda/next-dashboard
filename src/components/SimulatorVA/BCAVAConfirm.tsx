@@ -64,7 +64,7 @@ const BCAVAConfirm = () => {
 
   const pencetBayar = async () => {
     setIsLoading(true);
-    console.log('Pencet bener ');
+    
     const dataReq = {
       amount, //10600,
       externalID

@@ -24,7 +24,7 @@ const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 //     rejectUnauthorized: false, // Set this to true to validate the SSL certificate
 // });
 
-async function simulatorSaveDb(
+function simulatorSaveDb(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
@@ -37,38 +37,28 @@ async function simulatorSaveDb(
     console.log('payloadssss', payload);
 
     try {
-        await callAPI({
-            url,
-            method: 'POST',
-            data: payload,
-        });
+        // await callAPI({
+        //     url,
+        //     method: 'POST',
+        //     data: payload,
+        // });
 
 
     } catch (error) {
-        res.status(500).json("Error");
+        // res.status(500).json("Error");
     }
     console.log("resz", Response)
     res.status(200).json(payload.selectionsUrl);
-
-
-
-
-    // const response = await axios.post<any>(url, payload, {
-    //     timeout: 30000,
-    //     httpsAgent: agent
-    // });
-
-    // console.log("New", response)
 }
 
 
-export default async function handler(
+export default function handler(
     req: NextApiRequest,
     res: NextApiResponse,
     data: SimulatorTypes
 ) {
     try {
-        await simulatorSaveDb(req, res);
+        simulatorSaveDb(req, res);
     } catch (error) {
         console.error('API error:', error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -87,8 +87,9 @@ const Simulator = () => {
     };
 
     if (!quantity || !total) {
-      // console.log('Error');
       toast.error('quantity and total are required !!!');
+    } else if(!phoneNumber){
+      toast.error('phone number are required !!!');
     } else {
       const response = await setSimulator(data);
       console.log('response', JSON.stringify(response));
@@ -131,7 +132,7 @@ const Simulator = () => {
               </div>
 
               <div className="ml-auto mr-auto w-full px-4 md:w-5/12 ">
-                <h3 className="mb-2 text-3xl font-semibold leading-normal">
+                <h3 className="mb-2 text-3xl font-semibold leading-normal mt-10">
                   Working with us is a pleasure
                 </h3>
                 <p className="text-blueGray-600 mb-4 mt-4 text-lg font-light leading-relaxed">
@@ -273,21 +274,6 @@ const Simulator = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                      Email
-                    </label>
-                    <input
-                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                      type="email"
-                      name="email"
-                      placeholder="Input your email"
-                      value={email}
-                      onChange={(e)=>{
-                        setEmail(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div className="relative mb-3 w-full">
-                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Phone
                     </label>
                     <input
@@ -298,6 +284,21 @@ const Simulator = () => {
                       value={phoneNumber}
                       onChange={(e)=>{
                         setPhoneNumber(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Email
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="email"
+                      name="email"
+                      placeholder="Input your email"
+                      value={email}
+                      onChange={(e)=>{
+                        setEmail(e.target.value);
                       }}
                     />
                   </div>
@@ -338,7 +339,7 @@ const Simulator = () => {
                     />
                   </div>
                 </div>
-                <div className="grid">
+                <div className="grid hidden">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Auth Data
@@ -433,7 +434,7 @@ const Simulator = () => {
                 <div className="grid">
                   <div className="relative mb-5 mt-5 w-full">
                   <span className="text-blueGray-600 ml-2 text-sm font-semibold">
-                        Discount Ammount
+                        Discount Amount
                       </span>
                   <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       <input

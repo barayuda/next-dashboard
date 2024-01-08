@@ -37,7 +37,8 @@ export const authOptions: NextAuthOptions = {
         },
       },
       authorize(credentials) {
-        const { email, password } = credentials as any;
+        const email = credentials?.email;
+        const password = credentials?.password;
         const user = {id: "1", name: "udin", email: "udin@testing.com", password: "161ebd7d45089b3446ee4e0d86dbcf92" };
 
         const res = {

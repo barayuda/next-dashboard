@@ -5,38 +5,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { v4 as uuidv4 } from 'uuid';
 import callAPI from '../pages/api/call';
-import type { ApiHeaders } from '../pages/api/call';
 import type { SimulatorTypes } from './data-types';
 import axios from 'axios';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
-
 const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
-
-const headers = {
-  Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
-  // Add any other headers as needed
-};
 
 export async function setSimulator(data: SimulatorTypes) {
   // START Process Inquiry
   console.log('dataSimulator', data);
   const reqId = uuidv4();
 
-  const allo = data.authData || "{ }";
-  let alloJson;
+  const alloVerifier = await axios.post<any>(`../api/alloVerifier`, data, {
+    timeout: 30000,
+  });
 
+  const alloJson =  alloVerifier.data || "";
 
-  try {
-    alloJson = JSON.parse(allo);
-  } catch (error) {
-
-    console.error("NO JSON VALUE:", error);
-    alloJson = {};
-  }
 
   const testCaseName = data.name || "Test Name";
-
   const date = new Date();
   const orderRefId =
     date.getFullYear().toString() +
@@ -50,7 +37,7 @@ export async function setSimulator(data: SimulatorTypes) {
     amount: data.total,
     currency: 'IDR',
     referenceUrl:
-      ('https://demo-commerce.bankmega.com' || '') + '/simulator/' + orderRefId,
+      ('https://demo-merchants.bankmega.com' || '') + '/simulator/' + orderRefId,
     order: {
       id: data.orderId || orderRefId,
       recurringId: data.recurringId || "",
@@ -117,9 +104,6 @@ export async function setSimulator(data: SimulatorTypes) {
     method: 'POST',
     data: payload,
   });
-
-
-
 
 }
 
