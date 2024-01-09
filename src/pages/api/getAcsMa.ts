@@ -4,92 +4,99 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/require-await */
+import axios from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
+import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
+import { KJUR } from 'jsrsasign';
 
-import axios, { AxiosRequestConfig } from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs";
-import https from "https";
+async function dunk(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const private_value = process.env.SNAP_SERVICES_PRIV_KEY;
 
-async function dunk(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+    const body = {
+        grantType: 'client_credentials',
+    };
 
-    const certPath = "/tmp/cert/bankmegalocal.crt";
-    const keyPath = "/tmp/cert/bankmegalocal.key";
+    interface Utils {
+      toIsoString: (date: Date) => string;
+    }
 
-    const cert = fs.readFileSync(certPath);
-    const key = fs.readFileSync(keyPath);
+    const utils: Utils = {
+      toIsoString: function (date: Date) {
+        const tzo = -date.getTimezoneOffset();
+        const dif = tzo >= 0 ? '+' : '-';
+        const pad = (num: number) => (num < 10 ? '0' : '') + num;
 
-    const agent = new https.Agent({
-        cert: cert,
-        key: key,
-        rejectUnauthorized: false, // Set this to true to validate the SSL certificate
+        return (
+          date.getFullYear() +
+          '-' +
+          pad(date.getMonth() + 1) +
+          '-' +
+          pad(date.getDate()) +
+          'T' +
+          pad(date.getHours()) +
+          ':' +
+          pad(date.getMinutes()) +
+          dif +
+          pad(Math.floor(Math.abs(tzo) / 60)) +
+          ':' +
+          pad(Math.abs(tzo) % 60)
+        );
+      },
+    };
+
+    const dt = new Date();
+    const timestamp = utils.toIsoString(dt);
+    Cookies.set('timestamp', timestamp, { secure: true });
+
+    var private_key =
+      '-----BEGIN PRIVATE KEY-----' +
+      private_value +
+      '-----END PRIVATE KEY-----';
+    const clientKey = '0cd72de3-d5d0-4d7e-94bc-78f84624ea43';
+    const combined = clientKey + '|' + timestamp;
+
+    var sig = new KJUR.crypto.Signature({"alg": "SHA256withRSA"});
+    sig.init(private_key);
+    sig.updateString(combined);
+    
+    var encodedSignature = CryptoJS.enc.Base64.stringify(
+      CryptoJS.enc.Hex.parse(sig.sign())
+    );
+
+    const axiosInstance = axios.create({
+      proxy: false, // or proxy: {}
     });
 
-    const API_KEY = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
-    const API_ADDS = process.env.NEXT_PUBLIC_SIMULATOR_ADDS || '';
-    console.log(`  Idk//`);
-    // ${ROOT_API}/${API_VERSION}/monitoring/history/${id}/detail
-    //${ROOT_API}/${API_VERSION}/monitoring/${params}
-    const record = req.headers;
-    console.log("Happier", record)
+    const url = process.env.SNAP_SERVICES_URL + '/api/v1.0/access-token/b2b';
 
-    const apiKey = req.headers.fire;
-    console.log("t1", record)
-    console.log("t2", apiKey)
-    if (!apiKey || apiKey !== API_KEY) {
-        return res.status(400).json({ error: 'Missing or invalid API key' });
-    }
+    const response = await axiosInstance.request({
+      method: 'POST',
+      url,
+      data: body,
+      headers: {
+        'X-SIGNATURE': encodedSignature,
+        'X-TIMESTAMP': timestamp,
+        'X-CLIENT-KEY': clientKey,
+        Host: 'snap.bankmega.app',
+      },
+    });
 
-
-    try {
-
-        const headers = {
-            Authorization: process.env.NEXT_PUBLIC_VA_PASSWORD?.toString(),
-            'Content-Type': 'application/x-www-form-urlencoded', // Use quotes for keys with special characters
-            // Add any other headers as needed
-        };
-
-        const body = {
-            grant_type: "client_credentials"
-        }
-        const axiosInstance = axios.create({
-            proxy: false // or proxy: {}
-        });
-        const url = API_ADDS;
-        console.log("INI URL NYA:" + url);
-
-
-        const response = await axiosInstance.post<any>(url, body, {
-            headers,
-            httpsAgent: agent
-        });
-
-
-        console.log("RESPONSE NYA: ", response);
-
-
-
-        res.status(200).json(response.data);
-    } catch (error) {
-        console.error('Error:', error);
-        console.log("Error Suuhu");
-        res.status(500).json({ error: 'An error occurred' });
-    }
+    Cookies.set('accessToken', response.data.accessToken, { secure: true });
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 }
 
-
-
-
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse,
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-    try {
-        await dunk(req, res);
-    } catch (error) {
-        console.error('API error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+  try {
+    await dunk(req, res);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }

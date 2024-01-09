@@ -10,7 +10,6 @@ import {
   removeLocalStorage,
   setLocalStorage,
 } from '../../services/auth';
-import { vaMega, xenditSimulatePayment } from '../../services/simulator';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -23,28 +22,9 @@ const MEGAVAConfirm = () => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('0.00');
   const [amount1, setAmount1] = useState(0);
-  const [externalID, setExternalID] = useState('');
-  const [billAmount,setBillAmount] = useState('');
-  const [billAmount2,setBillAmount2] = useState('');
-//   const [cardNum,setCardNum] = useState('');
-  const [time,setTime] = useState('');
-  const [billStatus,setBillStatus] = useState('');
-  const [operation,setOperation] = useState('');
   const [customerID,setCustomerID] = useState('');
-  const [processingCode,setProcessingCode] = useState('');
-  const [d1,setD1] = useState('');
-  const [date,setDate] = useState('');
-  const [d2,setD2] =useState('');
-  const [descRepeat,setDescRepeat] = useState('');
-  const [d3,setD3] = useState('');
   const [tranceNum,setTraceNum] = useState('');
-  const [instCode,setInstCode] = useState('');
-  const [accCredit,setAccCredit] = useState('');
-  const [terminalID,setTerminalID] = useState('');
-  const [accDebit,setAccDebit] = useState('');
-  const [datePlus,setDatePlus] = useState('');
   const [customerName,setCustomerName] = useState('');
-  const [amountRepeating,setAmountRepeating] = useState('');
 
   useEffect(() => {
     const datava = getLocalStorage('megava');
@@ -53,8 +33,6 @@ const MEGAVAConfirm = () => {
       datava?.data?.statusCode !== undefined &&
       datava?.data?.accountRef !== undefined &&
       datava?.data?.amount !== undefined &&
-    //   datava?.data?.payinquiryData?.decryptedData(?.response?.external_id !==
-    //     undefined &&
       datava?.data?.statusCode === '00'
     ) {
       setIsError(false);
@@ -69,55 +47,27 @@ const MEGAVAConfirm = () => {
         datava?.data?.payinquiryData?.decryptedData?.response?.name ||
           'Unknown Name'
       );
-    //   setExternalID(
-    //     datava?.data?.payinquiryData?.decryptedData?.response?.external_id
-    //   );
-    // setBillAmount("0");
-    // setCardNum(datava?.data?.);
-    // setBillAmount(amount);
-    // setBillAmount2(amount);
-    // setTime(datava?.data?.createdAt);
-    // setBillStatus(datava?.data?.payinquiryData?.decryptedData?.response?.RC);
-    // setOperation("payment");
-    setCustomerID(datava?.data?.payinquiryData?.decryptedData?.response?.vacctno);
-    // setProcessingCode("171000");
-    // setD1("00000000000000000000IDRA");
-    // setDate("");
-    // setD2("010190012001081++++++++++++++++++++");
-    // setDescRepeat("03");
-    // setD3("010190011555550++++++++++++++++++++");
-    setTraceNum(datava?.data?.payinquiryData?.decryptedData?.response?.billing_id);
-    // setInstCode("VA");
-    // setAccCredit("010190012001081");
-    // setTerminalID("9481");
-    // setAccDebit("010740021014062");
-    // setDatePlus("0715");
-    setCustomerName(datava?.data?.payinquiryData?.decryptedData?.request?.name);
-    // setAmountRepeating("02");
+      setCustomerID(datava?.data?.payinquiryData?.decryptedData?.response?.vacctno);
+      setTraceNum(datava?.data?.payinquiryData?.decryptedData?.response?.billing_id);
+      setCustomerName(datava?.data?.payinquiryData?.decryptedData?.request?.name);
     } else {
       setDescription('ERROR ' + datava?.data?.statusCode);
     }
-
-    console.log('data', datava);
   }, []);
 
-  const pencetKembali = () => {
+  const back = () => {
     removeLocalStorage('megava');
     void router.push('/simulator/megava');
   };
 
-  const pencetBayar = async () => {
+  const pay = async () => {
     setIsLoading(true);
-    const dataReq = {
-      amount,
-      customerID,     
-      tranceNum,
-    };
+
     const tokenss = Cookies.get('tokenss');
     const parsedAmount = parseFloat(amount);
-    setAmount1(parsedAmount)
-    try{
+    setAmount1(parsedAmount);
 
+    try{
       const callApi = await axios.post("/api/vaMega", {
         customerID,     
         tranceNum,
@@ -136,34 +86,13 @@ const MEGAVAConfirm = () => {
         });
         void router.push('/simulator/megava/payment');
       }
-  
-
     }catch(error){
       throw error
     }
     finally {
       setIsLoading(false); // Stop loading
     }
-   
-   
-    // console.log("callApi",callApi)
-
-    //   setLocalStorage('megava',{
-    //     details: { va, amount, name },
-    //   })
-    //   void router.push('/simulator/megava/payment');
-
   }
-   
-  //   if (!callApi.error) {
-  //     setLocalStorage('megava', {
-  //       ...callApi,
-  //       details: { va, amount, name },
-  //     });
-  //     void router.push('/simulator/megava/payment');
-  //   }
-  //   console.log("Gak sabi Suhu")
-  // };
 
   return (
     <div className="container mx-auto h-screen px-4">
@@ -264,7 +193,7 @@ const MEGAVAConfirm = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetBayar();
+                        void pay();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>
@@ -273,7 +202,7 @@ const MEGAVAConfirm = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetKembali();
+                        void back();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>

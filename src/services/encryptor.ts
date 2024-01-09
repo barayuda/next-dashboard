@@ -60,36 +60,29 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
     const dt = new Date();
     const timestamp = utils.toIsoString(dt);
     Cookies.set('timestamp', timestamp, { secure: true });
-    console.log('X-TIMESTAMP: ' + timestamp);
 
 
     // Generate Random AES Key
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
     const randomAESKeyBytes = CryptoJS.PBKDF2('itec-cds-is-the-beast', salt, { keySize: 256 / 32 });
     const randomAESKey = CryptoJS.enc.Base64.stringify(randomAESKeyBytes);
-    console.log('Random AES Key (256): ' + randomAESKey);
+
     Cookies.set('random_aes_key', randomAESKey, { secure: true });
 
     // Generate Random IV
     const IvBytes = CryptoJS.lib.WordArray.random(128 / 8);
     const randomAESIv = CryptoJS.enc.Base64.stringify(IvBytes);
-    console.log('Random IV (16): ' + randomAESIv);
-    Cookies.set('random_aes_iv', randomAESIv, { secure: true });
 
-    console.log(public_public_key);
-    console.log("HOXTON");
+    Cookies.set('random_aes_iv', randomAESIv, { secure: true });
 
     // Calculate X-CREDENTIAL-KEY Header
     const public_key =
         '-----BEGIN PUBLIC KEY-----' + public_public_key + '-----END PUBLIC KEY-----';
-    console.log("Pubs", public_key)
     const publicKey = KEYUTIL.getKey(public_key) as RSAKey;
     const req1 = bodd;
-    console.log("Pala Yoan", req1)
+
     const body2 = JSON.parse(req1);
-    console.log("lanciao Yoan", body2)
     const body1 = JSON.stringify(body2);
-    console.log("Badan Yoan", body1)
     const combined = randomAESKey + ":" + randomAESIv;
     const encrypted = KJUR.crypto.Cipher.encrypt(combined, publicKey, "RSA");
     const xcred = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Hex.parse(encrypted));
@@ -100,18 +93,8 @@ export async function encrypt(body: any): Promise<EncryptionResult> {
         padding: CryptoJS.pad.Pkcs7,
         mode: CryptoJS.mode.CBC,
     });
-    console.log('Plain Body: ' + body1);
-    console.log('Encrypted Body: ' + encryptedBody.toString());
-    console.log('Encrypted Body HAHAHAHAH: ' + encryptedBody);
+
     Cookies.set('encrypted_body', encryptedBody.toString(), { secure: true });
-
-
-
-
-
-
-
-
     const result: EncryptionResult = {
         timestamp,
         randomAESKey,

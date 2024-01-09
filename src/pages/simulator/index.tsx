@@ -34,7 +34,7 @@ const Simulator = () => {
   const [orderId, setOrderId] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
-
+  const [isLoading, setLoading] = useState(false)
 
   async function callInqueryApi() {
     const data: SimulatorTypes = {
@@ -66,7 +66,8 @@ const Simulator = () => {
   }
 
   const onSubmit = async () => {
-
+    
+    setLoading(true);
     const data: SimulatorTypes = {
       quantity,
       total,
@@ -100,6 +101,9 @@ const Simulator = () => {
         window.location.href = response?.data;
       }
     }
+
+    
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -339,7 +343,7 @@ const Simulator = () => {
                     />
                   </div>
                 </div>
-                <div className="grid hidden">
+                <div className="hidden">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Auth Data
@@ -478,7 +482,7 @@ const Simulator = () => {
                         void onSubmit();
                       }}
                     >
-                      Checkout
+                      {isLoading ? 'Checkout....' : 'Checkout'}
                     </button>
                   </div>
                 </div>

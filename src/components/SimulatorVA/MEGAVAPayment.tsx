@@ -38,7 +38,7 @@ const MEGAVAPayment = () => {
     console.log('data', responseValue);
   }, []);
 
-  const pencetKembali = () => {
+  const back = () => {
     removeLocalStorage('megava');
     void router.push('/simulator/megava');
   };
@@ -137,7 +137,7 @@ const MEGAVAPayment = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetKembali();
+                        void back();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>

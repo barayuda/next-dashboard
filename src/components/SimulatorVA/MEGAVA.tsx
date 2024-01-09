@@ -8,8 +8,6 @@ import { setLocalStorage } from '../../services/auth';
 import { findByAccRef, openAdds } from '../../services/mega-ipg';
 import Cookies from 'js-cookie';
 
-
-
 const MEGAVA = () => {
   const router = useRouter();
   const [va, setVa] = useState('');
@@ -17,40 +15,35 @@ const MEGAVA = () => {
 
   const apikey = process.env.NEXT_PUBLIC_OPEN_API_KEY || '';
 
-  
-  const pencetBenar = async () => {
+  const pay = async () => {
     setIsLoading(true);
     try {
-    console.log('Pencet bener ');
-    const dataFindByAccRef = {
-      trxType: 'getby.account_ref',
-      accountRef: va,
-    };
-    console.log('dataFindByAccRef', dataFindByAccRef);
-    const callApiSpring = await findByAccRef(dataFindByAccRef);
-    const header = {
-      fire:apikey
-    }
-    const callApiOpen = await openAdds(header);
-    console.log('response', callApiSpring.data);
-    console.log('responding', callApiOpen.data);
-    setLocalStorage('openAdds', callApiSpring.data);
-    const token = callApiOpen.data.access_token;
-    Cookies.set('tokenss',token)
-    if (!callApiSpring.error) {
-      // if (callApiSpring?.data?.statusCode === '00') {
-      // }
-      setLocalStorage('megava', callApiSpring.data);
-      void router.push('/simulator/megava/confirm');
-    }
-  }catch(error){
-    throw error
-  }
-  finally {
-    setIsLoading(false); // Stop loading
-  }
-  
+      const dataFindByAccRef = {
+        trxType: 'getby.account_ref',
+        accountRef: va,
+      };
 
+      const callPG = await findByAccRef(dataFindByAccRef);
+      const header = {
+        fire: apikey,
+      };
+
+      const callOpenApi = await openAdds(header);
+      setLocalStorage('openAdds', callPG.data);
+
+      const token = callOpenApi.data.accessToken;
+
+      Cookies.set('tokenss', token);
+      if (!callPG.error) {
+        setLocalStorage('megava', callPG.data);
+        void router.push('/simulator/megava/confirm');
+      }
+      
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="container mx-auto h-screen px-4">
@@ -78,13 +71,11 @@ const MEGAVA = () => {
                 </div>
               </div>
               <div className="col-span-8 ">
-              <div className="col-center">
+                <div className="col-center">
                   {isLoading ? (
                     <div>Loading Please Wait....</div>
                   ) : (
-                    <div>
-                      {/* Your regular component content */}
-                    </div>
+                    <div>{/* Your regular component content */}</div>
                   )}
                 </div>
                 <div className="rounded-md bg-blue-500 text-center text-white">
@@ -146,7 +137,7 @@ const MEGAVA = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        void pencetBenar();
+                        void pay();
                       }}
                       className="h-10 w-16 bg-white hover:bg-orange-400"
                     ></button>

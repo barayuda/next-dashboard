@@ -21,8 +21,6 @@ export async function setSimulator(data: SimulatorTypes) {
   });
 
   const alloJson =  alloVerifier.data || "";
-
-
   const testCaseName = data.name || "Test Name";
   const date = new Date();
   const orderRefId =
