@@ -37,7 +37,7 @@ export async function setSimulator(data: SimulatorTypes) {
     amount: data.total,
     currency: 'IDR',
     referenceUrl:
-      ('https://demo-merchants.bankmega.com' || '') + '/simulator/' + orderRefId,
+      ('https://demo-merchant.bankmega.com' || '') + '/simulator/',
     order: {
       id: data.orderId || orderRefId,
       recurringId: data.recurringId || "",
