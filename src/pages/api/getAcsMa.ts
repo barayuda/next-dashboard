@@ -26,22 +26,10 @@ async function dunk(req: NextApiRequest, res: NextApiResponse) {
       toIsoString: function (date: Date) {
         const tzo = -date.getTimezoneOffset();
         const dif = tzo >= 0 ? '+' : '-';
-        const pad = (num: number) => (num < 10 ? '0' : '') + num;
+        const pad = (num: number) => (num < 10 ? `0${num}` : num);
 
         return (
-          date.getFullYear() +
-          '-' +
-          pad(date.getMonth() + 1) +
-          '-' +
-          pad(date.getDate()) +
-          'T' +
-          pad(date.getHours()) +
-          ':' +
-          pad(date.getMinutes()) +
-          dif +
-          pad(Math.floor(Math.abs(tzo) / 60)) +
-          ':' +
-          pad(Math.abs(tzo) % 60)
+          `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}${dif}${pad(Math.floor(Math.abs(tzo) / 60))}:${pad(Math.abs(tzo) % 60)}`
         );
       },
     };
@@ -50,18 +38,15 @@ async function dunk(req: NextApiRequest, res: NextApiResponse) {
     const timestamp = utils.toIsoString(dt);
     Cookies.set('timestamp', timestamp, { secure: true });
 
-    var private_key =
-      '-----BEGIN PRIVATE KEY-----' +
-      private_value +
-      '-----END PRIVATE KEY-----';
+    const private_key = `-----BEGIN PRIVATE KEY-----${private_value}-----END PRIVATE KEY-----`;
     const clientKey = '0cd72de3-d5d0-4d7e-94bc-78f84624ea43';
     const combined = clientKey + '|' + timestamp;
 
-    var sig = new KJUR.crypto.Signature({"alg": "SHA256withRSA"});
+    const sig = new KJUR.crypto.Signature({"alg": "SHA256withRSA"});
     sig.init(private_key);
     sig.updateString(combined);
     
-    var encodedSignature = CryptoJS.enc.Base64.stringify(
+    const encodedSignature = CryptoJS.enc.Base64.stringify(
       CryptoJS.enc.Hex.parse(sig.sign())
     );
 
@@ -69,7 +54,7 @@ async function dunk(req: NextApiRequest, res: NextApiResponse) {
       proxy: false, // or proxy: {}
     });
 
-    const url = process.env.SNAP_SERVICES_URL + '/api/v1.0/access-token/b2b';
+    const url = `${process.env.SNAP_SERVICES_URL}/api/v1.0/access-token/b2b`;
 
     const response = await axiosInstance.request({
       method: 'POST',
@@ -83,7 +68,7 @@ async function dunk(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    Cookies.set('accessToken', response.data.accessToken, { secure: true });
+    Cookies.set('accessToken', response.data.accessToken as string, { secure: true });
     res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json(error);

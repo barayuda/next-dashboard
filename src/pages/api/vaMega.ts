@@ -49,22 +49,22 @@ function generateRandomValueString() {
   return randomInt.toString();
 }
 
-function generateSignature(stringToSign: string, clientSecret: string){
-    var hash = CryptoJS.HmacSHA512(stringToSign, clientSecret);
-    return CryptoJS.enc.Base64.stringify(hash);
+function generateSignature(stringToSign: string, clientSecret: string) {
+  const hash = CryptoJS.HmacSHA512(stringToSign, clientSecret);
+  return CryptoJS.enc.Base64.stringify(hash);
 }
 
-function generateEncodedHash(bodyString: string){
-    var md = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "cryptojs"});
-    md.updateString(bodyString);
-    return md.digest();
+function generateEncodedHash(bodyString: string) {
+  const md = new KJUR.crypto.MessageDigest({ alg: 'sha256', prov: 'cryptojs' });
+  md.updateString(bodyString);
+  return md.digest();
 }
 
 async function vaMega(req: NextApiRequest, res: NextApiResponse) {
   try {
     const randomValueString = generateRandomValueString();
     const inquiryId = 'abcdef-123456-pqrstu-' + randomValueString;
-    var clientSecret = 'u1nY1tHdlQV50sVbFCbfWThjSr5cMn0B';
+    const clientSecret = 'u1nY1tHdlQV50sVbFCbfWThjSr5cMn0B';
 
     //inquiry
     const record = req.body;
@@ -120,71 +120,72 @@ async function vaMega(req: NextApiRequest, res: NextApiResponse) {
 
     // payment
     const bodyPay = {
-        'partnerServiceId':'     78',
-        'customerNo':'781000',
-        'virtualAccountNo': record.customerID,
-         'virtualAccountName': '',
-         'virtualAccountEmail': '',
-         'virtualAccountPhone': '',
-         'trxId': 'abcdefgh1234',
-         'paymentRequestId': 'abcdef-123456-fghijklmno',
-         'channelCode': 6011,
-         'hashedSourceAccountNo': 'M2EBYfK1Rc5fpQsDqRJTvjJRuxToOxNwbF1Dgk4BiBEjYQBXo0zW4z57TTYqDXo+lTtVzXiuahkZR4FrUagfVA==',
-         'sourceBankCode': '0426',
-         'paidAmount': {
-             'value': '',
-             'currency': ''
-         },
-         'cumulativePaymentAmount': {
-             'value': record.parsedAmount,
-             'currency': 'IDR'
-         },
-         'paidBills': '',
-         'totalAmount': {
-             'value': record.parsedAmount,
-             'currency': 'IDR'
-         },
-         'trxDateTime': '20201231T235959Z',
-         'referenceNo': '123456789012345',
-         'journalNum': '',
-         'paymentType': 1,
-         'flagAdvise': 'Y',
-         'subCompany': '',
-         'billDetails': [
-             {
-                 'billCode': '',
-                 'billNo': '',
-                 'billName': '',
-                 'billShortName': '',
-                 'billDescription': {
-                     'english': '',
-                     'indonesia': ''
-                 },
-                 'billSubCompany': '',
-                 'billAmount': {
-                     'value': '',
-                     'currency': ''
-                 },
-                 'additionalInfo': {},
-                 'billReferenceNo': ''
-             }
-         ],
-         'freeTexts': [
-             {
-                 'english': '',
-                 'indonesia': ''
-             }
-         ],
-         'additionalInfo': {
-             'inquiryRequestId': inquiryId
-         }
-     }
+      partnerServiceId: '     78',
+      customerNo: '781000',
+      virtualAccountNo: record.customerID,
+      virtualAccountName: '',
+      virtualAccountEmail: '',
+      virtualAccountPhone: '',
+      trxId: 'abcdefgh1234',
+      paymentRequestId: 'abcdef-123456-fghijklmno',
+      channelCode: 6011,
+      hashedSourceAccountNo:
+        'M2EBYfK1Rc5fpQsDqRJTvjJRuxToOxNwbF1Dgk4BiBEjYQBXo0zW4z57TTYqDXo+lTtVzXiuahkZR4FrUagfVA==',
+      sourceBankCode: '0426',
+      paidAmount: {
+        value: '100.00',
+        currency: 'IDR',
+      },
+      cumulativePaymentAmount: {
+        value: '100.00',
+        currency: 'IDR',
+      },
+      paidBills: '',
+      totalAmount: {
+        value: '100.00',
+        currency: 'IDR',
+      },
+      trxDateTime: '20201231T235959Z',
+      referenceNo: '123456789012345',
+      journalNum: '',
+      paymentType: 1,
+      flagAdvise: 'Y',
+      subCompany: '',
+      billDetails: [
+        {
+          billCode: '',
+          billNo: '',
+          billName: '',
+          billShortName: '',
+          billDescription: {
+            english: '',
+            indonesia: '',
+          },
+          billSubCompany: '',
+          billAmount: {
+            value: '',
+            currency: '',
+          },
+          additionalInfo: {},
+          billReferenceNo: '',
+        },
+      ],
+      freeTexts: [
+        {
+          english: '',
+          indonesia: '',
+        },
+      ],
+      additionalInfo: {
+        inquiryRequestId: inquiryId,
+      },
+    };
 
     bodyString = JSON.stringify(bodyPay);
-    path = "/v1.0/transfer-va/payment";
+    path = '/v1.0/transfer-va/payment';
     encodedHash = generateEncodedHash(bodyString);
 
-    stringToSign = 'POST' + ":" + path + ":" + record.tokenss + ":" + encodedHash + ":" + timestamp;
+    stringToSign = 'POST' + ':' + path + ':' + record.tokenss + ':' + encodedHash + ':' + timestamp;
     signature = generateSignature(stringToSign, clientSecret);
 
     url = process.env.SNAP_SERVICES_URL + path;
@@ -203,9 +204,25 @@ async function vaMega(req: NextApiRequest, res: NextApiResponse) {
       },
     });
     // end of payment
-    
 
-    res.status(200).json(payment.data);
+
+    // build result
+    const result = {
+      status: 'ok',
+      statusHttp: 200,
+      message: 'Called',
+      request: {
+        amount: record.parsedAmount,
+      },
+      response: {
+        status: 'success', 
+        message: 'success'
+      },
+    };
+
+    console.log(`success to pay: ${body}}, response: ${result}`);
+
+    res.status(200).json(result);
   } catch (error) {
     throw error;
   }

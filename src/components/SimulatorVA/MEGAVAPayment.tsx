@@ -16,14 +16,11 @@ const MEGAVAPayment = () => {
 
   useEffect(() => {
     const data = getLocalStorage('megava');
-    console.log("XASX",data)
-    const responseValue = data.Response;
-    const amountValue = data.Amount;
-    const vaValue = data.details.va;
-
+    const amountValue = data?.responseData?.request.amount;
+    const vaValue = data?.details.va;
     if (
-      responseValue !== undefined &&
-      responseValue === '00'
+      data?.responseData?.response?.status !== undefined &&
+      data?.responseData?.response?.status === 'success'
     ) {
       setIsError(false);
       setVa(vaValue || 'XXX');
@@ -33,9 +30,6 @@ const MEGAVAPayment = () => {
     } else {
       setDescription('Pembayaran Gagal');
     }
-
-    console.log('data', data);
-    console.log('data', responseValue);
   }, []);
 
   const back = () => {

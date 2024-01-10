@@ -75,13 +75,9 @@ const MEGAVAConfirm = () => {
         tokenss
       });
       const responseData: string = callApi.data;
-  
-      const parsedData = JSON.parse(responseData);
-      console.log("Gru",parsedData);
-  
-      if (parsedData) {
+      if (responseData) {
         setLocalStorage('megava', {
-          ...parsedData.Data,
+          responseData,
           details: { va, amount, name },
         });
         void router.push('/simulator/megava/payment');
