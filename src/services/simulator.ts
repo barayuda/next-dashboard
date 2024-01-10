@@ -5,15 +5,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { v4 as uuidv4 } from 'uuid';
 import callAPI from '../pages/api/call';
-import type { SimulatorTypes } from './data-types';
+import type { AlloTypes, SimulatorTypes } from './data-types';
 import axios from 'axios';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
 const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
 
 export async function setSimulator(data: SimulatorTypes) {
-  // START Process Inquiry
-  console.log('dataSimulator', data);
   const reqId = uuidv4();
 
   const alloVerifier = await axios.post<any>(`../api/alloVerifier`, data, {
@@ -73,7 +71,6 @@ export async function setSimulator(data: SimulatorTypes) {
   });
 
   console.log('responseData', response);
-  console.log('Stup');
   // START Save to DB
   const url = '/api/simulatorSaveDb';
   console.log('url', url);
@@ -95,7 +92,6 @@ export async function setSimulator(data: SimulatorTypes) {
     requestData,
     response,
   };
-  console.log('payload', payload);
 
   return await callAPI({
     url,
@@ -199,10 +195,18 @@ export async function vaMega(customerID: string, tranceNum: string, parsedAmount
     const response = await axios.post(url, requestBody);
     return response.data;
   } catch (error) {
-    console.log("Error Suhu")
-    console.error('Error:', error);
     throw error;
   }
+}
+
+export async function alloAction(data: AlloTypes) {
+  const url = `/api/allo/addPoint`;
+
+  return await callAPI({
+    url,
+    method: 'POST',
+    data: data,
+  });
 }
 
 

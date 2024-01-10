@@ -2,21 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import Footer from '../../components/Footers/Footer';
 import Navbar from '../../components/Navbars/SimpleNavbar';
 
-import axios from 'axios';
-import type { SimulatorTypes } from '../../services/data-types';
-import { setSimulator } from '../../services/simulator';
+import type { AlloTypes, SimulatorTypes } from '../../services/data-types';
+import { setSimulator, alloAction } from '../../services/simulator';
 
 import { getServerSideProps } from '../index';
 const Simulator = () => {
-  const router = useRouter();
-  // const price = 100;
   const [price, setPrice] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(price);
@@ -27,43 +23,17 @@ const Simulator = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState('');
   const [authData, setAuthData] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState('John Doe');
   const [disablePromo, setDisablePromo] = useState(false);
   const [recurringId, setReccuringId] = useState('');
   const [retryPolicy, setRetryPolicy] = useState('');
   const [orderId, setOrderId] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [isLoading, setLoading] = useState(false)
-
-  async function callInqueryApi() {
-    const data: SimulatorTypes = {
-      quantity,
-      total,
-      material,
-      paymentSource,
-      paymentSourceMethod,
-      email,
-      phoneNumber,
-      token,
-      authData,
-      name,
-    };
-
-    if (!quantity || !total) {
-      // console.log('Error');
-      toast.error('quantity and total are required !!!');
-    } else {
-      const response = await axios.get('/api/simulator');
-      const responseData = response.data;
-      console.log('responseData', JSON.stringify(responseData));
-      if (responseData.error) {
-        toast.error('Error bla !!!');
-      } else {
-        toast.success('Transaction Created !!!');
-      }
-    }
-  }
+  const [isLoading, setLoading] = useState(false);
+  const [point, setPoint] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [alloStatus, setAlloStatus] = useState('');
 
   const onSubmit = async () => {
     
@@ -92,6 +62,7 @@ const Simulator = () => {
     } else if(!phoneNumber){
       toast.error('phone number are required !!!');
     } else {
+      debugger;
       const response = await setSimulator(data);
       console.log('response', JSON.stringify(response));
       if (response.error) {
@@ -101,9 +72,38 @@ const Simulator = () => {
         window.location.href = response?.data;
       }
     }
+  };
 
-    
-    setLoading(false);
+  const addPoint = async () => {
+    const data: AlloTypes = {
+     phoneNumber,
+     point
+    };
+
+    if(!phoneNumber && !point){
+      toast.error('phone number are required !!!');
+    } else {
+      const response = await alloAction(data);
+      if (!response.error) {
+        setAlloStatus('Successfully added a data point.');
+      }
+    }
+  };
+
+  const deductPoint = async () => {
+    const data: AlloTypes = {
+     phoneNumber,
+     point
+    };
+
+    if(!phoneNumber && !point){
+      toast.error('phone number are required !!!');
+    } else {
+      const response = await alloAction(data);
+      if (response) {
+        setAlloStatus('Success to add point');
+      }
+    }
   };
 
   useEffect(() => {
@@ -140,11 +140,10 @@ const Simulator = () => {
                   Working with us is a pleasure
                 </h3>
                 <p className="text-blueGray-600 mb-4 mt-4 text-lg font-light leading-relaxed">
-                  Don&apos;t let your uses guess by attaching tooltips and
-                  popoves to any element. Just make sure you enable them first.
+                  This page is a simulation of data inputted during the inquiry process to the mega payment gateway. 
                 </p>
                 <p className="text-blueGray-600 mb-4 mt-0 text-lg font-light leading-relaxed">
-                 Lets check how Mega Ipg works 
+                  Lets check how Mega Ipg works 
                 </p>
                 <hr />
                 <div className="grid grid-cols-2 gap-2">
@@ -275,6 +274,7 @@ const Simulator = () => {
                     />
                   </div>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
@@ -291,6 +291,18 @@ const Simulator = () => {
                       }}
                     />
                   </div>
+
+                  <div className="relative mb-3 mt-6 w-full">
+                  <button
+                      className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => setShowModal(true)}
+                    > Add/Deduction Point
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Email
@@ -307,6 +319,7 @@ const Simulator = () => {
                     />
                   </div>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
@@ -473,7 +486,7 @@ const Simulator = () => {
                 </div>
                 <div className="">
                   <div className="">
-                    <button
+                    {/* <button
                       className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                       type="button"
                       name="button"
@@ -482,7 +495,26 @@ const Simulator = () => {
                         void onSubmit();
                       }}
                     >
+                         <svg  className="ml-40 animate-spin" width="20" height="20" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+                            </path>
+                        </svg>
                       {isLoading ? 'Checkout....' : 'Checkout'}
+                    </button> */}
+
+                    <button type="button" 
+                        className="py-3 px-12 flex justify-center items-center bg-blueGray-800 hover:shadow-lg text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg"
+                        name="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          void onSubmit();
+                        }}>
+                        {isLoading ?  
+                        <svg width="20" height="20" fill="currentColor" className="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+                            </path>
+                        </svg> : null}
+                        Checkout
                     </button>
                   </div>
                 </div>
@@ -526,6 +558,89 @@ const Simulator = () => {
         </section>
       </main>
       <Footer />
+
+
+      {/* modal to add or deduction point */}
+      {showModal ? (
+        <>
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                  <h3 className="font-semibold">
+                    Add/Deduction Point
+                  </h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <div className="relative mb-3 w-full">
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                      Point
+                    </label>
+                    <input
+                      className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                      type="number"
+                      name="point"
+                      placeholder="Input point"
+                      value={point}
+                      onChange={(e)=>{
+                        setPoint(e.target.value);
+                      }}
+                    />
+                  </div>
+
+                  <p className='text-xs text-red-500'>
+                    {alloStatus}
+                  </p>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      void addPoint();
+                    }}
+                  >
+                    Add Point
+                  </button>
+                  <button
+                    className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      void deductPoint();
+                    }}
+                  >
+                    Point Deduction
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </>
   );
 };

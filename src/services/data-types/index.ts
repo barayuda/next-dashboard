@@ -91,13 +91,8 @@ export interface SimulatorTypes {
   paymentMethod?: string;
 
 }
-// [
-//   {
-//     alloCode?: string;
-//     alloCodeVerifier?: string;
-//     alloOsType?: string;
-//     alloDeviceId?: string;
-//     alloAppType?: string;
-//   }
 
-// ]
+export interface AlloTypes {
+  phoneNumber?: string;
+  point?: string;
+}

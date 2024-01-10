@@ -10,34 +10,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'js-cookie';
 import { KJUR } from 'jsrsasign';
 import CryptoJS from 'crypto-js';
-
-interface Utils {
-  toIsoString: (date: Date) => string;
-}
-
-const utils: Utils = {
-  toIsoString: function (date: Date) {
-    const tzo = -date.getTimezoneOffset();
-    const dif = tzo >= 0 ? '+' : '-';
-    const pad = (num: number) => (num < 10 ? '0' : '') + num;
-
-    return (
-      date.getFullYear() +
-      '-' +
-      pad(date.getMonth() + 1) +
-      '-' +
-      pad(date.getDate()) +
-      'T' +
-      pad(date.getHours()) +
-      ':' +
-      pad(date.getMinutes()) +
-      dif +
-      pad(Math.floor(Math.abs(tzo) / 60)) +
-      ':' +
-      pad(Math.abs(tzo) % 60)
-    );
-  },
-};
+import { toIsoString } from '../../utils/commonHelpers';
 
 function generateRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -88,7 +61,7 @@ async function vaMega(req: NextApiRequest, res: NextApiResponse) {
     };
 
     const dt = new Date();
-    const timestamp = utils.toIsoString(dt);
+    const timestamp = toIsoString(dt);
     Cookies.set('timestamp', timestamp, { secure: true });
 
     let bodyString = JSON.stringify(body);

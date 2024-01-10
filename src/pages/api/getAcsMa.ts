@@ -9,6 +9,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { KJUR } from 'jsrsasign';
+import { toIsoString } from '../../utils/commonHelpers';
 
 async function dunk(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -18,24 +19,8 @@ async function dunk(req: NextApiRequest, res: NextApiResponse) {
         grantType: 'client_credentials',
     };
 
-    interface Utils {
-      toIsoString: (date: Date) => string;
-    }
-
-    const utils: Utils = {
-      toIsoString: function (date: Date) {
-        const tzo = -date.getTimezoneOffset();
-        const dif = tzo >= 0 ? '+' : '-';
-        const pad = (num: number) => (num < 10 ? `0${num}` : num);
-
-        return (
-          `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}${dif}${pad(Math.floor(Math.abs(tzo) / 60))}:${pad(Math.abs(tzo) % 60)}`
-        );
-      },
-    };
-
     const dt = new Date();
-    const timestamp = utils.toIsoString(dt);
+    const timestamp = toIsoString(dt);
     Cookies.set('timestamp', timestamp, { secure: true });
 
     const private_key = `-----BEGIN PRIVATE KEY-----${private_value}-----END PRIVATE KEY-----`;
