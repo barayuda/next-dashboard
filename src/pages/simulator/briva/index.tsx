@@ -1,6 +1,7 @@
 import React from 'react';
 import BRIVA from '../../../components/SimulatorVA/BRIVA';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
+import { getServerSideProps } from '../index';
 
 const Briva = () => {
   return (
@@ -10,4 +11,5 @@ const Briva = () => {
   );
 };
 
+export { getServerSideProps };
 export default Briva;

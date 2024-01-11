@@ -1,6 +1,7 @@
 import React from 'react';
 import MANDIRIVA from '../../../components/SimulatorVA/MANDIRIVA';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
+import { getServerSideProps } from '../index';
 
 const Mandiriva = () => {
   return (
@@ -10,4 +11,5 @@ const Mandiriva = () => {
   );
 };
 
+export { getServerSideProps };
 export default Mandiriva;
