@@ -9,7 +9,11 @@ import Footer from '../../components/Footers/Footer';
 import Navbar from '../../components/Navbars/SimpleNavbar';
 
 import type { AlloTypes, SimulatorTypes } from '../../services/data-types';
-import { setSimulator, alloAction } from '../../services/simulator';
+import {
+  setSimulator,
+  alloAction,
+  alloBalancePoint,
+} from '../../services/simulator';
 
 import { getServerSideProps } from '../index';
 const Simulator = () => {
@@ -33,10 +37,12 @@ const Simulator = () => {
   const [isLoading, setLoading] = useState(false);
   const [point, setPoint] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [pointCurrent, setPointCurrent] = useState(0);
+
+  const [alloLoading, setAlloLoading] = useState(false);  
   const [alloStatus, setAlloStatus] = useState('');
 
   const onSubmit = async () => {
-    
     setLoading(true);
     const data: SimulatorTypes = {
       quantity,
@@ -54,15 +60,14 @@ const Simulator = () => {
       orderId,
       discountAmount,
       paymentMethod,
-      disablePromo
+      disablePromo,
     };
 
     if (!quantity || !total) {
       toast.error('quantity and total are required !!!');
-    } else if(!phoneNumber){
+    } else if (!phoneNumber) {
       toast.error('phone number are required !!!');
     } else {
-      debugger;
       const response = await setSimulator(data);
       console.log('response', JSON.stringify(response));
       if (response.error) {
@@ -74,50 +79,50 @@ const Simulator = () => {
     }
   };
 
-  const addPoint = async () => {
+  const allo = async (actionType: string) => {
     const data: AlloTypes = {
-     phoneNumber,
-     point
+      phoneNumber,
+      point,
+      actionType,
     };
 
-    if(!phoneNumber && !point){
+    setAlloLoading(true);
+    setAlloStatus('');
+    if (!phoneNumber && !point) {
       toast.error('phone number are required !!!');
     } else {
       const response = await alloAction(data);
       if (!response.error) {
-        setAlloStatus('Successfully added a data point.');
+        setPointCurrent(response.data);
+        setAlloStatus(
+          actionType === 'add'
+            ? 'Successfully added a data point.'
+            : 'Successfully deducted a data point.'
+        );
       }
     }
+    setAlloLoading(false);
   };
 
-  const deductPoint = async () => {
+  const getPoint = async () => {
     const data: AlloTypes = {
-     phoneNumber,
-     point
+      phoneNumber,
     };
-
-    if(!phoneNumber && !point){
-      toast.error('phone number are required !!!');
-    } else {
-      const response = await alloAction(data);
-      if (response) {
-        setAlloStatus('Success to add point');
-      }
-    }
+    const response = await alloBalancePoint(data);
+    setPointCurrent(response.data);
   };
 
   useEffect(() => {
     document
       .querySelector('body')
       ?.classList.add('g-sidenav-show', 'g-sidenav-pinned');
-      setTotal(quantity * price);
+    setTotal(quantity * price);
   }, [material, quantity, price]);
   return (
     <>
       <Navbar />
       <main>
-        <div className="min-h-screen-25 relative flex content-center items-center justify-center pb-18 pt-16">
-        </div>
+        <div className="min-h-screen-25 pb-18 relative flex content-center items-center justify-center pt-16"></div>
 
         <section className="bg-blueGray-200 -mt-24 pb-20">
           <div className="container mx-auto px-4">
@@ -131,19 +136,19 @@ const Simulator = () => {
                     width={336}
                     height={224}
                   />
-
                 </div>
               </div>
 
               <div className="ml-auto mr-auto w-full px-4 md:w-5/12 ">
-                <h3 className="mb-2 text-3xl font-semibold leading-normal mt-10">
+                <h3 className="mb-2 mt-10 text-3xl font-semibold leading-normal">
                   Working with us is a pleasure
                 </h3>
                 <p className="text-blueGray-600 mb-4 mt-4 text-lg font-light leading-relaxed">
-                  This page is a simulation of data inputted during the inquiry process to the mega payment gateway. 
+                  This page is a simulation of data inputted during the inquiry
+                  process to the mega payment gateway.
                 </p>
                 <p className="text-blueGray-600 mb-4 mt-0 text-lg font-light leading-relaxed">
-                  Lets check how Mega Ipg works 
+                  Lets check how Mega Ipg works
                 </p>
                 <hr />
                 <div className="grid grid-cols-2 gap-2">
@@ -190,7 +195,7 @@ const Simulator = () => {
                           setTotal(parseInt(event.target.value) * price);
                         } else {
                           setQuantity(1);
-                          setTotal(1 * price);  
+                          setTotal(1 * price);
                         }
                       }}
                     />
@@ -268,8 +273,8 @@ const Simulator = () => {
                       name="name"
                       placeholder="Input your name"
                       value={name}
-                      onChange={(e)=>{
-                        setName(e.target.value)
+                      onChange={(e) => {
+                        setName(e.target.value);
                       }}
                     />
                   </div>
@@ -286,22 +291,27 @@ const Simulator = () => {
                       name="phone"
                       placeholder="Input your mobile phone"
                       value={phoneNumber}
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setPhoneNumber(e.target.value);
                       }}
                     />
                   </div>
 
                   <div className="relative mb-3 mt-6 w-full">
-                  <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    <button
+                      className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                       type="button"
-                      onClick={() => setShowModal(true)}
-                    > Add/Deduction Point
+                      onClick={() => {
+                        void getPoint();
+                        setShowModal(true);
+                      }}
+                    >
+                      {' '}
+                      Add/Deduction Point
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-2">
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
@@ -313,7 +323,7 @@ const Simulator = () => {
                       name="email"
                       placeholder="Input your email"
                       value={email}
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setEmail(e.target.value);
                       }}
                     />
@@ -350,7 +360,7 @@ const Simulator = () => {
                       name="token"
                       placeholder="Input your token"
                       value={token}
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setToken(e.target.value);
                       }}
                     />
@@ -367,11 +377,10 @@ const Simulator = () => {
                       placeholder="Input Auth Data"
                       rows={3}
                       value={authData}
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setAuthData(e.target.value);
                       }}
                     />
-                    
                   </div>
                 </div>
                 <div className="grid">
@@ -382,7 +391,7 @@ const Simulator = () => {
                         type="checkbox"
                         className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
                         checked={disablePromo}
-                        onChange={(e)=>{
+                        onChange={(e) => {
                           setDisablePromo(e.target.checked);
                         }}
                       />
@@ -394,127 +403,123 @@ const Simulator = () => {
                 </div>
                 {/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */}
                 <div className="grid grid-cols-2 gap-2">
-                <div className="grid">
-                  <div className="relative mb-5 mt-5 w-full">
-                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                  <div className="grid">
+                    <div className="relative mb-5 mt-5 w-full">
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
                         RecurringId
                       </span>
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                      <input
-                        id="recurringId"
-                        type="text"
-                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        value={recurringId}
-                        onChange={(e)=>{
-                          setReccuringId(e.target.value)
-                        }}
-                      />
-                    </label>
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        <input
+                          id="recurringId"
+                          type="text"
+                          className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                          value={recurringId}
+                          onChange={(e) => {
+                            setReccuringId(e.target.value);
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
-                </div>
-                <div className="grid">
-                  <div className="relative mb-5 mt-5 w-full">
-                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
-                       RetryPolicy
+                  <div className="grid">
+                    <div className="relative mb-5 mt-5 w-full">
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                        RetryPolicy
                       </span>
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                      <input
-                        id="retryPolicy"
-                        type="text"
-                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        value={retryPolicy}
-                        onChange={(e)=>{setRetryPolicy(e.target.value)}}
-                      />
-                    </label>
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        <input
+                          id="retryPolicy"
+                          type="text"
+                          className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                          value={retryPolicy}
+                          onChange={(e) => {
+                            setRetryPolicy(e.target.value);
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                <div className="grid">
-                  <div className="relative mb-5 mt-5 w-full">
-                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                  <div className="grid">
+                    <div className="relative mb-5 mt-5 w-full">
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
                         OrderId
                       </span>
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                      <input
-                        id="orderId"
-                        type="text"
-                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        value={orderId}
-                        onChange={ (e)=>{
-                              setOrderId(e.target.value)
-                        }}
-                      />
-                    </label>
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        <input
+                          id="orderId"
+                          type="text"
+                          className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                          value={orderId}
+                          onChange={(e) => {
+                            setOrderId(e.target.value);
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
-                </div>
-                <div className="grid">
-                  <div className="relative mb-5 mt-5 w-full">
-                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                  <div className="grid">
+                    <div className="relative mb-5 mt-5 w-full">
+                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
                         Discount Amount
                       </span>
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                      <input
-                        id="discountAmmount"
-                        type="number"
-                        className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        value={discountAmount}
-                        onChange={(e) => {
-                          setDiscountAmount(parseInt(e.target.value));
-                        }}
-                      />
-                    </label>
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        <input
+                          id="discountAmmount"
+                          type="number"
+                          className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
+                          value={discountAmount}
+                          onChange={(e) => {
+                            setDiscountAmount(parseInt(e.target.value));
+                          }}
+                        />
+                      </label>
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div className="grid">
                   <div className="relative mb-5 mt-5 w-full">
-                  <span className="text-blueGray-600 ml-2 text-sm font-semibold">
-                       Payment Method
-                      </span>
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                    <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                      Payment Method
+                    </span>
+                    <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       <input
                         id="paymentMethod"
                         type="text"
                         className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                         value={paymentMethod}
-                        onChange={(e)=>{
-                          setPaymentMethod(e.target.value)}}
+                        onChange={(e) => {
+                          setPaymentMethod(e.target.value);
+                        }}
                       />
                     </label>
                   </div>
                 </div>
                 <div className="">
                   <div className="">
-                    {/* <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                    <button
                       type="button"
+                      className="bg-blueGray-800 flex w-full items-center justify-center rounded-lg px-12 py-3 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:shadow-lg focus:outline-none focus:ring-2  focus:ring-offset-2"
                       name="button"
                       onClick={(e) => {
                         e.preventDefault();
                         void onSubmit();
                       }}
                     >
-                         <svg  className="ml-40 animate-spin" width="20" height="20" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-                            </path>
+                      {isLoading ? (
+                        <svg
+                          width="20"
+                          height="20"
+                          fill="currentColor"
+                          className="mr-2 animate-spin"
+                          viewBox="0 0 1792 1792"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
                         </svg>
-                      {isLoading ? 'Checkout....' : 'Checkout'}
-                    </button> */}
-
-                    <button type="button" 
-                        className="py-3 px-12 flex justify-center items-center bg-blueGray-800 hover:shadow-lg text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg"
-                        name="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          void onSubmit();
-                        }}>
-                        {isLoading ?  
-                        <svg width="20" height="20" fill="currentColor" className="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-                            </path>
-                        </svg> : null}
-                        Checkout
+                      ) : null}
+                      Checkout
                     </button>
                   </div>
                 </div>
@@ -559,32 +564,53 @@ const Simulator = () => {
       </main>
       <Footer />
 
-
       {/* modal to add or deduction point */}
       {showModal ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+            <div className="relative mx-auto my-6 w-auto max-w-3xl">
               {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
                 {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="font-semibold">
-                    Add/Deduction Point
-                  </h3>
+                <div className="border-blueGray-200 flex items-start justify-between rounded-t border-b border-solid p-5">
+                  <h3 className="font-semibold">Add/Deduction Point</h3>
                   <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none">
                       ×
                     </span>
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
+                <div className="relative flex-auto p-6">
+                  <div className="mb-1 md:flex md:items-center">
+                    <div className="md:w-1/3">
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        Phone Number
+                      </label>
+                    </div>
+                    <div className="md:w-2/3">
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        : {phoneNumber}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="mb-6 md:flex md:items-center">
+                    <div className="md:w-1/3">
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        Current Point
+                      </label>
+                    </div>
+                    <div className="md:w-2/3">
+                      <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                        : {pointCurrent}
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="relative mb-3 w-full">
                     <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
                       Point
@@ -595,41 +621,56 @@ const Simulator = () => {
                       name="point"
                       placeholder="Input point"
                       value={point}
-                      onChange={(e)=>{
+                      onChange={(e) => {
                         setPoint(e.target.value);
                       }}
                     />
                   </div>
 
-                  <p className='text-xs text-red-500'>
-                    {alloStatus}
-                  </p>
+
+                  { alloLoading ?     
+                  <svg
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      className="mr-2 animate-spin"
+                      viewBox="0 0 1792 1792"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
+                    </svg> : null }
+
+                  <p className="text-xs text-red-500">{alloStatus}</p>
                 </div>
                 {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <div className="border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6">
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      setPoint('');
+                      setAlloStatus('');
+                      setShowModal(false);
+                    }}
                   >
                     Close
                   </button>
                   <button
-                    className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      void addPoint();
+                      void allo('add');
                     }}
                   >
                     Add Point
                   </button>
                   <button
-                    className="bg-blueGray-800 active:bg-blueGray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      void deductPoint();
+                      void allo('deduct');
                     }}
                   >
                     Point Deduction
@@ -638,7 +679,7 @@ const Simulator = () => {
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
         </>
       ) : null}
     </>

@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { authorize, balance } from './helper';
 
 async function addPoint(
     req: NextApiRequest,
@@ -11,20 +17,8 @@ async function addPoint(
         });
         const ALLO_SERVICE_URL = process.env.ALLO_SERVICE_URL || '';
         const url = `${ALLO_SERVICE_URL}/alloServices/index.php`;
-      
-        const bodyAuth = {
-            phoneNo: req.body.phoneNumber,
-          };
-
-        const authorize = await axiosInstance.post<any>(url, bodyAuth, {
-            headers: {
-            'Content-Type': 'application/json',
-            'bu': 'mega',
-            'secret': '082208222250',
-            'action': 'authorize',
-          }});
-
-        const accessToken = authorize.data.responseData.accessToken;
+        const phoneNumber = req.body.phoneNumber;
+        const accessToken = await authorize(phoneNumber);
         const bodyToken = {
             'phoneNo': req.body.phoneNumber,
             'amount':  req.body.point,
@@ -40,7 +34,9 @@ async function addPoint(
             'action': 'addPoint',
           }});
 
-        res.status(200).json(response.data);
+        const point = await balance(accessToken);  
+
+        res.status(200).json(point);
     } catch (error) {
         res.status(500).json({ error: 'An error occurred' });
     }

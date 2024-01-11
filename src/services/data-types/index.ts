@@ -95,4 +95,5 @@ export interface SimulatorTypes {
 export interface AlloTypes {
   phoneNumber?: string;
   point?: string;
+  actionType?: string;
 }

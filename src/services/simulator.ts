@@ -13,7 +13,6 @@ const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
 
 export async function setSimulator(data: SimulatorTypes) {
   const reqId = uuidv4();
-
   const alloVerifier = await axios.post<any>(`../api/alloVerifier`, data, {
     timeout: 30000,
   });
@@ -200,7 +199,17 @@ export async function vaMega(customerID: string, tranceNum: string, parsedAmount
 }
 
 export async function alloAction(data: AlloTypes) {
-  const url = `/api/allo/addPoint`;
+  const url =  data.actionType === 'add' ? `/api/allo/addPoint` : `/api/allo/deductPoint`;
+
+  return await callAPI({
+    url,
+    method: 'POST',
+    data: data,
+  });
+}
+
+export async function alloBalancePoint(data: AlloTypes) {
+  const url =  `/api/allo/balance`;
 
   return await callAPI({
     url,
