@@ -1,6 +1,7 @@
 import React from 'react';
 import BCAVA from '../../../components/SimulatorVA/BCAVA';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
+import { getServerSideProps } from '../index';
 
 const Bcava = () => {
   return (
@@ -10,4 +11,5 @@ const Bcava = () => {
   );
 };
 
+export { getServerSideProps };
 export default Bcava;

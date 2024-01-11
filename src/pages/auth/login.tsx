@@ -129,7 +129,7 @@ export default function Login() {
                       }}
                     />
                   </div>
-                  <div>
+                  <div className='hidden'>
                     <label className="inline-flex cursor-pointer items-center">
                       <input
                         id="customCheckLogin"
@@ -161,7 +161,8 @@ export default function Login() {
                 </form>
               </div>
             </div>
-            <div className="relative mt-6 flex flex-wrap">
+            {/* <div className="relative mt-6 flex flex-wrap"> */}
+            <div className="hidden">
               <div className="w-1/2">
                 <Link href="/auth/forgot" className="text-blueGray-200">
                   <small>Forgot password?</small>

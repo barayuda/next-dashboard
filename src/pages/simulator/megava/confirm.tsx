@@ -1,7 +1,7 @@
 import React from 'react';
-import MANDIRIVAConfirm from '../../../components/SimulatorVA/MANDIRIVAConfirm';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
 import MEGAVAConfirm from '../../../components/SimulatorVA/MEGAVAConfirm';
+import { getServerSideProps } from '../index';
 
 const MegavaConfirm = () => {
   return (
@@ -11,4 +11,5 @@ const MegavaConfirm = () => {
   );
 };
 
+export { getServerSideProps };
 export default MegavaConfirm;

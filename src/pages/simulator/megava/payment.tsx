@@ -1,7 +1,7 @@
 import React from 'react';
-import MANDIRIVAPayment from '../../../components/SimulatorVA/MANDIRIVAPayment';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
 import MEGAVAPayment from '../../../components/SimulatorVA/MEGAVAPayment';
+import { getServerSideProps } from '../index';
 
 const MandirivaPayment = () => {
   return (
@@ -11,4 +11,5 @@ const MandirivaPayment = () => {
   );
 };
 
+export { getServerSideProps };
 export default MandirivaPayment;

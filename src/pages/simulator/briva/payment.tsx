@@ -1,6 +1,7 @@
 import React from 'react';
 import BRIVAPayment from '../../../components/SimulatorVA/BRIVAPayment';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
+import { getServerSideProps } from '../index';
 
 const BrivaPayment = () => {
   return (
@@ -10,4 +11,5 @@ const BrivaPayment = () => {
   );
 };
 
+export { getServerSideProps };
 export default BrivaPayment;

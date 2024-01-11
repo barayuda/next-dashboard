@@ -1,6 +1,7 @@
 import React from 'react';
 import BNIVAPayment from '../../../components/SimulatorVA/BNIVAPayment';
 import SimulatorLayout from '../../../layouts/SimulatorLayout';
+import { getServerSideProps } from '../index';
 
 const BnivaPayment = () => {
   return (
@@ -10,4 +11,5 @@ const BnivaPayment = () => {
   );
 };
 
+export { getServerSideProps };
 export default BnivaPayment;
