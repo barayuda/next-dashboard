@@ -39,7 +39,6 @@ export default function Login() {
         console.log('typeof accessToken', typeof accessToken);
         console.log('accessToken', accessToken);
 
-        debugger;
         if (typeof accessToken === 'string') {
           //Cookies.set('token', accessToken, { secure: true });
           Cookies.set('token', accessToken, { secure: true });
@@ -155,20 +154,20 @@ export default function Login() {
                       //   handleKeyPress(e);
                       // }}
                     >
-                      Sign Ini
+                      Sign In
                     </button>
                   </div>
                 </form>
               </div>
             </div>
-            {/* <div className="relative mt-6 flex flex-wrap"> */}
+            <div className="relative mt-6 flex flex-wrap">
             <div className="hidden">
-              <div className="w-1/2">
+              {/* <div className="w-1/2"> */}
                 <Link href="/auth/forgot" className="text-blueGray-200">
                   <small>Forgot password?</small>
                 </Link>
               </div>
-              <div className="w-1/2 text-right">
+              <div className="w-1/2 ">
                 <Link href="/auth/register" className="text-blueGray-200">
                   <small>Create new account</small>
                 </Link>

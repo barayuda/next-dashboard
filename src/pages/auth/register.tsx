@@ -2,23 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import GoogleLogin from '@leecheuk/react-google-login';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import jwt from 'jsonwebtoken';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { env } from '../../env/client.mjs';
 
 // layout for page
 
 import AuthLayout from '../../layouts/AuthLayout';
 import {
-  authenticate,
   isAuth,
-  sendGoogleToken,
   setSignUp,
 } from '../../services/auth';
 import type { RegisterTypes } from '../../services/data-types/index';
@@ -40,6 +34,7 @@ export default function Register() {
   const [focusedPassword, setFocusedPassword] = React.useState(false);
   const [focusedRetypePassword, setFocusedRetypePassword] =
     React.useState(false);
+  const [error, setError] = useState('');
 
   const inputReference = useRef<HTMLInputElement>(null);
 
@@ -50,8 +45,10 @@ export default function Register() {
       password,
       retypePassword,
     };
-
-    if (!name || !email || !password || !retypePassword) {
+    
+    if (password !== retypePassword) {
+      setError('Passwords do not match');
+    } else if (!name || !email || !password || !retypePassword) {
       // console.log('Error');
       toast.error('Please input required fields !!!');
     } else if (!isAgreed) {
@@ -70,33 +67,11 @@ export default function Register() {
     return;
   };
 
-  const responseGoogle = async (response: any) => {
-    console.log('GOOGLE CLIENT ID', env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
-    console.log('responseGoogle', response);
-    const res = await sendGoogleToken(response.tokenId);
-    informParent(res);
-  };
-
-  const responseFailed = (response: any) => {
-    console.log('responseFailed', response);
-    toast.success('Login Failed !!!');
-  };
-
   const handleKeyPress = (event: any) => {
     if (event.key === 'Enter') {
       console.log('enter press here! ');
       void onSubmit();
     }
-  };
-
-  const informParent = (response: any) => {
-    authenticate(response, () => {
-      if (isAuth() && isAuth().role === 'admin') {
-        void router.push('/dashboard');
-      } else {
-        void router.push('/');
-      }
-    });
   };
 
   useEffect(() => {
@@ -200,9 +175,10 @@ export default function Register() {
                       className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                       placeholder="Retype Password"
                       value={retypePassword}
-                      onChange={(event) =>
-                        setRetypePassword(event.target.value)
-                      }
+                      onChange={(event) =>{
+                        setError('');
+                        setRetypePassword(event.target.value);
+                      }}
                       onFocus={() => setFocusedRetypePassword(true)}
                       onBlur={() =>
                         setFocusedRetypePassword(!focusedRetypePassword)
@@ -254,17 +230,20 @@ export default function Register() {
                       </span>
                     </label>
                   </div>
-
+                  <br />
+                  {error && <p style={{ color: 'red' }}>{error}</p>}
+                  <br />
                   <div className="mt-6 text-center">
                     <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg 
+                                  focus:outline-none "
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
                         console.log('Sign in lagi ');
                         // toast.success('Login Process !!!');
                         void onSubmit();
-                      }}
+                      }} 
                     >
                       Create Account
                     </button>
@@ -273,12 +252,13 @@ export default function Register() {
               </div>
             </div>
             <div className="relative mt-6 flex flex-wrap">
-              <div className="w-1/2">
+              {/* <div className="w-1/2"> */}
+              <div className="hidden">
                 <Link href="/auth/forgot" className="text-blueGray-200">
                   <small>Forgot password?</small>
                 </Link>
               </div>
-              <div className="w-1/2 text-right">
+              <div className="w-1/2">
                 <Link href="/auth/login" className="text-blueGray-200">
                   <small>Already have an account? Go to Login</small>
                 </Link>

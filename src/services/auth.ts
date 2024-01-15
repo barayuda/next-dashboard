@@ -20,7 +20,7 @@ console.log(`ROOT_API: ${ROOT_API}`);
 const API_VERSION = 'v1';
 
 export async function setSignUp(data: RegisterTypes) {
-  const url = `${ROOT_SELF}`;
+  const url = `/api/auth/signUp`;
 
   return callAPI({
     url,

@@ -155,7 +155,6 @@ export default async function callAPI({
       },
       statusHttp: response.status || 500,
     };
-    console.log('NextJS Response1', JSON.stringify(res));
     return res;
   }
 
@@ -169,6 +168,5 @@ export default async function callAPI({
     };
   }
 
-  console.log('NextJS Response', JSON.stringify(res));
   return res;
 }

@@ -1,5 +1,10 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import {usersRepo, UserTypes} from "./helper";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -39,11 +44,11 @@ export const authOptions: NextAuthOptions = {
       authorize(credentials) {
         const email = credentials?.email;
         const password = credentials?.password;
-        const user = {id: "1", name: "udin", email: "udin@testing.com", password: "161ebd7d45089b3446ee4e0d86dbcf92" };
+        const user = usersRepo.getByEmailAndPassword(email, password);
 
         const res = {
           id: user.id, 
-          email: "udin@testing.com",
+          email: user.email,
           accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJ1ZGluIiwicm9sZXMiOlsiT1dORVIiXSwiZW1haWwiOiJ1ZGluQGdtYWlsLmNvbSIsImF2YXRhciI6Ii9hc3NldHMvaW1nL3RlYW0tMS04MDB4ODAwLmpwZyIsImlkIjoiNjUxZjc0ZTdjNmZmNjY5ODA1ZmI3MTFkIn0sImlhdCI6MTcwMzE0NjY4OSwiZXhwIjoxNzAzMTQ3NTg5fQ.VG7f36PRt7Rycpl6PVbmv9_5j_LKBaj3RGER3oE8KnE",
           refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidWRpbkBnbWFpbC5jb20ifSwiaWF0IjoxNzAzMTQ2Njg5LCJleHAiOjIzMDc5NDY2ODl9.H0VyHo9JDWK1KM4krdvvbs_Tmt0bp5SlqECkZQUQpeA"
         };
