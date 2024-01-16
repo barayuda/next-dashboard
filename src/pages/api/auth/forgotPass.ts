@@ -6,26 +6,32 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { NextApiRequest, NextApiResponse } from 'next';
-import { create, UserTypes, usersRepo } from './helper';
+import { usersRepo, generateRandomValueString, update, emailHtmlAuth } from './helper';
 import CryptoJS from 'crypto-js';
+import { sendMail } from '../../../services/mailService';
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const data = {
-      name: req.body.name,
-      email: req.body.email,
-      admin: req.body.admin,
-      password: CryptoJS.MD5(req.body.password as any).toString(),
-    };
+    const randomValueString = generateRandomValueString();
+    const password = CryptoJS.MD5(randomValueString).toString();
 
     let status;
     let result;
-    if (usersRepo.getByEmail(req.body.email)) {
+
+    const user = usersRepo.getByEmail(req.body.email);
+    const html = emailHtmlAuth('You have requested to reset your password', randomValueString);
+
+    if (!user) {
       status = 500;
-      result = { message: `User with the email ${req.body.email} already exists`};
+      result = { message: `User with the email ${req.body.email} not exists` };
     } else {
+      sendMail('Reset Password', req.body.email, html);
+
+      user.password = password;
+      user.dateUpdated = new Date().toISOString();
+
       status = 200;
-      result = create(data as UserTypes);
+      result = update(user.id, user);
     }
 
     res.status(status).json(result);

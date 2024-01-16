@@ -97,3 +97,9 @@ export interface AlloTypes {
   point?: string;
   actionType?: string;
 }
+
+export interface RegisterUserTypes {
+  name: string;
+  email: string;
+  admin: boolean;
+}

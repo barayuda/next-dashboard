@@ -33,28 +33,26 @@ export default function Login() {
       callbackUrl: '/',
     }).then(async (res) => {
       const session = await getSession();
-
       if (session) {
         const accessToken = session.user?.token?.accessToken;
-        console.log('typeof accessToken', typeof accessToken);
-        console.log('accessToken', accessToken);
 
         if (typeof accessToken === 'string') {
           //Cookies.set('token', accessToken, { secure: true });
           Cookies.set('token', accessToken, { secure: true });
-          console.log('token', accessToken);
         }
 
         const refreshToken = session.user?.token?.refreshToken;
-        console.log('typeof refreshToken', typeof refreshToken);
         if (typeof refreshToken === 'string') {
-          // Cookies.set('refreshToken', refreshToken, { secure: true });
           Cookies.set('refreshToken', refreshToken, { secure: true });
-          console.log('refreshToken', refreshToken);
         }
+
+        const role = session.user?.token?.role;
+        if (typeof role === 'string'){
+          Cookies.set('role', role, { secure: true });
+        }
+
       }
 
-      console.log('result', res);
       if (res) {
         if (!res.ok && res.error !== undefined) {
           toast.error(res.error);
@@ -161,13 +159,14 @@ export default function Login() {
               </div>
             </div>
             <div className="relative mt-6 flex flex-wrap">
-            <div className="hidden">
+            {/* <div className="hidden"> */}
+              <div className="w-1/2">
               {/* <div className="w-1/2"> */}
                 <Link href="/auth/forgot" className="text-blueGray-200">
                   <small>Forgot password?</small>
                 </Link>
               </div>
-              <div className="w-1/2 ">
+              <div className="hidden">
                 <Link href="/auth/register" className="text-blueGray-200">
                   <small>Create new account</small>
                 </Link>

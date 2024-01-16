@@ -115,7 +115,7 @@ export default function Forgot() {
                   <small>Already have an account?</small>
                 </Link>
               </div>
-              <div className="w-1/2 text-right">
+              <div className="hidden">
                 <Link href="/auth/register" className="text-blueGray-200">
                   <small>Create new account</small>
                 </Link>

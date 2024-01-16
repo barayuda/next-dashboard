@@ -67,6 +67,7 @@
     "@types/jsrsasign": "^10.5.12",
     "@types/mime-types": "^2.1.1",
     "@types/node": "^18.11.18",
+    "@types/nodemailer": "^6.4.14",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",

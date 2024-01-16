@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 const LogOutDropdown = () => {
   const router = useRouter();
+  const role = Cookies.get('role');
 
   const onLogOut = () => {
     Cookies.remove('token');
@@ -67,7 +68,7 @@ const LogOutDropdown = () => {
         <Link
           href="#doavers"
           className={
-            'text-blueGray-700 block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal'
+            'text-blueGray-700 block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal'
           }
           onClick={(e) => {
             e.preventDefault();
@@ -76,6 +77,16 @@ const LogOutDropdown = () => {
         >
           Log Out
         </Link>
+
+          
+        <Link
+          href="/auth/register-user"
+          className={
+           role === 'admin'? 'text-blueGray-700 block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal' : 'hidden'
+          }
+        >
+          Register User        
+        </Link>  
       </div>
     </>
   );

@@ -12,6 +12,7 @@ import type {
   LoginTypes,
   RegisterTypes,
   ResetPassTypes,
+  RegisterUserTypes
 } from './data-types';
 
 const ROOT_SELF = '/api/signUp'
@@ -39,8 +40,18 @@ export async function setLogin(data: LoginTypes) {
   });
 }
 
+// export async function setForgotPass(data: ForgotPassTypes) {
+//   const url = `${ROOT_API}/${API_VERSION}/auth/forgotpass`;
+
+//   return callAPI({
+//     url,
+//     method: 'POST',
+//     data,
+//   });
+// }
+
 export async function setForgotPass(data: ForgotPassTypes) {
-  const url = `${ROOT_API}/${API_VERSION}/auth/forgotpass`;
+  const url = `/api/auth/forgotPass`;
 
   return callAPI({
     url,
@@ -174,3 +185,13 @@ export const sendGoogleToken = async (tokenId: string) => {
   //     console.log('GOOGLE SIGNIN ERROR', error.response);
   //   });
 };
+
+export async function setRegisterUser(data: RegisterUserTypes) {
+  const url = `/api/auth/registerUser`;
+
+  return callAPI({
+    url,
+    method: 'POST',
+    data,
+  });
+}
