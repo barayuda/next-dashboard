@@ -6,11 +6,9 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import AuthLayout from '../../layouts/AuthLayout';
-import {
-  isAuth, setRegisterUser
-} from '../../services/auth';
+import { isAuth, setRegisterUser } from '../../services/auth';
 import type { RegisterUserTypes } from '../../services/data-types/index';
-
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
   const router = useRouter();
@@ -19,24 +17,33 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [focusedName, setFocusedName] = React.useState(true);
   const [focusedEmail, setFocusedEmail] = React.useState(true);
-    React.useState(false);
+  React.useState(false);
 
   const inputReference = useRef<HTMLInputElement>(null);
+
+  const [captcha, setCaptcha] = useState<string | null>();
+  const recaptchaRef: any = React.createRef();
 
   const onSubmit = async () => {
     const data: RegisterUserTypes = {
       name,
       email,
-      admin
+      admin,
     };
 
-    const response = await setRegisterUser(data);
-    if (response.data) {
+    if (!captcha) {
+      toast.error('captcha not verified !!!');
+    } else if (!name || !email) {
+      toast.error('name or email is required');
+    } else {
+      const response = await setRegisterUser(data);
+      if (response.data) {
         toast.error('Register Failed: ' + response.message);
       } else {
         toast.success('Register Success !!!');
         void router.push('/auth/login');
       }
+    }
 
     return;
   };
@@ -60,7 +67,7 @@ export default function Register() {
             <div className="bg-blueGray-200 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg border-0 shadow-lg">
               <div className="flex-auto px-4 py-10 pt-0 lg:px-10">
                 <form>
-                  <div className="relative mb-3 w-full mt-5">
+                  <div className="relative mb-3 mt-5 w-full">
                     <label
                       className="text-blueGray-600 mb-2 block text-xs font-bold uppercase"
                       htmlFor="grid-retypePassword"
@@ -97,32 +104,44 @@ export default function Register() {
                     />
                   </div>
                   <div className="grid">
-                  <div className="relative mb-5 mt-5 w-full">
-                    <label className="inline-flex cursor-pointer items-center">
-                      <input
-                        id="disablePromo"
-                        type="checkbox"
-                        className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
-                        checked={admin}
-                        onChange={(e) => {
-                          setAdmin(e.target.checked);
-                        }}
-                      />
-                      <span className="text-blueGray-600 ml-2 text-sm font-semibold">
-                        admin
-                      </span>
-                    </label>
+                    <div className="relative mb-5 mt-5 w-full">
+                      <label className="inline-flex cursor-pointer items-center">
+                        <input
+                          id="disablePromo"
+                          type="checkbox"
+                          className="form-checkbox text-blueGray-700 ml-1 h-5 w-5 rounded border-0 transition-all duration-150 ease-linear"
+                          checked={admin}
+                          onChange={(e) => {
+                            setAdmin(e.target.checked);
+                          }}
+                        />
+                        <span className="text-blueGray-600 ml-2 text-sm font-semibold">
+                          admin
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="grid">
+                      <div className="relative mb-5 mt-5 w-full">
+                        <ReCAPTCHA
+                          size="normal"
+                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                          className="mx-auto"
+                          onChange={setCaptcha}
+                          ref={recaptchaRef}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
                   <div className="mt-6 text-center">
                     <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg 
+                      className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg 
                                   focus:outline-none "
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
                         void onSubmit();
-                      }} 
+                      }}
                     >
                       Create Account
                     </button>

@@ -7,6 +7,8 @@ import { toast } from 'react-hot-toast';
 
 import Footer from '../../components/Footers/Footer';
 import Navbar from '../../components/Navbars/SimpleNavbar';
+import ReCAPTCHA from 'react-google-recaptcha';
+import React from 'react';
 
 import type { AlloTypes, SimulatorTypes } from '../../services/data-types';
 import {
@@ -42,6 +44,9 @@ const Simulator = () => {
   const [alloLoading, setAlloLoading] = useState(false);  
   const [alloStatus, setAlloStatus] = useState('');
 
+  const [captcha, setCaptcha] = useState<string | null>();
+  const recaptchaRef: any = React.createRef();
+
   const onSubmit = async () => {
     setLoading(true);
     const data: SimulatorTypes = {
@@ -62,8 +67,9 @@ const Simulator = () => {
       paymentMethod,
       disablePromo,
     };
-
-    if (!quantity || !total) {
+    if (!captcha) {
+      toast.error('captcha not verified !!!');
+    } else if (!quantity || !total) {
       toast.error('quantity and total are required !!!');
     } else if (!phoneNumber) {
       toast.error('phone number are required !!!');
@@ -77,6 +83,7 @@ const Simulator = () => {
         window.location.href = response?.data;
       }
     }
+    setLoading(false);
   };
 
   const allo = async (actionType: string) => {
@@ -496,6 +503,14 @@ const Simulator = () => {
                     </label>
                   </div>
                 </div>
+
+                <div className="grid">
+                  <div className="relative mb-5 mt-5 w-full">
+                    <ReCAPTCHA size='normal' sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} className='mx-auto' onChange={setCaptcha}
+                      ref={recaptchaRef}/>
+                  </div>
+                </div>
+
                 <div className="">
                   <div className="">
                     <button

@@ -11,7 +11,7 @@
 
 import fs from 'fs';
 
-const dataFilePath = `${process.env.FILE_PATH_ROOT}/users.json`;
+const dataFilePath = 'data/users.json';
 
 const jsonData = fs.readFileSync(dataFilePath, 'utf8');
 let users = JSON.parse(jsonData);
