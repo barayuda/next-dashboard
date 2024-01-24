@@ -25,6 +25,7 @@ export function sendMail(subject: string, toEmail: string, html: string) {
     if (error) {
       throw error;
     } else {
+      console.log(`email sent successfully, email: ${toEmail}`)
       return true;
     }
   });

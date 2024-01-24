@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { usersRepo } from './helper';
@@ -57,6 +58,8 @@ export const authOptions: NextAuthOptions = {
         };
 
         if (user.email === email && user.password === password) {
+          console.log(`Login Success User: ${email}`);
+          
           return res;
         } else {
           return null;

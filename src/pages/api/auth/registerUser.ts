@@ -42,11 +42,12 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
         message: `User with the email ${req.body.email} already exists`,
       };
     } else {
-      sendMail('Register', req.body.email, html);
-
       status = 200;
       result = create(data as UserTypes);
+
+      sendMail('Register', req.body.email, html);
     }
+    console.log(`Register User: ${req.body.email}, status: ${status}` );
 
     res.status(status).json(result);
   } catch (error) {
