@@ -62,15 +62,12 @@ const BRIVAConfirm = () => {
 
   const pencetBayar = async () => {
     setIsLoading(true);
-    console.log('Pencet bener ');
     const dataReq = {
       amount, //10600,
       externalID
     };
-    console.log('dataReq', dataReq);
     try{
       const callApi = await xenditSimulatePayment(dataReq, externalID);
-    console.log('response', callApi.data);
     if (!callApi.error) {
       setLocalStorage('briva', {
         ...callApi.data,

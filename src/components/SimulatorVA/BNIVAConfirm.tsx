@@ -51,7 +51,6 @@ const BNIVAConfirm = () => {
       setDescription('ERROR ' + datava?.data?.statusCode);
     }
 
-    console.log('data', datava);
   }, []);
 
   const pencetKembali = () => {
@@ -65,10 +64,9 @@ const BNIVAConfirm = () => {
       amount, //10600,
       externalID
     };
-    console.log('dataReq', dataReq);
+
     try{
-      const callApi = await xenditSimulatePayment(dataReq, externalID);
-    console.log('response', callApi.data);
+    const callApi = await xenditSimulatePayment(dataReq, externalID);
     if (!callApi.error) {
       setLocalStorage('bniva', {
         ...callApi.data,

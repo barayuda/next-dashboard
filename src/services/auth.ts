@@ -17,7 +17,7 @@ import type {
 
 const ROOT_SELF = '/api/signUp'
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
-console.log(`ROOT_API: ${ROOT_API}`);
+
 const API_VERSION = 'v1';
 
 export async function setSignUp(data: RegisterTypes) {

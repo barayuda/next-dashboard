@@ -13,21 +13,20 @@ const BNIVA = () => {
   const pencetBenar = async () => {
     setIsLoading(true);
     try {
-    console.log('Pencet bener ');
+
     const dataFindByAccRef = {
       trxType: 'getby.account_ref',
       accountRef: va,
     };
     
-    console.log('dataFindByAccRef', dataFindByAccRef);
     const callApiSpring = await findByAccRef(dataFindByAccRef);
-    console.log('response', callApiSpring.data);
     if (!callApiSpring.error) {
       // if (callApiSpring?.data?.statusCode === '00') {
       // }
       setLocalStorage('bniva', callApiSpring.data);
       void router.push('/simulator/bniva/confirm');
     }
+
   }catch(error){
     throw error
   }

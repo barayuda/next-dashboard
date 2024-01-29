@@ -11,7 +11,6 @@ async function xenditPaid(
     res: NextApiResponse
 ) {
     const record = req.body;
-    console.log("saw", record)
     try {
 
         const axiosInstance = axios.create({

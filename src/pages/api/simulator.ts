@@ -42,11 +42,10 @@ async function inqueryApi(
     };
 
     // console.log('Test Case Name', record);
-    console.log('Request', requestData);
+    console.log('inquiry request: ', requestData);
 
     const headers = {
       Authorization: process.env.NEXT_PUBLIC_IPG_API_KEY?.toString(),
-      // Add any other headers as needed
     };
 
     const PostAddrest = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL || '';
@@ -60,7 +59,7 @@ async function inqueryApi(
       timeout: 10000,
     });
 
-    console.log('Response', response);
+    console.log('inquiry response:', response.data);
 
     res.status(200).json(response.data);
   } catch (error) {

@@ -3,22 +3,26 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { v4 as uuidv4 } from 'uuid';
 import callAPI from '../pages/api/call';
 import type { AlloTypes, SimulatorTypes } from './data-types';
 import axios from 'axios';
 
 const ROOT_API = process.env.NEXT_PUBLIC_API || '';
-const urlInquiry = process.env.NEXT_PUBLIC_IPG_INQUIRY_URL;
 
 export async function setSimulator(data: SimulatorTypes) {
   const reqId = uuidv4();
-  const alloVerifier = await axios.post<any>(`../api/alloVerifier`, data, {
-    timeout: 30000,
-  });
 
-  const alloJson =  alloVerifier.data || "";
-  const testCaseName = data.name || "Test Name";
+  let alloJson = '';
+  if (data.phoneNumber !== '' && data.phoneNumber) {
+    const alloVerifier = await axios.post<any>(`../api/alloVerifier`, data, {
+      timeout: 30000,
+    });
+    alloJson = alloVerifier.data || '';
+  }
+
+  const testCaseName = data.name || 'Test Name';
   const date = new Date();
   const orderRefId =
     date.getFullYear().toString() +
@@ -31,20 +35,19 @@ export async function setSimulator(data: SimulatorTypes) {
   const requestData = {
     amount: data.total,
     currency: 'IDR',
-    referenceUrl:
-      ('https://demo-merchant.bankmega.com' || '') + '/simulator/',
+    referenceUrl: ('https://demo-merchant.bankmega.com' || '') + '/simulator/',
     order: {
       id: data.orderId || orderRefId,
-      recurringId: data.recurringId || "",
+      recurringId: data.recurringId || '',
       disablePromo: data.disablePromo || false,
-      auth: alloJson || "",
+      auth: alloJson || '',
       afterDiscount: '', // megacards, debitmega, creditmega
-      retryPolicy: data.retryPolicy || "failed",
-      discountAmmount: data.discountAmount || "",
-      paymentMethod: data.paymentMethod || "",
+      retryPolicy: data.retryPolicy || 'failed',
+      discountAmmount: data.discountAmount || '',
+      paymentMethod: data.paymentMethod || '',
       items: [
         {
-          name: data.material || "Wood",
+          name: data.material || 'Wood',
           quantity: data.quantity || 1,
           amount: data.total || 1,
         },
@@ -52,19 +55,17 @@ export async function setSimulator(data: SimulatorTypes) {
     },
     customer: {
       name: testCaseName,
-      email: data.email || "Daivaayala@yahoo.com",
-      phoneNumber: data.phoneNumber || "081318291877",
+      email: data.email || 'Daivaayala@yahoo.com',
+      phoneNumber: data.phoneNumber || '081318291877',
       country: 'ID',
       postalCode: '12345',
     },
     paymentSource: data.paymentSource,
     paymentSourceMethod: data.paymentSourceMethod,
-    token: data.token || "",
+    token: data.token || '',
   };
 
   const apiUrl = '/api/simulator';
-  console.log('urlInquiry', urlInquiry);
-  console.log('requestData', requestData);
   const response = await axios.post<any>(apiUrl, requestData, {
     timeout: 30000,
   });
@@ -72,16 +73,15 @@ export async function setSimulator(data: SimulatorTypes) {
   console.log('responseData', response);
   // START Save to DB
   const url = '/api/simulatorSaveDb';
-  console.log('url', url);
-  console.log('Json', data.authData)
-
   const payload = {
-    reqId,
+    reqId: response?.data?.id,
     apiKey: process.env.NEXT_PUBLIC_IPG_API_KEY,
     orderRefId,
     currency: 'IDR',
+    trxType: 'inquiry',
+    trxStatus: 'submitted',
     paymentSource: data.paymentSource,
-    auth: data.authData || "nihil",
+    auth: data.authData || 'nihil',
     paymentSourceMethod: data.paymentSourceMethod,
     amount: data.total,
     trxToken: response?.data?.token,
@@ -180,16 +180,21 @@ export async function xenditGetVaPayment(payment_id: string) {
   });
 }
 
-export async function vaMega(customerID: string, tranceNum: string, parsedAmount: number, tokenss: any) {
+export async function vaMega(
+  customerID: string,
+  tranceNum: string,
+  parsedAmount: number,
+  tokenss: any
+) {
   const url = `/api/vaMega`;
 
   const requestBody = {
     customerID,
     tranceNum,
     parsedAmount,
-    tokenss
+    tokenss,
   };
-  console.log(requestBody)
+  console.log(requestBody);
   try {
     const response = await axios.post(url, requestBody);
     return response.data;
@@ -199,7 +204,8 @@ export async function vaMega(customerID: string, tranceNum: string, parsedAmount
 }
 
 export async function alloAction(data: AlloTypes) {
-  const url =  data.actionType === 'add' ? `/api/allo/addPoint` : `/api/allo/deductPoint`;
+  const url =
+    data.actionType === 'add' ? `/api/allo/addPoint` : `/api/allo/deductPoint`;
 
   return await callAPI({
     url,
@@ -209,7 +215,7 @@ export async function alloAction(data: AlloTypes) {
 }
 
 export async function alloBalancePoint(data: AlloTypes) {
-  const url =  `/api/allo/balance`;
+  const url = `/api/allo/balance`;
 
   return await callAPI({
     url,
@@ -218,4 +224,19 @@ export async function alloBalancePoint(data: AlloTypes) {
   });
 }
 
+export async function transactionList() {
+  const url = `/api/transactionList`;
 
+  return  await axios.get<any>(url, {
+    timeout: 30000,
+  })
+}
+
+export async function transactionStatuses(id: any) {
+  debugger;
+  const url = `/api/transactionStatus?id=${id}`;
+
+  return await  axios.get<any>(url, {
+    timeout: 30000,
+  })
+}

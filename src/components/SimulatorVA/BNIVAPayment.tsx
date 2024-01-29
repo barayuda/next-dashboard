@@ -28,8 +28,6 @@ const BNIVAPayment = () => {
     } else {
       setDescription('Pembayaran Gagal');
     }
-
-    console.log('data', data);
   }, []);
 
   const pencetKembali = () => {

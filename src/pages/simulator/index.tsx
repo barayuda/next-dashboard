@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -8,16 +10,19 @@ import { toast } from 'react-hot-toast';
 import Footer from '../../components/Footers/Footer';
 import Navbar from '../../components/Navbars/SimpleNavbar';
 import ReCAPTCHA from 'react-google-recaptcha';
-import React from 'react';
+import  React from 'react';
 
 import type { AlloTypes, SimulatorTypes } from '../../services/data-types';
 import {
   setSimulator,
   alloAction,
   alloBalancePoint,
+  transactionList,
+  transactionStatuses,
 } from '../../services/simulator';
 
 import { getServerSideProps } from '../index';
+import { TransactionTypes } from '../api/transactionRepo';
 const Simulator = () => {
   const [price, setPrice] = useState(1);
   const [quantity, setQuantity] = useState(1);
@@ -46,6 +51,12 @@ const Simulator = () => {
 
   const [captcha, setCaptcha] = useState<string | null>();
   const recaptchaRef: any = React.createRef();
+  const [transactions, setTransactions] = useState([]);
+
+  
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [transactionStatus, setTransactionStatus] = useState<any>();
+  const [transactionStatusLoading, setTransactionStatusLoading] = useState(false);  
 
   const onSubmit = async () => {
     setLoading(true);
@@ -71,8 +82,6 @@ const Simulator = () => {
       toast.error('captcha not verified !!!');
     } else if (!quantity || !total) {
       toast.error('quantity and total are required !!!');
-    } else if (!phoneNumber) {
-      toast.error('phone number are required !!!');
     } else {
       const response = await setSimulator(data);
       console.log('response', JSON.stringify(response));
@@ -119,31 +128,131 @@ const Simulator = () => {
     setPointCurrent(response.data);
   };
 
+  const getTransactionStatus = async (id: string) => {
+    setTransactionStatus('');
+    setTransactionStatusLoading(true);
+    const response = await transactionStatuses(id);
+
+    setTransactionStatus(
+      response.data
+        .slice(0, 1)
+        .map((element: any) => {
+          return (
+            <div key={element.reqId}>
+              <div className="mb-1 md:flex md:items-center">
+                <div className="md:w-1/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                    Order Id
+                  </label>
+                </div>
+                <div className="md:w-2/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold">
+                    : {id}
+                  </label>
+                </div>
+              </div>
+
+              <div className="mb-1 md:flex md:items-center">
+                <div className="md:w-1/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                    Type
+                  </label>
+                </div>
+                <div className="md:w-2/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold">
+                    : {element.type}
+                  </label>
+                </div>
+              </div>
+
+              <div className="mb-1 md:flex md:items-center">
+                <div className="md:w-1/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                    Status
+                  </label>
+                </div>
+                <div className="md:w-2/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold">
+                    : {element.status}
+                  </label>
+                </div>
+              </div>
+
+              <div className="mb-1 md:flex md:items-center">
+                <div className="md:w-1/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                    Amount
+                  </label>
+                </div>
+                <div className="md:w-2/3">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold">
+                    : {element.amount}
+                  </label>
+                </div>
+              </div>
+            </div>
+          );
+      })
+    );
+
+    setTransactionStatusLoading(false);
+
+    getTransactions();
+
+  };
+
+  const getTransactions = async () => {
+    const response = await transactionList();
+    setTransactions(
+      response.data
+        .sort((a: TransactionTypes, b: TransactionTypes) => a.response.data.createdTime > b.response.data.createdTime ? -1 : 1)
+        .filter((trx: TransactionTypes) => {
+          return new Date(trx.response.data.createdTime).setHours(0,0,0,0) == new Date().setHours(0,0,0,0);
+        })
+        .slice(0, 5)
+        .map((element: TransactionTypes) => {
+          return (
+            <li key={element.reqId}>
+              {element.response.data.createdTime} - {element.orderRefId} - {element.trxType} - {element.trxStatus} - {element.requestData.customer.name} - {element.requestData.amount} -
+              <a href={element.selectionsUrl} target="_blank" rel="noreferrer"
+                className='text-blue-600 hover:text-blue-800 visited:text-purple-600'> Go to Page</a>
+              <a href="#" 
+                id = {element.reqId}
+                onClick={() => {
+                  void getTransactionStatus(element.reqId);
+                  setShowTransactionModal(true);
+                }}
+                className='text-blue-600 hover:text-blue-800 visited:text-purple-600'> Check Status</a>  
+            </li>
+          );
+      })
+    );
+  };
+
+
   useEffect(() => {
     document
       .querySelector('body')
       ?.classList.add('g-sidenav-show', 'g-sidenav-pinned');
     setTotal(quantity * price);
+
+    getTransactions();
   }, [material, quantity, price]);
+
   return (
     <>
       <Navbar />
       <main>
         <div className="min-h-screen-25 pb-18 relative flex content-center items-center justify-center pt-16"></div>
-
         <section className="bg-blueGray-200 -mt-24 pb-20">
           <div className="container mx-auto px-4">
             <div className="mt-24 flex flex-wrap items-center">
-              <div className="ml-auto mr-auto w-full px-4 pt-8 md:w-4/12">
-                <div className="bg-blueGray-700 relative mb-6 flex w-full min-w-0 flex-col break-words rounded-lg shadow-lg">
-                  <img
-                    alt="..."
-                    src="/assets/img/gaktau4.jpg"
-                    className="w-full rounded-t-lg align-middle"
-                    width={336}
-                    height={224}
-                  />
-                </div>
+            
+              <div className="ml-auto mr-auto w-full md:w-5/12">
+                <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Transaction Logs:</h2>
+                <ul className="space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                  {transactions}
+                </ul>
               </div>
 
               <div className="ml-auto mr-auto w-full px-4 md:w-5/12 ">
@@ -689,6 +798,57 @@ const Simulator = () => {
                     }}
                   >
                     Point Deduction
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
+        </>
+      ) : null}
+
+
+      {showTransactionModal ? (
+        <>
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+            <div className="relative mx-auto my-6 w-auto max-w-3xl">
+              {/*content*/}
+              <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+                {/*header*/}
+                <div className="border-blueGray-200 flex items-start justify-between rounded-t border-b border-solid p-5">
+                  <h3 className="font-semibold">Transaction Status</h3>
+                  <button
+                    className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
+                    onClick={() => setShowTransactionModal(false)}
+                  >
+                    <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative flex-auto p-6">
+                  {transactionStatus}
+
+                  { transactionStatusLoading ?     
+                    <svg
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        className="mr-2 animate-spin"
+                        viewBox="0 0 1792 1792"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
+                      </svg> : null }
+                </div>    
+                <div className="border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6">
+                  <button
+                    className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
+                    type="button"
+                    onClick={() => setShowTransactionModal(false)}
+                    >
+                    Close
                   </button>
                 </div>
               </div>

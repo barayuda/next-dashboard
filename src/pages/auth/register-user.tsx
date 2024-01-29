@@ -9,7 +9,10 @@ import AuthLayout from '../../layouts/AuthLayout';
 import { isAuth, setRegisterUser } from '../../services/auth';
 import type { RegisterUserTypes } from '../../services/data-types/index';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { getServerSideProps } from '../index';
 
+
+export { getServerSideProps };
 export default function Register() {
   const router = useRouter();
   const [admin, setAdmin] = useState(false);

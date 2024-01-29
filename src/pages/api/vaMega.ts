@@ -92,6 +92,7 @@ async function vaMega(req: NextApiRequest, res: NextApiResponse) {
     // end of inquiry
 
     // payment
+    const amount = parseInt(record.parsedAmount).toFixed(2).toString();
     const bodyPay = {
       partnerServiceId: '     78',
       customerNo: '781000',
@@ -106,16 +107,16 @@ async function vaMega(req: NextApiRequest, res: NextApiResponse) {
         'M2EBYfK1Rc5fpQsDqRJTvjJRuxToOxNwbF1Dgk4BiBEjYQBXo0zW4z57TTYqDXo+lTtVzXiuahkZR4FrUagfVA==',
       sourceBankCode: '0426',
       paidAmount: {
-        value: '100.00',
+        value: amount,
         currency: 'IDR',
       },
       cumulativePaymentAmount: {
-        value: '100.00',
+        value: amount,
         currency: 'IDR',
       },
       paidBills: '',
       totalAmount: {
-        value: '100.00',
+        value: amount,
         currency: 'IDR',
       },
       trxDateTime: '20201231T235959Z',
