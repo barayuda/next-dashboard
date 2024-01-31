@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
@@ -73,6 +73,12 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      router.push('/simulator');
+    }
+  }, []);
   return (
     <AuthLayout>
       <div className="container mx-auto h-full px-4">
