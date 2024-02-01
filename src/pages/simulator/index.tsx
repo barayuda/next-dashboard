@@ -141,8 +141,8 @@ const Simulator = () => {
             <div key={element.reqId}>
               <div className="mb-1 md:flex md:items-center">
                 <div className="md:w-1/3">
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
-                    Order Id
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold capitalize">
+                    Trx Id
                   </label>
                 </div>
                 <div className="md:w-2/3">
@@ -154,7 +154,7 @@ const Simulator = () => {
 
               <div className="mb-1 md:flex md:items-center">
                 <div className="md:w-1/3">
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold capitalize">
                     Type
                   </label>
                 </div>
@@ -167,7 +167,7 @@ const Simulator = () => {
 
               <div className="mb-1 md:flex md:items-center">
                 <div className="md:w-1/3">
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold capitalize">
                     Status
                   </label>
                 </div>
@@ -180,7 +180,7 @@ const Simulator = () => {
 
               <div className="mb-1 md:flex md:items-center">
                 <div className="md:w-1/3">
-                  <label className="text-blueGray-600 mb-2 block text-xs font-bold uppercase">
+                  <label className="text-blueGray-600 mb-2 block text-xs font-bold capitalize">
                     Amount
                   </label>
                 </div>
@@ -190,6 +190,11 @@ const Simulator = () => {
                   </label>
                 </div>
               </div>
+              {/* <div className="mb-1 md:flex justify-start">
+                <div className="text-gray-700 text-xs"><pre>
+                {JSON.stringify(element, null, 4)}</pre>
+                </div>
+              </div> */}
             </div>
           );
       })

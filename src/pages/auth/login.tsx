@@ -32,31 +32,33 @@ export default function Login() {
       redirect: false,
       callbackUrl: '/',
     }).then(async (res) => {
-      const session = await getSession();
-      if (session) {
-        const accessToken = session.user?.token?.accessToken;
-
-        if (typeof accessToken === 'string') {
-          //Cookies.set('token', accessToken, { secure: true });
-          Cookies.set('token', accessToken, { secure: true });
-        }
-
-        const refreshToken = session.user?.token?.refreshToken;
-        if (typeof refreshToken === 'string') {
-          Cookies.set('refreshToken', refreshToken, { secure: true });
-        }
-
-        const role = session.user?.token?.role;
-        if (typeof role === 'string'){
-          Cookies.set('role', role, { secure: true });
-        }
-
-      }
-
       if (res) {
         if (!res.ok && res.error !== undefined) {
-          toast.error(res.error);
+          Cookies.remove('token');
+          Cookies.remove('refreshToken');
+          toast.error('Email/Password Anda Salah');
+          
         } else {
+          const session = await getSession();
+          if (session) {
+            const accessToken = session.user?.token?.accessToken;
+
+            if (typeof accessToken === 'string') {
+              //Cookies.set('token', accessToken, { secure: true });
+              Cookies.set('token', accessToken, { secure: true });
+            }
+
+            const refreshToken = session.user?.token?.refreshToken;
+            if (typeof refreshToken === 'string') {
+              Cookies.set('refreshToken', refreshToken, { secure: true });
+            }
+
+            const role = session.user?.token?.role;
+            if (typeof role === 'string') {
+              Cookies.set('role', role, { secure: true });
+            }
+          }
+
           toast.success('Login Success !!!');
           router.push('/simulator');
         }
@@ -132,7 +134,7 @@ export default function Login() {
                       }}
                     />
                   </div>
-                  <div className='hidden'>
+                  <div className="hidden">
                     <label className="inline-flex cursor-pointer items-center">
                       <input
                         id="customCheckLogin"
@@ -147,7 +149,7 @@ export default function Login() {
 
                   <div className="mt-6 text-center">
                     <button
-                      className="bg-blueGray-800 active:bg-blueGray-600 mr-1 mb-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none focus:ring"
+                      className="bg-blueGray-800 active:bg-blueGray-600 mb-1 mr-1 w-full rounded px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none focus:ring"
                       type="button"
                       onClick={(e) => {
                         e.preventDefault();
@@ -165,9 +167,9 @@ export default function Login() {
               </div>
             </div>
             <div className="relative mt-6 flex flex-wrap">
-            {/* <div className="hidden"> */}
+              {/* <div className="hidden"> */}
               <div className="w-1/2">
-              {/* <div className="w-1/2"> */}
+                {/* <div className="w-1/2"> */}
                 <Link href="/auth/forgot" className="text-blueGray-200">
                   <small>Forgot password?</small>
                 </Link>

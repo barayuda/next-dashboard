@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { SimulatorTypes } from '../../services/data-types/';
 
@@ -63,8 +63,12 @@ async function inqueryApi(
 
     res.status(200).json(response.data);
   } catch (error) {
-    // Handle error
-    console.error('Error', error);
+    if (error instanceof AxiosError && error.response) {
+      // Handle error
+      console.error('error when inquiries', error.response.data);
+    } else {
+      console.error('error when inquiries', error);
+    }
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }

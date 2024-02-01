@@ -33,7 +33,7 @@ function webHook(req: NextApiRequest, res: NextApiResponse) {
       transaction.trxType = req.body.type;
       transaction.trxStatus = req.body.transaction.status;
 
-      update(req.body.inquiryid, transaction);
+      update(req.body.inquiry.id, transaction);
     }
   } catch (error) {
     console.log('Error when saving transaction:', transaction);

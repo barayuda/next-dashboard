@@ -70,7 +70,6 @@ export async function setSimulator(data: SimulatorTypes) {
     timeout: 30000,
   });
 
-  console.log('responseData', response);
   // START Save to DB
   const url = '/api/simulatorSaveDb';
   const payload = {
@@ -97,7 +96,6 @@ export async function setSimulator(data: SimulatorTypes) {
     method: 'POST',
     data: payload,
   });
-
 }
 
 export async function brivaInquiry(data: any) {
@@ -227,16 +225,15 @@ export async function alloBalancePoint(data: AlloTypes) {
 export async function transactionList() {
   const url = `/api/transactionList`;
 
-  return  await axios.get<any>(url, {
+  return await axios.get<any>(url, {
     timeout: 30000,
-  })
+  });
 }
 
 export async function transactionStatuses(id: any) {
-  debugger;
   const url = `/api/transactionStatus?id=${id}`;
 
-  return await  axios.get<any>(url, {
+  return await axios.get<any>(url, {
     timeout: 30000,
-  })
+  });
 }
