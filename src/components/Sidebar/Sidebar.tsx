@@ -57,7 +57,7 @@ export default function Sidebar(props: SidebarProps) {
                 sidebarOpen ? 'inline-block' : 'hidden'
               }`}
             >
-              Bank Mega
+              Demo Shopping
             </Link>
             <button
               className="hidden cursor-pointer rounded border border-solid border-transparent bg-transparent px-3 py-1 text-xl leading-none text-black opacity-50 md:block"
@@ -91,7 +91,7 @@ export default function Sidebar(props: SidebarProps) {
                     href="#pablo"
                     className="text-blueGray-600 mr-0 inline-block whitespace-nowrap p-4 px-0 text-left text-sm font-bold uppercase md:block md:pb-2"
                   >
-                    Bank Mega
+                    Demo Shopping
                   </Link>
                 </div>
                 <div className="flex w-6/12 justify-end">

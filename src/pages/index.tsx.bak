@@ -19,7 +19,7 @@ const Home = () => {
           <div className="w-full px-4 md:w-8/12 lg:w-6/12 xl:w-6/12">
             <div className="pt-32 sm:pt-0">
               <h2 className="text-blueGray-600 text-4xl font-semibold">
-                Mega IPG - Bank Mega <br />
+                Mega IPG - Demo Shopping <br />
                 Internet Payment Gateway for <br />
                 Trans Corp and Special Merchants.
               </h2>

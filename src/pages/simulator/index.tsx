@@ -89,7 +89,12 @@ const Simulator = () => {
         toast.error(response.message);
       } else {
         toast.success('Transaction Created !!!');
-        window.location.href = response?.data;
+        window.open(response?.data, '_blank');
+        //focus to thet window
+        window.focus();
+        //reload current page
+        location.reload();
+        // window.location.href = response?.data;
       }
     }
     setLoading(false);

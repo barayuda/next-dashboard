@@ -16,7 +16,7 @@ export default function Navbar() {
               href="/"
               className="mr-4 inline-block whitespace-nowrap py-2 text-sm font-bold uppercase leading-relaxed text-white"
             >
-              Bank Mega
+              Demo Shopping
             </Link>
             <button
               className="block cursor-pointer rounded border border-solid border-transparent bg-transparent px-3 py-1 text-xl leading-none outline-none focus:outline-none lg:hidden"
