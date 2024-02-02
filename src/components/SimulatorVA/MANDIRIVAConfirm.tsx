@@ -50,8 +50,6 @@ const MANDIRIVAConfirm = () => {
     } else {
       setDescription('ERROR ' + datava?.data?.statusCode);
     }
-
-    console.log('data', datava);
   }, []);
 
   const pencetKembali = () => {

@@ -18,7 +18,7 @@ async function vaMegaInquiry(
             proxy: false // or proxy: {}
         });
         const url = `${urlIPG}/transaction/sign`;
-        console.log(url);
+
         const data = {
             trxType: req.body.trxType,
             accountRef: req.body.accountRef,
@@ -28,12 +28,12 @@ async function vaMegaInquiry(
             apikey: API_KEY,
             username: USER_NAME
         }
-        console.log("Header", headers);
+        
         const response = await axiosInstance.post<any>(url, data, {
             headers
         });
 
-        console.log("Response:", response);
+        console.log("Get Transaction Detail Response:", response);
         res.status(200).json(response.data);
     } catch (error) {
         console.error('Error:', error);
