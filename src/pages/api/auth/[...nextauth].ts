@@ -70,6 +70,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
   },
+  useSecureCookies: process.env.NODE_ENV === 'production'
 };
 
 export default NextAuth(authOptions);

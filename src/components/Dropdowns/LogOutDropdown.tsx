@@ -14,6 +14,7 @@ const LogOutDropdown = () => {
   const onLogOut = () => {
     Cookies.remove('token');
     Cookies.remove('refreshToken');
+    Cookies.remove('role');
     void router.push('/auth/login');
   };
 

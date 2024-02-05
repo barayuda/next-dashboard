@@ -82,8 +82,11 @@ export async function setChangePass(data: any) {
 
 // Set in Cookie
 export const setCookie = (key: string, value: string) => {
+  const env = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
   Cookies.set(key, value, {
     // 1 Day
+    secure: env,
+    httpOnly: env,
     expires: 1,
   });
 };

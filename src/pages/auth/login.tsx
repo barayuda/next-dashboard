@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-hot-toast';
 import { getSession, signIn } from 'next-auth/react';
 import CryptoJS from 'crypto-js';
+import { setCookie } from '../../services/auth';
 
 // layout for page
 import AuthLayout from '../../layouts/AuthLayout';
@@ -45,17 +46,17 @@ export default function Login() {
 
             if (typeof accessToken === 'string') {
               //Cookies.set('token', accessToken, { secure: true });
-              Cookies.set('token', accessToken, { secure: true });
+              setCookie('token', accessToken);
             }
 
             const refreshToken = session.user?.token?.refreshToken;
             if (typeof refreshToken === 'string') {
-              Cookies.set('refreshToken', refreshToken, { secure: true });
+              setCookie('refreshToken', refreshToken);
             }
 
             const role = session.user?.token?.role;
             if (typeof role === 'string') {
-              Cookies.set('role', role, { secure: true });
+              setCookie('role', role);
             }
           }
 
