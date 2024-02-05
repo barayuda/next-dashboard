@@ -64,7 +64,8 @@ const BRIVAConfirm = () => {
     setIsLoading(true);
     const dataReq = {
       amount, //10600,
-      externalID
+      externalID,
+      va
     };
     try{
       const callApi = await xenditSimulatePayment(dataReq, externalID);

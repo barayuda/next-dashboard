@@ -67,7 +67,8 @@ const BCAVAConfirm = () => {
     
     const dataReq = {
       amount, //10600,
-      externalID
+      externalID,
+      va
     };
     console.log('dataReq', dataReq);
     try{

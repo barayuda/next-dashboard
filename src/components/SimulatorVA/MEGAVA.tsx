@@ -33,7 +33,7 @@ const MEGAVA = () => {
 
       const token = callOpenApi.data.accessToken;
 
-      Cookies.set('tokenss', token);
+      Cookies.set('tokenss', token, { secure: true });
       if (!callPG.error) {
         setLocalStorage('megava', callPG.data);
         void router.push('/simulator/megava/confirm');

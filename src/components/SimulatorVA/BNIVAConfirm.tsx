@@ -62,7 +62,8 @@ const BNIVAConfirm = () => {
     setIsLoading(true);
     const dataReq = {
       amount, //10600,
-      externalID
+      externalID,
+      va
     };
 
     try{
