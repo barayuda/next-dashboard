@@ -4,7 +4,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
+import {
+  setCookie as setCookieNext,
+  getCookie as getCookieNext,
+  deleteCookie as deleteCookieNext,
+} from 'cookies-next';
 
 import callAPI from '../pages/api/call';
 import type {
@@ -83,22 +88,24 @@ export async function setChangePass(data: any) {
 // Set in Cookie
 export const setCookie = (key: string, value: string) => {
   const env = process.env.NEXT_PUBLIC_NODE_ENV === 'production';
-  Cookies.set(key, value, {
+  setCookieNext(key, value, {
     // 1 Day
-    secure: env,
     httpOnly: env,
-    expires: 1,
+    expires: new Date(new Date().setDate(new Date().getDate() + 1)),
+    maxAge: 60 * 60 * 24,
   });
 };
 // remove from cookie
 export const removeCookie = (key: string) => {
-  Cookies.remove(key);
+  // Cookies.remove(key);
+  deleteCookieNext(key)
 };
 
 // Get from cookie such as stored token
 // Will be useful when we need to make request to server with token
 export const getCookie = (key: string) => {
-  return Cookies.get(key);
+  // return Cookies.get(key);
+  return getCookieNext(key);
 };
 
 // Set in localstorage
